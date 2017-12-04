@@ -100,8 +100,8 @@ const API = {
       password: data.password,
 
       // app logins
-      appname: CONFIG.morel.manager.appname,
-      appsecret: CONFIG.morel.manager.appsecret,
+      appname: CONFIG.indicia.manager.appname,
+      appsecret: CONFIG.indicia.manager.appsecret,
     };
 
     $.ajax({

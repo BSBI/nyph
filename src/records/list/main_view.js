@@ -3,7 +3,7 @@
  *****************************************************************************/
 import $ from 'jquery';
 import Marionette from 'backbone.marionette';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import Hammer from 'hammerjs';
 import { Log, StringHelp, Device, DateHelp } from 'helpers';
 import JST from 'JST';
@@ -119,13 +119,13 @@ const RecordView = Marionette.View.extend({
     return {
       id: recordModel.id || recordModel.cid,
       saved: recordModel.metadata.saved,
-      onDatabase: syncStatus === Morel.SYNCED,
+      onDatabase: syncStatus === Indicia.SYNCED,
       isLocating: recordModel.isGPSRunning(),
       location: locationPrint,
       location_name: location_name,
       location_gridref: location.gridref,
       recorder: StringHelp.escape(recordModel.get('recorder') || ''),
-      isSynchronising: syncStatus === Morel.SYNCHRONISING,
+      isSynchronising: syncStatus === Indicia.SYNCHRONISING,
       date,
       taxon,
       comment: occ.get('comment'),

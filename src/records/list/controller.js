@@ -1,7 +1,7 @@
 /** ****************************************************************************
  * Record List controller.
  *****************************************************************************/
-import Morel from 'morel';
+import Indicia from 'indicia';
 import App from 'app';
 import CONFIG from 'config';
 import { Log, Analytics, ImageHelp } from 'helpers';
@@ -70,7 +70,7 @@ const API = {
     let body = 'This record hasn\'t been saved to iRecord yet, ' +
       'are you sure you want to remove it from your device?';
 
-    if (syncStatus === Morel.SYNCED) {
+    if (syncStatus === Indicia.SYNCED) {
       body = 'Are you sure you want to remove this record from your device?';
       body += '</br><i><b>Note:</b> it will remain on the server.</i>';
     }
@@ -252,7 +252,7 @@ const API = {
         }
         records.each((record) => {
           const status = record.getSyncStatus();
-          if (record.metadata.saved && status !== Morel.SYNCED) {
+          if (record.metadata.saved && status !== Indicia.SYNCED) {
             incomplete = true;
           }
         });

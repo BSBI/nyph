@@ -2,7 +2,7 @@
  * Record Attribute controller.
  *****************************************************************************/
 import Backbone from 'backbone';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import { Log, DateHelp } from 'helpers';
 import App from 'app';
 import appModel from '../../common/models/app_model';
@@ -28,7 +28,7 @@ const API = {
 
       // can't edit a saved one - to be removed when record update
       // is possible on the server
-      if (recordModel.getSyncStatus() === Morel.SYNCED) {
+      if (recordModel.getSyncStatus() === Indicia.SYNCED) {
         App.trigger('records:show', recordID, { replace: true });
         return;
       }

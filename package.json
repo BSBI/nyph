@@ -59,6 +59,7 @@
     "hammerjs": "github:hammerjs/hammer.js",
     "html-webpack-plugin": "^2.22.0",
     "indexeddbshim": "^2.2.1",
+    "indicia": "Indicia-Team/indicia-js",
     "jquery": "^3.1.0",
     "jquery-touchswipe": "^1.6.15",
     "json-loader": "^0.5.4",
@@ -68,7 +69,6 @@
     "load-grunt-config": "^0.19.2",
     "load-grunt-tasks": "^3.5.2",
     "lodash": "3.6.0",
-    "morel": "Indicia-Team/morel#develop",
     "node-sass": "^3.8.0",
     "os-leaflet": "0.2.1",
     "photoswipe": "^4.1.1",
@@ -119,7 +119,6 @@
     "recording",
     "mobile",
     "app",
-    "offline",
     "bsbi",
     "brc",
     "ceh"

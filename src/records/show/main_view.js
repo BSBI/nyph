@@ -1,7 +1,7 @@
 /** ****************************************************************************
  * Record Show main view.
  *****************************************************************************/
-import Morel from 'morel';
+import Indicia from 'indicia';
 import Marionette from 'backbone.marionette';
 import JST from 'JST';
 import { DateHelp, StringHelp } from 'helpers';
@@ -50,8 +50,8 @@ export default Marionette.View.extend({
 
     return {
       id: occ.cid,
-      isSynchronising: syncStatus === Morel.SYNCHRONISING,
-      onDatabase: syncStatus === Morel.SYNCED,
+      isSynchronising: syncStatus === Indicia.SYNCHRONISING,
+      onDatabase: syncStatus === Indicia.SYNCED,
       scientific_name: scientificName,
       commonName,
       location: locationPrint,

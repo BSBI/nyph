@@ -1,23 +1,23 @@
 /** ****************************************************************************
- * Morel Sample.
+ * Indicia Sample.
  *****************************************************************************/
 import $ from 'jquery';
 import _ from 'lodash';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import CONFIG from 'config';
 import recordManager from '../record_manager';
 import { Log } from 'helpers';
 import Occurrence from './occurrence';
 import GeolocExtension from './sample_geoloc_ext';
 
-let Sample = Morel.Sample.extend({
+let Sample = Indicia.Sample.extend({
   constructor(...args) {
     this.manager = recordManager;
-    Morel.Sample.prototype.constructor.apply(this, args);
+    Indicia.Sample.prototype.constructor.apply(this, args);
   },
 
   initialize() {
-    this.set('form', CONFIG.morel.manager.input_form);
+    this.set('form', CONFIG.indicia.manager.input_form);
   },
   set_entry_time() {
     this.set('entry_time', new Date().toString());
@@ -140,8 +140,8 @@ let Sample = Morel.Sample.extend({
   isLocalOnly() {
     const status = this.getSyncStatus();
     if (this.metadata.saved && (
-      status === Morel.LOCAL ||
-      status === Morel.SYNCHRONISING)) {
+      status === Indicia.LOCAL ||
+      status === Indicia.SYNCHRONISING)) {
       return true;
     }
     return false;
@@ -151,5 +151,5 @@ let Sample = Morel.Sample.extend({
 // add geolocation functionality
 Sample = Sample.extend(GeolocExtension);
 
-$.extend(true, Morel.Sample.keys, CONFIG.morel.sample);
+$.extend(true, Indicia.Sample.keys, CONFIG.indicia.sample);
 export { Sample as default };

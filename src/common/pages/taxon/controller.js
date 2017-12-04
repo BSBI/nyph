@@ -2,7 +2,7 @@
  * Taxon controller.
  *****************************************************************************/
 import Backbone from 'backbone';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import App from 'app';
 import { Log } from 'helpers';
 import recordManager from '../../record_manager';
@@ -38,7 +38,7 @@ const API = {
 
         // can't edit a saved one - to be removed when record update
         // is possible on the server
-        if (recordModel.getSyncStatus() === Morel.SYNCED) {
+        if (recordModel.getSyncStatus() === Indicia.SYNCED) {
           App.trigger('records:show', recordID, { replace: true });
           return;
         }

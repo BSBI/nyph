@@ -4,7 +4,7 @@
 import Marionette from 'backbone.marionette';
 import Backbone from 'backbone';
 import _ from 'lodash';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import { Device, ImageHelp, Analytics, Log, StringHelp, Validate } from 'helpers';
 import App from 'app';
 import appModel from '../../common/models/app_model';
@@ -36,7 +36,7 @@ const API = {
 
       // can't edit a saved one - to be removed when record update
       // is possible on the server
-      if (recordModel.getSyncStatus() === Morel.SYNCED) {
+      if (recordModel.getSyncStatus() === Indicia.SYNCED) {
         App.trigger('records:show', recordID, { replace: true });
         return;
       }
@@ -50,7 +50,7 @@ const API = {
 
       // on finish sync move to show
       function checkIfSynced() {
-        if (recordModel.getSyncStatus() === Morel.SYNCED) {
+        if (recordModel.getSyncStatus() === Indicia.SYNCED) {
           App.trigger('records:show', recordID, { replace: true });
           return;
         }

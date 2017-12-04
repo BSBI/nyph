@@ -116,8 +116,8 @@ const API = {
 
 
     // app logins
-    formData.append('appname', CONFIG.morel.manager.appname);
-    formData.append('appsecret', CONFIG.morel.manager.appsecret);
+    formData.append('appname', CONFIG.indicia.manager.appname);
+    formData.append('appsecret', CONFIG.indicia.manager.appsecret);
 
     $.ajax({
       url: CONFIG.login.url,

@@ -2,7 +2,7 @@
  * Record Edit header view.
  *****************************************************************************/
 import Marionette from 'backbone.marionette';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import JST from 'JST';
 
 export default Marionette.View.extend({
@@ -23,7 +23,7 @@ export default Marionette.View.extend({
 
   serializeData() {
     return {
-      isSynchronising: this.model.getSyncStatus() === Morel.SYNCHRONISING,
+      isSynchronising: this.model.getSyncStatus() === Indicia.SYNCHRONISING,
     };
   },
 });

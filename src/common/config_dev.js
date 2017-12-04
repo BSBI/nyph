@@ -26,8 +26,8 @@ const newConfig = $.extend(true, config, {
     timeout: 80000,
   },
 
-  // morel configuration
-  morel: {
+  // indicia configuration
+  indicia: {
     manager: {
       url: 'http://192.171.199.230/irecord7/mobile/submit',
       survey_id: 419,

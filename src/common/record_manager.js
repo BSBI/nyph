@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import { Device, Log } from 'helpers';
 import CONFIG from 'config';
 import Sample from './models/sample';
 import appModel from './models/app_model';
 import userModel from './models/user_model';
 
-const morelConfiguration = $.extend(CONFIG.morel.manager, {
-  Storage: Morel.DatabaseStorage,
+const indiciaConfiguration = $.extend(CONFIG.indicia.manager, {
+  Storage: Indicia.DatabaseStorage,
   Sample,
   onSend(sample) {
     if (userModel.hasLogIn()) {
@@ -32,7 +32,7 @@ const morelConfiguration = $.extend(CONFIG.morel.manager, {
   },
 });
 
-class Manager extends Morel {
+class Manager extends Indicia {
   syncAll(method, collection, options = {}) {
     //if (!Device.connectionWifi()) {
     //  options.timeout = 180000; // 3 min
@@ -40,7 +40,7 @@ class Manager extends Morel {
     
     options.timeout = 180000; // 3 min
     
-    return Morel.prototype.syncAll.apply(this, [method, collection, options]);
+    return Indicia.prototype.syncAll.apply(this, [method, collection, options]);
   }
 
   sync(method, model, options = {}) {
@@ -50,7 +50,7 @@ class Manager extends Morel {
     
     options.timeout = 180000; // 3 min
     
-    return Morel.prototype.sync.apply(this, [method, model, options]);
+    return Indicia.prototype.sync.apply(this, [method, model, options]);
   }
 
   removeAllSynced(callback) {
@@ -65,7 +65,7 @@ class Manager extends Morel {
       let noneUsed = true;
 
       records.each((record) => {
-        if (record.getSyncStatus() === Morel.SYNCED) {
+        if (record.getSyncStatus() === Indicia.SYNCED) {
           noneUsed = false;
           toRemove++;
           record.destroy({
@@ -145,5 +145,5 @@ class Manager extends Morel {
   }
 }
 
-const recordManager = new Manager(morelConfiguration);
+const recordManager = new Manager(indiciaConfiguration);
 export { recordManager as default, Manager };

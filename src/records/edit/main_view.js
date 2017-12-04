@@ -2,7 +2,7 @@
  * Record Edit main view.
  *****************************************************************************/
 import Marionette from 'backbone.marionette';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import JST from 'JST';
 import { DateHelp, StringHelp } from 'helpers';
 import CONFIG from 'config';
@@ -47,7 +47,7 @@ export default Marionette.View.extend({
       scientificName,
       commonName,
       isLocating: recordModel.isGPSRunning(),
-      isSynchronising: recordModel.getSyncStatus() === Morel.SYNCHRONISING,
+      isSynchronising: recordModel.getSyncStatus() === Indicia.SYNCHRONISING,
       location: locationPrint,
       location_name: location_name,
       date: DateHelp.print(recordModel.get('date')),

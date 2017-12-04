@@ -59,8 +59,8 @@ export default {
     mapbox_satellite_id: 'cehapps.0femh3mh',
   },
 
-  // morel configuration
-  morel: {
+  // indicia configuration
+  indicia: {
     manager: {
       url: 'https://www.brc.ac.uk/irecord/mobile/submit',
       appname: API_KEY,

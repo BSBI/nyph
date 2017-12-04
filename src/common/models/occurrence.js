@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import Morel from 'morel';
+import Indicia from 'indicia';
 import ImageModel from './image';
 import CONFIG from 'config';
 
-$.extend(true, Morel.Occurrence.keys, CONFIG.morel.occurrence);
+$.extend(true, Indicia.Occurrence.keys, CONFIG.indicia.occurrence);
 
-export default Morel.Occurrence.extend({
+export default Indicia.Occurrence.extend({
   Image: ImageModel,
 });
