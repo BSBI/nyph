@@ -8,28 +8,36 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const pkg = require('../package.json');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 
+const extractSass = new ExtractTextPlugin({
+  filename: '[name].[contenthash].css',
+  disable: process.env.NODE_ENV === 'development',
+});
+
+const srcPath = path.resolve(__dirname, '../src');
+
 const sassLoaders = [
   'css-loader?-url',
   'postcss-loader',
-  `sass-loader?includePaths[]=${path.resolve(__dirname, './src')}`,
+  `sass-loader?includePaths[]=${path.resolve(srcPath)}`,
 ];
 
 module.exports = {
-  context: './src/',
+  context: srcPath,
   entry: {
     app: './main.js',
     vendor: './vendor.js',
   },
   output: {
-    path: 'dist/main',
+    path: __dirname + '../dist/main',
     filename: '[name].js', // Notice we use a variable
   },
   resolve: {
-    root: [
+     modules: [
       path.resolve('./dist/_build'),
-      path.resolve('./node_modules/'),
+      //path.resolve('./node_modules/'),
       path.resolve('./src/'),
       path.resolve('./src/common/vendor'),
+      "node_modules"
     ],
     alias: {
       app: 'app',
@@ -56,7 +64,19 @@ module.exports = {
       { test: /(\.woff)|(\.ttf)/, loader: 'file?name=font/[name].[ext]' },
       {
         test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
+        //loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
+        use: extractSass.extract({
+          use: [
+            {
+              loader: 'css-loader?-url',
+            },
+            {
+              loader: `sass-loader?includePaths[]=${srcPath}`,
+            },
+          ],
+          // use style-loader in development
+          fallback: 'style-loader',
+        }),
       },
     ],
   },
@@ -80,11 +100,11 @@ module.exports = {
     }),
     new CircularDependencyPlugin(),
   ],
-  postcss: [
-    autoprefixer({
-      browsers: ['last 2 versions'],
-    }),
-  ],
+  //postcss: [
+  //  autoprefixer({
+  //    browsers: ['last 2 versions'],
+  //  }),
+  //],
   stats: {
     children: false,
   },
