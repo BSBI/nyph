@@ -1,0 +1,27 @@
+CACHE MANIFEST
+# v1.2 2017-12-05
+
+1.data.js
+app.css
+app.js
+index.html
+vendor.js
+
+font/icons.eot
+font/icons.svg
+font/icons.ttf
+font/icons.woff
+font/icons.woff2
+font/ratchicons.ttf
+font/ratchicons.woff
+
+images/BRC_approved_logo.png
+images/default-skin.png
+images/default-skin.svg
+images/layers.png
+images/layers-2x.png
+images/sponsor_logo.png
+images/swipe_record.png
+
+NETWORK
+https://ajax.googleapis.com/ajax/libs/jquery/

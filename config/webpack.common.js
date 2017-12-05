@@ -1,4 +1,4 @@
-require('dotenv').config({ silent: true }); // get local environment variables from .env
+require('dotenv').config({ silent: false }); // get local environment variables from .env
 
 const path = require('path');
 const webpack = require('webpack');
@@ -35,6 +35,7 @@ module.exports = {
       app: 'app',
       config: 'common/config',
       helpers: 'common/helpers/main',
+      morel: 'common/helpers/morel/main',
 
       // vendor
       typeahead: 'typeahead.js/dist/typeahead.jquery',
@@ -73,10 +74,11 @@ module.exports = {
       APP_BUILD: JSON.stringify(process.env.TRAVIS_BUILD_ID || pkg.build || new Date().getTime()),
       APP_NAME: JSON.stringify(pkg.name),
       APP_VERSION: JSON.stringify(pkg.version),
-      API_SECRET: JSON.stringify(process.env.API_SECRET || ''),
-      API_KEY: JSON.stringify(process.env.API_KEY || ''),
+      API_SECRET: JSON.stringify('irecordApp123'), // JSON.stringify(process.env.API_SECRET || ''),
+      API_KEY: JSON.stringify('ir'), // JSON.stringify(process.env.API_KEY || ''),
       ADMIN_USERNAME: JSON.stringify(process.env.ADMIN_USERNAME || ''),
       ADMIN_PASSWORD: JSON.stringify(process.env.ADMIN_PASSWORD || ''),
+      GUBBINS: JSON.stringify(process.env.GUBBINS || '')
     }),
     new CircularDependencyPlugin(),
   ],

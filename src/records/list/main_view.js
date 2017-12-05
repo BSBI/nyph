@@ -68,6 +68,7 @@ const RecordView = Marionette.View.extend({
       toolsWidth: 100,
     };
 
+    Log(this.el);
     const hammertime = new Hammer(this.el, { direction: Hammer.DIRECTION_HORIZONTAL });
     const that = this;
 

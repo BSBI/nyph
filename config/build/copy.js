@@ -3,13 +3,21 @@ module.exports = {
     files: [
       // IMAGES
       {
-        src: 'src/common/images/*', dest: 'dist/main/images/',
-        expand: true, flatten: true,
+        src: 'src/common/images/*',
+        dest: 'dist/main/images/',
+        expand: true,
+        flatten: true,
       },
       // FONTS
       {
-        src: 'src/common/vendor/fontello/font/*', dest: 'dist/main/font/',
-        expand: true, flatten: true,
+        src: 'src/common/vendor/fontello/font/*',
+        dest: 'dist/main/font/',
+        expand: true,
+        flatten: true,
+      },
+        // MANIFEST
+      {
+        src: 'src/nyph.appcache', dest: 'dist/main/nyph.appcache',
       },
     ],
   },

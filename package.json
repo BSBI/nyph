@@ -40,7 +40,7 @@
     "circular-dependency-plugin": "^2.0.0",
     "core-js": "^2.4.1",
     "css-loader": "^0.25.0",
-    "dotenv": "^2.0.0",
+    "dotenv": "^4.0.0",
     "es6-promise": "^4.0.5",
     "eslint-import-resolver-webpack": "^0.6.0",
     "extract-text-webpack-plugin": "^1.0.1",
