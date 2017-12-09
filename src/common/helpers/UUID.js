@@ -2,7 +2,7 @@
  * Generate UUID.
  */
 
-function UUID() {
+function uuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     // eslint-disable-next-line
     const r = Math.random() * 16 | 0;
@@ -12,4 +12,4 @@ function UUID() {
   });
 }
 
-export default UUID;
+export default uuid;
