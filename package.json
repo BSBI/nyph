@@ -1,9 +1,9 @@
 {
-  "name": "NYPH-app",
+  "name": "NYPH-app-2018",
   "id": "uk.ac.ceh.nyph",
   "title": "NYPH",
-  "description": "New Year Plant Hunt mobile application.",
-  "version": "1.0.0",
+  "description": "BSBI New Year Plant Hunt 2018.",
+  "version": "2.2018.0",
   "build": "3",
   "homepage": "https://bsbi.org.uk",
   "author": {

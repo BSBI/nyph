@@ -9,12 +9,11 @@ import { Log, Validate, StringHelp, LocHelp, GridRefUtils } from 'helpers';
 import App from 'app';
 import recordManager from '../../record_manager';
 import appModel from '../../models/app_model';
-import MainView from './main_view';
+import MainView from './location_main_view';
 import CONFIG from 'config';
 import './styles.scss';
 
-/*eslint-disable camelcase*/
-const API = {
+const LocationController = {
   show(recordID) {
     Log('Location:Controller: showing.');
 
@@ -25,12 +24,12 @@ const API = {
         return;
       }
 
-      // can't edit a saved one - to be removed when record update
-      // is possible on the server
-      if (recordModel.getSyncStatus() === Morel.SYNCED) {
-        App.trigger('records:show', recordID, { replace: true });
-        return;
-      }
+      // // can't edit a saved one - to be removed when record update
+      // // is possible on the server
+      // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+      //   App.trigger('records:show', recordID, { replace: true });
+      //   return;
+      // }
 
       // MAIN
       const mainView = new MainView({
@@ -40,25 +39,25 @@ const API = {
 
       // listen to events
       mainView.on('location:select:map', (loc, createNew) => {
-        API.onLocationSelect(recordModel, loc, createNew);
+        LocationController.onLocationSelect(recordModel, loc, createNew);
       });
       mainView.on('gps:click', () => {
-        API.onGPSClick(recordModel);
+        LocationController.onGPSClick(recordModel);
       });
-      mainView.on('location:name:change', name => {
-        API.onLocationNameChange(recordModel, name);
+      mainView.on('location:name:change', (name) => {
+        LocationController.onLocationNameChange(recordModel, name);
       });
-      mainView.on('location:gridref:change', gridRefString => {
-        API.onManualGridrefChange(recordModel, gridRefString);
+      mainView.on('location:gridref:change', (gridRefString) => {
+        LocationController.onManualGridrefChange(recordModel, gridRefString);
       });
-      mainView.on('lock:click:location', API.onLocationLockClick);
-      mainView.on('lock:click:name', API.onNameLockClick);
+      mainView.on('lock:click:location', LocationController.onLocationLockClick);
+      mainView.on('lock:click:name', LocationController.onNameLockClick);
       const location = recordModel.get('location') || {};
       // const name = recordModel.get('location_name');
       const locationIsLocked = appModel.isAttrLocked('location', location);
       // const nameIsLocked = appModel.isAttrLocked('location_name', currentVal);
       mainView.on('navigateBack', () => {
-        API.exit(recordModel, locationIsLocked);
+        LocationController.exit(recordModel, locationIsLocked);
       });
 
       App.regions.getRegion('main').show(mainView);
@@ -69,13 +68,13 @@ const API = {
 
     // FOOTER
     App.regions.getRegion('footer').hide().empty();
-    
+
     document.getElementById('main').style.zIndex = '2000';
   },
 
   exit(recordModel, locationIsLocked) {
     Log('Location:Controller: exiting.');
-    
+
     document.getElementById('main').style.zIndex = 'auto';
 
     recordModel.save(null, {
@@ -83,13 +82,12 @@ const API = {
         // save to past locations and update location ID on record
         const location = recordModel.get('location') || {};
         if ((location.latitude && location.longitude)) {
-          const location_name = recordModel.get('location_name');
-          const locationID = appModel.setLocation(location, location_name);
-          location.id = locationID;
+          const locationName = recordModel.get('location_name');
+          location.id = appModel.setLocation(location, locationName);
           recordModel.set('location', location);
         }
 
-        API.updateLocks(recordModel, locationIsLocked);
+        LocationController.updateLocks(recordModel, locationIsLocked);
 
         window.history.back();
       },
@@ -103,8 +101,8 @@ const API = {
   updateLocks(recordModel, locationIsLocked) {
     Log('Location:Controller: updating locks.');
 
-    let location = recordModel.get('location') || {};
-    const location_name = recordModel.get('location_name');
+    const location = recordModel.get('location') || {};
+    const locationName = recordModel.get('location_name');
     const lockedLocation = appModel.getAttrLock('location');
     const lockedName = appModel.getAttrLock('location_name');
 
@@ -112,7 +110,7 @@ const API = {
     if (lockedLocation === true && (!location.latitude || !location.longitude)) {
       appModel.setAttrLock('location', null);
     }
-    if (lockedName === true && !location_name) {
+    if (lockedName === true && !locationName) {
       appModel.setAttrLock('location_name', null);
     }
 
@@ -131,12 +129,12 @@ const API = {
     }
 
     // name
-    if (lockedName && (lockedName === true || lockedName === location_name)) {
-      appModel.setAttrLock('location_name', location_name);
+    if (lockedName && (lockedName === true || lockedName === locationName)) {
+      appModel.setAttrLock('location_name', locationName);
     }
-    if (CONFIG.AUTO_LOCK_LOCATION_NAME && location_name) {
+    if (CONFIG.AUTO_LOCK_LOCATION_NAME && locationName) {
       // no explicit lock request by user, but remember name anyway
-      appModel.setAttrLock('location_name', location_name);
+      appModel.setAttrLock('location_name', locationName);
     }
   },
 
@@ -147,8 +145,8 @@ const API = {
       return;
     }
 
-    const escaped_name = StringHelp.escape(name);
-    recordModel.set('location_name', escaped_name);
+    const escapedName = StringHelp.escape(name);
+    recordModel.set('location_name', escapedName);
   },
 
   onManualGridrefChange(recordModel, gridRefString) {
@@ -159,7 +157,7 @@ const API = {
      * @param {string} gridRefString
      * @returns {{}}
      */
-    //function validate(gridRefString) {
+    // function validate(gridRefString) {
     //  const errors = {};
     //  gridRefString = gridRefString.replace(/\s/g, '').toUpperCase();
     //  if (!LocHelp.gridrefStringToLatLng(gridRefString)) {
@@ -171,29 +169,29 @@ const API = {
     //  }
     //
     //  return null;
-    //}
+    // }
 
-    //const validationError = validate(gridRefString);
-    
-    gridRefString = gridRefString.replace(/\s/g, '').toUpperCase();
-    
-    if (gridRefString !== '') {
-      var parsedGridRef = GridRefUtils.GridRefParser.factory(gridRefString);
-      
+    // const validationError = validate(gridRefString);
+
+    const cleanGridRefString = gridRefString.replace(/\s/g, '').toUpperCase();
+
+    if (cleanGridRefString !== '') {
+      const parsedGridRef = GridRefUtils.GridRefParser.factory(cleanGridRefString);
+
       if (parsedGridRef) {
         const location = recordModel.get('location') || {};
         const latLng = parsedGridRef.osRef.to_latLng();
-        
+
         location.source = 'gridref';
         location.gridref = parsedGridRef.preciseGridRef;
         location.latitude = latLng.lat;
         location.longitude = latLng.lng;
         location.accuracy = parsedGridRef.length / 2; // radius rather than square dimension
-        
-        API.onLocationSelect(recordModel, location);
+
+        LocationController.onLocationSelect(recordModel, location);
       } else {
         App.trigger('gridref:form:data:invalid', {
-          gridref: 'invalid'
+          gridref: 'invalid',
         });
       }
     } else {
@@ -203,13 +201,13 @@ const API = {
       location.latitude = null;
       location.longitude = null;
       location.accuracy = null;
-      
-      API.onLocationSelect(recordModel, location);
+
+      LocationController.onLocationSelect(recordModel, location);
     }
-    
-    //if (!validationError) {
+
+    // if (!validationError) {
     //  App.trigger('gridref:form:data:invalid', {}); // update form
-    //  const latLon = LocHelp.gridrefStringToLatLng(gridRefString);
+    //  const latLon = LocHelp.gridrefStringToLatLng(cleanGridRefString);
     //
     //  const location = recordModel.get('location') || {};
     //  // location.name = StringHelp.escape(name);
@@ -224,16 +222,16 @@ const API = {
     //  // -2 because of gridref letters, 2 because this is min precision
     //  // @todo Irish GR issue
     //  // @todo tetrad issue
-    //  // const accuracy = (gridRefString.replace(/\s/g, '').length - 2) || 2;
-    //  const grSquareDimension = Math.pow(10, 5 - ((gridRefString.replace(/\s/g, '').length - 2) / 2));
+    //  // const accuracy = (cleanGridRefString.replace(/\s/g, '').length - 2) || 2;
+    //  const grSquareDimension = Math.pow(10, 5 - ((cleanGridRefString.replace(/\s/g, '').length - 2) / 2));
     //
-    //  location.accuracy = grSquareDimension / 2; // accauracy is radius, so for sqaures use half dimension
+    //  location.accuracy = grSquareDimension / 2; // accuracy is radius, so for squares use half dimension
     //
-    //  API.onLocationSelect(recordModel, location);
-    //  // API.exit();
-    //} else {
+    //  LocationController.onLocationSelect(recordModel, location);
+    //  // LocationController.exit();
+    // } else {
     //  App.trigger('gridref:form:data:invalid', validationError);
-    //}
+    // }
   },
 
   onLocationSelect(recordModel, loc, createNew) {
@@ -288,4 +286,4 @@ const API = {
   },
 };
 
-export { API as default };
+export { LocationController as default };

@@ -20,8 +20,12 @@ const Occurrence = Backbone.Model.extend({
     if (options.Image) this.Image = options.Image;
 
     this.attributes = {};
-    if (options.collection) this.collection = options.collection;
-    if (options.parse) attrs = this.parse(attrs, options) || {};
+    if (options.collection) {
+      this.collection = options.collection;
+    }
+    if (options.parse) {
+      attrs = this.parse(attrs, options) || {};
+    }
     attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
     this.set(attrs, options);
     this.changed = {};
@@ -29,8 +33,12 @@ const Occurrence = Backbone.Model.extend({
     if (options.metadata) {
       this.metadata = options.metadata;
     } else {
+      const today = new Date();
       this.metadata = {
-        created_on: new Date(),
+        created_on: today,
+        updated_on: today,
+        synced_on: null, // set when fully initialized only
+        server_on: null, // updated on server
       };
     }
 
@@ -55,6 +63,20 @@ const Occurrence = Backbone.Model.extend({
     }
 
     this.initialize.apply(this, arguments);
+  },
+
+  /**
+   * marks changed and saves Occurrence and parent Sample
+   *
+   */
+  markChangedAndResave(attrs, options = {}) {
+    if (!this.sample) return false;
+
+    this.metadata.updated_on = new Date();
+    this.metadata.synced_on = null; // set when fully initialized only
+    this.metadata.server_on = null; // updated on server
+
+    return this.sample.markChangedAndResave(attrs, options);
   },
 
   save(attrs, options = {}) {

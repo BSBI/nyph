@@ -36,11 +36,11 @@ export default Marionette.View.extend({
   serializeData() {
     const recordModel = this.model.get('recordModel');
     const occ = recordModel.occurrences.at(0);
-    const specie = occ.get('taxon');
+    const species = occ.get('taxon');
 
     // taxon
-    const scientificName = specie.scientific_name;
-    const commonName = specie.common_name;
+    const scientificName = species.scientific_name;
+    const commonName = species.common_name;
 
     const syncStatus = recordModel.getSyncStatus();
 

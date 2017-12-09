@@ -36,12 +36,12 @@ const API = {
           return;
         }
 
-        // can't edit a saved one - to be removed when record update
-        // is possible on the server
-        if (recordModel.getSyncStatus() === Morel.SYNCED) {
-          App.trigger('records:show', recordID, { replace: true });
-          return;
-        }
+        // // can't edit a saved one - to be removed when record update
+        // // is possible on the server
+        // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+        //   App.trigger('records:show', recordID, { replace: true });
+        //   return;
+        // }
 
         let mainView;
 
@@ -85,18 +85,17 @@ const API = {
         if (edit) {
           const updatedSampleID = sample.id || sample.cid;
           App.trigger('records:edit', updatedSampleID, { replace: true });
-        } else {
+        } else if (sample.get('location_name')) {
           // interfere with app flow
           // if location not set then navigate to that screen
           // otherwise go back to list
-          if (sample.get('location_name')) {
-            // already have a satisfactory locked location
-            // return to previous page
-            window.history.back();
-          } else {
-            // navigate to edit the location of the new record
-            App.trigger('records:edit:location', sample.cid, { replace: true });
-          }
+
+          // already have a satisfactory locked location
+          // return to previous page
+          window.history.back();
+        } else {
+          // navigate to edit the location of the new record
+          App.trigger('records:edit:location', sample.cid, { replace: true });
         }
       });
     }, that);

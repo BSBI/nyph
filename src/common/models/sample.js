@@ -31,11 +31,11 @@ let Sample = Morel.Sample.extend({
     const sample = {};
     const occurrences = {};
 
-    // todo: remove this bit once sample DB update is possible
-    // check if saved
-    if (!this.metadata.saved) {
-      sample.send = false;
-    }
+    // // todo: remove this bit once sample DB update is possible
+    // // check if saved
+    // if (!this.metadata.saved) {
+    //   sample.send = false;
+    // }
 
     // location
     const location = attrs.location || {};
@@ -112,7 +112,7 @@ let Sample = Morel.Sample.extend({
   },
 
   /**
-   * Set the record for submission and send it.
+   * Mark the record for submission and store it locally
    */
   setToSend(callback) {
     this.metadata.saved = true;
@@ -124,7 +124,7 @@ let Sample = Morel.Sample.extend({
       return false;
     }
 
-    // save record
+    // save record (does not send remotely)
     const promise = this.save(null, {
       success: () => {
         callback && callback();

@@ -10,6 +10,7 @@ import ImageModel from './Image';
 import Error from './Error';
 import CONST from './constants';
 import helpers from './helpers';
+// import appModel from '../../models/app_model';
 
 class Morel {
   constructor(options = {}) {
@@ -54,6 +55,9 @@ class Morel {
 
   /**
    * Synchronises a collection
+   * if collection is undefined then sync everything
+   *
+   * @param method
    * @param collection
    * @param options
    * @returns {*}
@@ -83,7 +87,7 @@ class Morel {
         toWait.push(passingPromise);
       });
 
-      const dfd = $.when.apply($, toWait);
+      const dfd = $.when(...toWait);
       dfd.then(() => {
         returnPromise.resolve();
         options.success && options.success();
@@ -92,24 +96,24 @@ class Morel {
 
     if (collection) {
       syncEach(collection);
-      return returnPromise.promise();
+    } else {
+      // get all models to submit
+      this.getAll((err, receivedCollection) => {
+        if (err) {
+          returnPromise.reject();
+          options.error && options.error(err);
+          return;
+        }
+
+        syncEach(receivedCollection);
+      });
     }
-
-    // get all models to submit
-    this.getAll((err, receivedCollection) => {
-      if (err) {
-        returnPromise.reject();
-        options.error && options.error(err);
-        return;
-      }
-
-      syncEach(receivedCollection);
-    });
     return returnPromise.promise();
   }
 
   /**
    * Synchronises the model with the remote server.
+   *
    * @param method
    * @param model
    * @param options
@@ -132,7 +136,9 @@ class Morel {
       });
     };
 
+    // why not model.manager.post(model, options)
     const xhr = Morel.prototype.post.apply(model.manager, [model, options]);
+
     return xhr;
   }
 
@@ -152,7 +158,7 @@ class Morel {
 
     model.synchronising = true;
 
-    // on success
+      // on success
     const success = options.success;
     options.success = () => {
       model.synchronising = false;
@@ -160,8 +166,21 @@ class Morel {
       // update model
       model.metadata.warehouse_id = 1;
       model.metadata.server_on =
-      model.metadata.updated_on =
-      model.metadata.synced_on = new Date();
+          model.metadata.updated_on =
+            model.metadata.synced_on = new Date();
+
+      // mark associated images as synch'ed
+      model.occurrences.each((occurrence) => {
+        if (occurrence.images) {
+          occurrence.images.each((image) => {
+            image.metadata.server_on =
+              image.metadata.updated_on =
+                image.metadata.synced_on = new Date();
+
+            image.save();
+          });
+        }
+      });
 
       success && success(model, null, options);
     };
@@ -179,14 +198,14 @@ class Morel {
 
     const dfd = new $.Deferred();
     this._getModelFormData(model, (err, formData) => {
-      // AJAX post
+        // AJAX post
       const xhr = options.xhr = Backbone.ajax({
         url: options.url,
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
-        timeout: options.timeout || 30000, // 30s
+        timeout: options.timeout || 120000, // 120s
         success: options.success,
         error: options.error,
       });
@@ -219,58 +238,70 @@ class Morel {
     const occurrenceProcesses = [];
     model.occurrences.each((occurrence) => {
       // on async run occCount will be incremented before used for image name
-      const localOccCount = occCount;
+      // const localOccCount = occCount;
       let imgCount = 0;
 
       const imageProcesses = [];
 
       occurrence.images.each((image) => {
-        const imageDfd = new $.Deferred();
-        imageProcesses.push(imageDfd);
-
-        const url = image.getURL();
-        const type = image.get('type');
-
-        function onSuccess(err, img, dataURI, blob) {
-          const name = `sc:${localOccCount}::photo${imgCount}`;
-
-          // can provide both image/jpeg and jpeg
-          let extension = type;
-          let mediaType = type;
-          if (type.match(/image.*/)) {
-            extension = type.split('/')[1];
-          } else {
-            mediaType = `image/${mediaType}`;
-          }
-          if (!blob) {
-            blob = helpers.dataURItoBlob(dataURI, mediaType);
-          }
-
-          formData.append(name, blob, `pic.${extension}`);
-          imgCount++;
-          imageDfd.resolve();
+        // add external ID
+        const imageId = image.cid || image.id;
+        if (imageId) {
+          flattened[`photoid[${imgCount}]`] = imageId;
         }
 
-        if (!helpers.isDataURL(url)) {
-          // load image
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', url, true);
-          xhr.responseType = 'blob';
-          xhr.onload = () => {
-            onSuccess(null, null, null, xhr.response);
-          };
+        const imageSyncStatus = image.getSyncStatus();
+        if (imageSyncStatus !== CONST.SYNCED && imageSyncStatus !== CONST.SYNCHRONISING) {
+          // need to send image
 
-          xhr.send();
-        } else {
-          onSuccess(null, null, url);
+          const imageDfd = new $.Deferred();
+          imageProcesses.push(imageDfd);
+
+          const url = image.getURL();
+          const type = image.get('type');
+
+          function onSuccess(err, img, dataURI, blob) {
+            // const name = `sc:${localOccCount}::photo${imgCount}`;
+            const name = imageId;
+
+            // can provide both image/jpeg and jpeg
+            let extension = type;
+            let mediaType = type;
+            if (type.match(/image.*/)) {
+              extension = type.split('/')[1];
+            } else {
+              mediaType = `image/${mediaType}`;
+            }
+            if (!blob) {
+              blob = helpers.dataURItoBlob(dataURI, mediaType);
+            }
+
+            formData.append(name, blob, `pic.${extension}`);
+            imgCount++;
+            imageDfd.resolve();
+          }
+
+          if (!helpers.isDataURL(url)) {
+            // load image
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+            xhr.onload = () => {
+              onSuccess(null, null, null, xhr.response);
+            };
+
+            xhr.send();
+          } else {
+            onSuccess(null, null, url);
+          }
         }
       });
 
-      occurrenceProcesses.push($.when.apply($, imageProcesses));
+      occurrenceProcesses.push($.when(...imageProcesses));
       occCount++;
     });
 
-    $.when.apply($, occurrenceProcesses).then(() => {
+    $.when(...occurrenceProcesses).then(() => {
       // append attributes
       const keys = Object.keys(flattened);
       for (let i = 0; i < keys.length; i++) {
@@ -278,7 +309,12 @@ class Morel {
       }
 
       // Add authentication
-      formData = this.appendAuth(formData);
+      // formData = this.appendAuth(formData);
+
+      // Add NYPH list-level attributes
+      // (a hacky approach because these are not part of an Indicia object)
+      formData = this.appendNyphListDetails(formData);
+
       callback(null, formData);
     });
   }
@@ -376,6 +412,19 @@ class Morel {
     this._appendAppAuth(data);
     // warehouse data
     this._appendWarehouseAuth(data);
+
+    return data;
+  }
+
+  /**
+   * Hacky addition of global NYPH list details
+   * this should be overriden by RecordManager
+   *
+   * @param data An object to modify
+   * @returns {*} A data object
+   */
+  appendNyphListDetails(data) {
+    data.append('foo', 'bar');
 
     return data;
   }

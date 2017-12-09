@@ -26,12 +26,12 @@ const API = {
         return;
       }
 
-      // can't edit a saved one - to be removed when record update
-      // is possible on the server
-      if (recordModel.getSyncStatus() === Morel.SYNCED) {
-        App.trigger('records:show', recordID, { replace: true });
-        return;
-      }
+      // // can't edit a saved one - to be removed when record update
+      // // is possible on the server
+      // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+      //   App.trigger('records:show', recordID, { replace: true });
+      //   return;
+      // }
 
       // MAIN
       const mainView = new MainView({

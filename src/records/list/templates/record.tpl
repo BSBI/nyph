@@ -1,5 +1,5 @@
 <% if (obj.taxon) { %>
-  <a href="#records/<%- obj.id %><%- obj.onDatabase ? '' : '/edit' %>">
+  <a href="#records/<%- obj.id %>/edit">
 <% } else { %>
   <a href="#records/<%- obj.id %>/edit/taxon">
 <% } %>
@@ -29,7 +29,7 @@
           <div data-attr="comment" title="edit comment" class="js-attr icon icon-comment"></div>
           <% } %>
         <% } %>
-        <div id="delete" title="delete record" class="delete icon icon-cancel"></div>
+        <div title="delete record" class="delete icon icon-cancel"></div>
       </div>
 
     <% } else { %>
@@ -40,7 +40,7 @@
         <div data-attr="comment" class="js-attr icon icon-comment"></div>
         <% } %>
 
-        <div id="delete" class="delete icon icon-cancel"></div>
+        <div title="delete record" class="delete icon icon-cancel"></div>
       </div>
     <% } %>
     </div>

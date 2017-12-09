@@ -6,19 +6,20 @@ import App from 'app';
 import CONFIG from 'config';
 import { Log, Analytics, ImageHelp } from 'helpers';
 import appModel from '../../common/models/app_model';
-import userModel from '../../common/models/user_model';
+// import userModel from '../../common/models/user_model';
 import recordManager from '../../common/record_manager';
 import Sample from '../../common/models/sample';
 import Occurrence from '../../common/models/occurrence';
-import MainView from './main_view';
+import MainView from './list_main_view';
 import HeaderView from './header_view';
 import LoaderView from '../../common/views/loader_view';
 
-const API = {
+const RecordListController = {
   show() {
     const loaderView = new LoaderView();
     App.regions.getRegion('main').show(loaderView);
 
+    // recordsCollection is a set of Samples
     recordManager.getAll((getError, recordsCollection) => {
       Log('Records:List:Controller: showing');
       if (getError) {
@@ -39,7 +40,7 @@ const API = {
 
       mainView.on('childview:record:delete', (childView) => {
         const recordModel = childView.model;
-        API.recordDelete(recordModel);
+        RecordListController.recordDelete(recordModel);
       });
 
       App.regions.getRegion('main').show(mainView);
@@ -47,20 +48,26 @@ const API = {
 
     // HEADER
     const headerView = new HeaderView({ model: appModel });
-    headerView.on('records:submit:all', API.showSendAllDialog);
+    headerView.on('records:submit:all', RecordListController.showSendAllDialog);
 
     headerView.on('photo:upload', (e) => {
       const photo = e.target.files[0];
-      API.photoUpload(photo);
+      RecordListController.photoUpload(photo);
     });
 
     // android gallery/camera selection
-    headerView.on('photo:selection', API.photoSelect);
+    headerView.on('photo:selection', RecordListController.photoSelect);
 
     App.regions.getRegion('header').show(headerView);
 
     // FOOTER
     App.regions.getRegion('footer').hide().empty();
+  },
+
+  onExit(mainView, recordModel, attr, callback) {
+    Log('Records:List:Controller: exiting');
+        // const values = mainView.getValues();
+        // RecordListController.save(attr, values, recordModel, callback);
   },
 
   recordDelete(recordModel) {
@@ -101,7 +108,7 @@ const API = {
     Log('Records:List:Controller: photo upload');
 
     // show loader
-    API.createNewRecord(photo, () => {
+    RecordListController.createNewRecord(photo, () => {
       // hide loader
     });
   },
@@ -116,7 +123,7 @@ const API = {
           title: 'Camera',
           onClick() {
             ImageHelp.getImage((entry) => {
-              API.createNewRecord(entry.nativeURL, () => {});
+              RecordListController.createNewRecord(entry.nativeURL, () => {});
             });
             App.regions.getRegion('dialog').hide();
           },
@@ -125,7 +132,7 @@ const API = {
           title: 'Gallery',
           onClick() {
             ImageHelp.getImage((entry) => {
-              API.createNewRecord(entry.nativeURL, () => {});
+              RecordListController.createNewRecord(entry.nativeURL, () => {});
             }, {
               sourceType: window.Camera.PictureSourceType.PHOTOLIBRARY,
               saveToPhotoAlbum: false,
@@ -143,8 +150,7 @@ const API = {
   createNewRecord(photo, callback) {
     ImageHelp.getImageModel(photo, (err, image) => {
       if (err || !image) {
-        const err = new Error('Missing image.');
-        callback(err);
+        callback(new Error('Missing image.'));
         return;
       }
       const occurrence = new Occurrence({
@@ -194,7 +200,7 @@ const API = {
         {
           title: 'OK',
           class: 'btn-positive',
-          onClick: API.sendAllRecords,
+          onClick: RecordListController.sendAllRecords,
         },
       ],
     });
@@ -227,22 +233,16 @@ const API = {
   sendAllRecords() {
     Log('Settings:Menu:Controller: sending all records');
 
+    // try to send all records
     recordManager.setAllToSend((err) => {
       if (err) {
         App.regions.getRegion('dialog').error(err);
         return;
       }
       App.regions.getRegion('dialog').hide();
-
-      // check if logged in
-      if (!userModel.hasLogIn()) {
-        App.trigger('user:login');
-      }
     }).then(() => {
-      // check if there are any unsent
-
-      //only if logged in
-      if (!userModel.hasLogIn()) return;
+      // check if there are any unsent changes
+      // retrieve the records again and check that all are marked as synch'ed
 
       let incomplete = false;
       recordManager.getAll((err, records) => {
@@ -259,13 +259,13 @@ const API = {
 
         // give feedback
         if (incomplete) {
-          API.showIncompleteDialog();
+          RecordListController.showIncompleteDialog();
         } else {
-          API.showThanksDialog();
+          RecordListController.showThanksDialog();
         }
       });
     });
   },
 };
 
-export { API as default };
+export { RecordListController as default };

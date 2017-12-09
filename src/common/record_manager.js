@@ -92,7 +92,7 @@ class Manager extends Morel {
       returnPromiseResolve = resolve;
       returnPromiseReject = reject;
     });
-    const that = this;
+    // const that = this;
     let noneUsed = true;
     let saving = 0;
 
@@ -101,28 +101,31 @@ class Manager extends Morel {
         Log(err, 'e');
         callback && callback(err);
         return;
-      }
-      records.each((record) => {
-        noneUsed = false;
-        saving++;
-        const valid = record.setToSend((error) => {
-          if (error) {
-            callback && callback(error);
-            return;
-          }
-          saving--;
-          if (saving === 0) {
-            callback && callback();
-            that.syncAll().then(() => {
-              returnPromiseResolve();
-            });
+      } else {
+        records.each((record) => {
+          noneUsed = false;
+          saving++;
+          const valid = record.setToSend((error) => {
+            if (error) {
+              callback && callback(error);
+              return;
+            }
+            saving--;
+            if (saving === 0) {
+              callback && callback();
+
+              // send all records remotely
+              this.syncAll().then(() => {
+                returnPromiseResolve();
+              });
+            }
+          });
+
+          if (!valid) {
+            saving--;
           }
         });
-
-        if (!valid) {
-          saving--;
-        }
-      });
+      }
 
       if (noneUsed || saving === 0) {
         callback && callback();
@@ -132,7 +135,7 @@ class Manager extends Morel {
   }
 
   clearAll(local, callback) {
-    const that = this;
+    // const that = this;
     this.getAll((err, samples) => {
       if (window.cordova) {
         // we need to remove the images from file system
@@ -140,8 +143,23 @@ class Manager extends Morel {
           sample.trigger('destroy');
         });
       }
-      that.clear(callback);
+      this.clear(callback);
     });
+  }
+
+  /**
+   * Hacky addition of global NYPH list details
+   *
+   * @param data An object to modify
+   * @returns {*} A data object
+   */
+  appendNyphListDetails(data) {
+    data.append('nyphListEmail', appModel.get('nyphListEmail'));
+    data.append('nyphListRecorders', appModel.get('nyphListRecorders'));
+    data.append('nyphListPlacename', appModel.get('nyphListPlacename'));
+    data.append('nyphListUUID', appModel.get('nyphListUUID'));
+
+    return data;
   }
 }
 

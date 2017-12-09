@@ -5,8 +5,8 @@ import Marionette from 'backbone.marionette';
 import JST from 'JST';
 import { Log, LocHelp } from 'helpers';
 import CONFIG from 'config';
-import 'typeahead'; //typeahead.js
-import headerFunctions from './main_view_header';
+import 'typeahead'; // typeahead.js
+import headerFunctions from './location_header_view';
 import mapFunctions from './map/main';
 import './styles.scss';
 
@@ -16,16 +16,16 @@ const LocationView = Marionette.View.extend({
 
   triggers: {
     'click #location-lock-btn': 'lock:click:location',
-    'click #name-lock-btn': 'lock:click:name',
+    // 'click #name-lock-btn': 'lock:click:name',
     'click a[data-rel="back"]': 'navigateBack',
   },
 
   events: {
-    'change #location-name': 'changeName',
-    'typeahead:select #location-name': 'changeName',
+    // 'change #location-name': 'changeName',
+    // 'typeahead:select #location-name': 'changeName',
     'change #location-gridref': 'changeGridRef',
     'keyup #location-gridref': 'keyupGridRef',
-    'blur #location-name': 'blurInput',
+    // 'blur #location-name': 'blurInput',
     'blur #location-gridref': 'blurInput',
   },
 
@@ -39,6 +39,9 @@ const LocationView = Marionette.View.extend({
     this.currentLayer = null;
     this.markerAdded = false;
 
+    /**
+     * @var {Sample}
+     */
     const recordModel = this.model.get('recordModel');
 
     // this.listenTo(recordModel,
@@ -59,15 +62,17 @@ const LocationView = Marionette.View.extend({
 
     this._refreshMapHeight();
     this.initMap();
-    this.addLocationNameSearch();
+    // this.addLocationNameSearch();
   },
 
   serializeData() {
     Log('Location:Controller:MainView: serializing.');
 
     const appModel = this.model.get('appModel');
-    const location = this._getCurrentLocation();
-    const name = this.model.get('recordModel').get('location_name');
+
+    // const sample = this.model.get('recordModel');
+
+    // const location = this._getCurrentLocation();
     let gridref;
 
     // avoid testing location.longitude as this can validly be zero within the UK
@@ -77,25 +82,29 @@ const LocationView = Marionette.View.extend({
       gridref = location.gridref;
     }
 
-    const locationLocked = appModel.isAttrLocked('location', location);
-    const nameLocked = appModel.isAttrLocked('location_name', name);
+    // const locationLocked = appModel.isAttrLocked('location', location);
+    // const nameLocked = appModel.isAttrLocked('location_name', name);
 
     return {
-      name,
-      gridref,
+      // name,
+      gridref: location.gridref,
       locationSource: location.source,
       accuracy: location.accuracy,
       latitude: location.latitude,
       longitude: location.longitude,
       accuracyLimit: CONFIG.gps_accuracy_limit, // TODO: get from GPS
-      locationLocked,
-      nameLocked,
+      // locationLocked,
+      // nameLocked,
     };
   },
 
   _getCurrentLocation() {
     return this.model.get('recordModel').get('location') || {};
   },
+
+  //_getCurrentSample() {
+  //  return this.model.get('recordModel');
+  //},
 });
 
 const LocationViewHeader = LocationView.extend(headerFunctions);

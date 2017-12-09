@@ -48,7 +48,6 @@ App.on('before:start', () => {
 App.on('start', () => {
   // update app first
   Update.run(() => {
-    // release the beast
     Log('App: starting');
 
     FastClick.attach(document.body);

@@ -81,7 +81,9 @@ const Sample = Backbone.Model.extend({
   },
 
   /**
-   * Saves the record to the record manager and if valid syncs it with DB
+   * Saves the record to the record manager
+   * if valid and options.remote is TRUE then syncs it with DB
+   *
    * Returns on success: model, response, options
    */
   save(attrs, options = {}) {

@@ -62,14 +62,18 @@ export default {
   // morel configuration
   morel: {
     manager: {
-      url: 'https://nyph.bsbi.org/appsubmit.php', // was 'https://www.brc.ac.uk/irecord/mobile/submit',
+      url: 'https://www.brc.ac.uk/irecord/mobile/submit',
       appname: API_KEY,
       appsecret: API_SECRET,
       website_id: 23,
       survey_id: 427,
-      input_form: 'enter-NYPH-2017' // was 'enter-app-record',
+      input_form: 'enter-NYPH-2018', // was 'enter-app-record',
     },
     sample: {
+
+      // abandon most of the indicia location implementation,
+      // as then don't have to map values to it's horrible database structure
+      // flatten everything to attributes
       location: {
         values(location, options) {
           // convert accuracy for map and gridref sources
@@ -88,7 +92,7 @@ export default {
             location_altitude: location.altitude,
             location_altitude_accuracy: location.altitudeAccuracy,
             location_accuracy: accuracy,
-            //location_type: location.gridref ? 'OSGB' : 4326, // this should eventually also accomodate Irish gridrefs
+            //location_type: location.gridref ? 'OSGB' : 4326, // this should eventually also accommodate Irish gridrefs
           };
           
           if (window.nyphAdminMode) {

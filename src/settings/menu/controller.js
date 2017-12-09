@@ -117,16 +117,17 @@ const API = {
           onClick() {
             Log('Settings:Menu:Controller: sending all records');
 
-            // delete all
             recordManager.setAllToSend((err) => {
               if (err) {
                 App.regions.getRegion('dialog').error(err);
-                return;
+              } else {
+                // this is wrong as callback called after first record sent rather than all
+
+                App.regions.getRegion('dialog').show({
+                  title: 'Done!',
+                  timeout: 1000,
+                });
               }
-              App.regions.getRegion('dialog').show({
-                title: 'Done!',
-                timeout: 1000,
-              });
             });
             Analytics.trackEvent('Settings', 'send all');
           },

@@ -56,5 +56,5 @@
   </a>
 
   <div class="mobile-swipe-edit">
-    <div id="delete" class="delete icon icon-delete"></div>
+    <div class="delete icon icon-delete"></div>
   </div>

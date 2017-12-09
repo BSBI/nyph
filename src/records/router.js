@@ -8,12 +8,13 @@ import App from 'app';
 import recordManager from '../common/record_manager';
 import userModel from '../common/models/user_model';
 import appModel from '../common/models/app_model';
-import ListController from './list/controller';
+import ListController from './list/list_controller';
 import ShowController from './show/controller';
 import EditController from './edit/controller';
-import EditLocationController from '../common/pages/location/controller';
+import DetailsController from './details/details_controller';
+import EditLocationController from '../common/pages/location/location_controller';
 import EditAttrController from './attr/controller';
-import TaxonController from '../common/pages/taxon/controller';
+import TaxonController from '../common/pages/taxon/taxon_controller';
 
 App.records = {};
 
@@ -38,6 +39,10 @@ const Router = Marionette.AppRouter.extend({
         scroll = $mainRegion.scrollTop();
       },
     },
+    'records/details': {
+      route: DetailsController.show,
+
+    },
     'records/new(/)': TaxonController.show,
     'records/:id': ShowController.show,
     'records/:id/edit(/)': EditController.show,
@@ -51,6 +56,11 @@ const Router = Marionette.AppRouter.extend({
 App.on('records:list', (options) => {
   App.navigate('records', options);
   ListController.show();
+});
+
+App.on('records:details', (options) => {
+  App.navigate('records/details', options);
+  DetailsController.show();
 });
 
 App.on('records:show', (recordID, options) => {

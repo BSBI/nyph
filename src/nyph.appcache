@@ -1,11 +1,14 @@
 CACHE MANIFEST
-# v1.2 2017-12-05
+# v1.2 2017-12-07
 
 1.data.js
 app.css
+app.css.map
 app.js
+app.js.map
 index.html
 vendor.js
+vendor.js.map
 
 font/icons.eot
 font/icons.svg
@@ -23,5 +26,11 @@ images/layers-2x.png
 images/sponsor_logo.png
 images/swipe_record.png
 
-NETWORK
+https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
+
+NETWORK:
 https://ajax.googleapis.com/ajax/libs/jquery/
+https://openspace.ordnancesurvey.co.uk/
+https://api.tiles.mapbox.com/
+https://nyph.bsbi.org/
+

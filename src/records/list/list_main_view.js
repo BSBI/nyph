@@ -16,7 +16,7 @@ const RecordView = Marionette.View.extend({
   className: 'table-view-cell swipe',
 
   triggers: {
-    'click #delete': 'record:delete',
+    'click .delete': 'record:delete',
   },
 
   events: {
@@ -99,12 +99,13 @@ const RecordView = Marionette.View.extend({
   },
 
   serializeData() {
+    /** @var recordModel Occurrence */
     const recordModel = this.model;
     const occ = recordModel.occurrences.at(0);
     const date = DateHelp.prettyPrintStamp(recordModel);
     const species = occ.get('taxon') || {};
     const images = occ.images;
-    let img = images.length && images.at(0).get('thumbnail');
+    const img = images.length && images.at(0).get('thumbnail');
 
     const taxon = species[species.found_in_name];
 
@@ -112,7 +113,7 @@ const RecordView = Marionette.View.extend({
 
     const locationPrint = recordModel.printLocation();
     const location = recordModel.get('location') || {};
-    const location_name = StringHelp.escape(recordModel.get('location_name'));
+    const locationName = StringHelp.escape(recordModel.get('location_name'));
 
     // regardless of CONFIG.ENFORCE_DATE_CONSTRAINT, flag date range problems in UI
     const modelDate = new Date(recordModel.get('date'));
@@ -123,7 +124,7 @@ const RecordView = Marionette.View.extend({
       onDatabase: syncStatus === Morel.SYNCED,
       isLocating: recordModel.isGPSRunning(),
       location: locationPrint,
-      location_name: location_name,
+      location_name: locationName,
       location_gridref: location.gridref,
       recorder: StringHelp.escape(recordModel.get('recorder') || ''),
       isSynchronising: syncStatus === Morel.SYNCHRONISING,
@@ -201,6 +202,77 @@ export default Marionette.CompositeView.extend({
   emptyView: NoRecordsView,
   childView: RecordView,
 
+  events: {
+    'blur #nyph-list-email': 'emailChange',
+    'change #nyph-list-email': 'emailChange',
+    'blur #nyph-list-recorders': 'recordersChange',
+    'change #nyph-list-recorders': 'recordersChange',
+    'blur #nyph-list-place': 'placenameChange',
+    'change #nyph-list-place': 'placenameChange',
+  },
+
+  /**
+   * fired after change or blur event on email field
+   * ideally refresh code should be in the controller rather than here in the 'view'
+   *
+   * @param {Event} event
+   */
+  emailChange(event) {
+    // console.log('email address changed (parent)');
+    // console.log(event);
+
+    const currentEmail = this.options.appModel.get('nyphListEmail');
+    // console.log(`current email: ${currentEmail}`);
+
+    const emailEl = document.getElementById('nyph-list-email');
+
+    if (emailEl.checkValidity()) {
+      const newEmail = emailEl.value.trim();
+
+      if (newEmail !== currentEmail) {
+        // console.log(`email address changed to ${newEmail}`);
+        this.options.appModel.set('nyphListEmail', newEmail);
+        this.options.appModel.save();
+      }
+    } else {
+      // @todo need to expose this message in the app
+      console.log('Email address is not valid');
+    }
+  },
+
+  /**
+   * fired after change or blur event on place name field
+   * (not the same as a gridref change)
+   * ideally refresh code should be in the controller rather than here in the 'view'
+   *
+   * @param {Event} event
+   */
+  placenameChange(event) {
+    const currentPlacename = this.options.appModel.get('nyphListPlacename');
+    const newPlacename = document.getElementById('nyph-list-place').value.trim();
+
+    if (currentPlacename !== newPlacename) {
+      this.options.appModel.set('nyphListPlacename', newPlacename);
+      this.options.appModel.save();
+    }
+  },
+
+  /**
+   * fired after change or blur event on recorders' field
+   * ideally refresh code should be in the controller rather than here in the 'view'
+   *
+   * @param {Event} event
+   */
+  recordersChange(event) {
+    const currentRecorders = this.options.appModel.get('nyphListRecorders');
+    const newRecorders = document.getElementById('nyph-list-recorders').value.trim();
+
+    if (currentRecorders !== newRecorders) {
+      this.options.appModel.set('nyphListRecorders', newRecorders);
+      this.options.appModel.save();
+    }
+  },
+
   // invert the order
   attachHtml(collectionView, childView) {
     collectionView.$el.find(this.childViewContainer).prepend(childView.el);
@@ -213,8 +285,13 @@ export default Marionette.CompositeView.extend({
   },
 
   serializeData() {
+    const appModel = this.options.appModel;
+    // need details descriptor (date and list title
     return {
-      useTraining: this.options.appModel.get('useTraining'),
+      useTraining: appModel.get('useTraining'),
+      nyphListEmail: StringHelp.escape(appModel.get('nyphListEmail')),
+      nyphListRecorders: StringHelp.escape(appModel.get('nyphListRecorders')),
+      nyphListPlacename: StringHelp.escape(appModel.get('nyphListPlacename')),
     };
   },
 });

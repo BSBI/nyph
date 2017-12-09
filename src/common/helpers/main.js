@@ -9,7 +9,7 @@ import GridRefUtils from './gridrefutils';
 import Log from './log';
 import StringHelp from './string';
 import Update from './update';
-import UUID from './UUID';
+import uuid from './uuid';
 import Validate from './validate';
 
 export {
@@ -24,6 +24,6 @@ export {
   Log,
   StringHelp,
   Update,
-  UUID,
+  uuid,
   Validate,
 };

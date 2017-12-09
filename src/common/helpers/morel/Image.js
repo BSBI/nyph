@@ -4,9 +4,9 @@
 import $ from 'jquery';
 import Backbone from 'backbone';
 import _ from 'underscore';
-
 import helpers from './helpers';
 import Error from './Error';
+import CONST from "./constants";
 
 const THUMBNAIL_WIDTH = 100; // px
 const THUMBNAIL_HEIGHT = 100; // px
@@ -24,8 +24,12 @@ const ImageModel = Backbone.Model.extend({
     this.setOccurrence(options.occurrence || this.occurrence);
 
     this.attributes = {};
-    if (options.collection) this.collection = options.collection;
-    if (options.parse) attrs = this.parse(attrs, options) || {};
+    if (options.collection) {
+      this.collection = options.collection;
+    }
+    if (options.parse) {
+      attrs = this.parse(attrs, options) || {};
+    }
     attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
     this.set(attrs, options);
     this.changed = {};
@@ -33,8 +37,13 @@ const ImageModel = Backbone.Model.extend({
     if (options.metadata) {
       this.metadata = options.metadata;
     } else {
+      const today = new Date();
       this.metadata = {
-        created_on: new Date(),
+        created_on: today,
+        updated_on: today,
+
+        synced_on: null, // set when fully initialized only
+        server_on: null, // updated on server
       };
     }
 
@@ -44,6 +53,43 @@ const ImageModel = Backbone.Model.extend({
   save(attrs, options = {}) {
     if (!this.occurrence) return false;
     return this.occurrence.save(attrs, options);
+  },
+
+  /**
+   * Sync statuses:
+   * synchronising, synced, local, server, changed_locally, changed_server, conflict
+   */
+  getSyncStatus() {
+    const meta = this.metadata;
+    // on server
+    if (this.synchronising) {
+      return CONST.SYNCHRONISING;
+    }
+
+    if (meta.warehouse_id) {
+      // fully initialized
+      if (meta.synced_on) {
+        // changed_locally
+        if (meta.synced_on < meta.updated_on) {
+          // changed_server - conflict!
+          if (meta.synced_on < meta.server_on) {
+            return CONST.CONFLICT;
+          }
+          return CONST.CHANGED_LOCALLY;
+          // changed_server
+        } else if (meta.synced_on < meta.server_on) {
+          return CONST.CHANGED_SERVER;
+        }
+        return CONST.SYNCED;
+
+        // partially initialized - we know the record exists on
+        // server but has not yet been downloaded
+      }
+      return CONST.SERVER;
+
+      // local only
+    }
+    return CONST.LOCAL;
   },
 
   destroy(options = {}) {
@@ -60,7 +106,7 @@ const ImageModel = Backbone.Model.extend({
         success && success();
       };
 
-      // save the changes permanentely
+      // save the changes permanently
       this.save(null, options);
     } else {
       dfd.resolve();
@@ -91,21 +137,21 @@ const ImageModel = Backbone.Model.extend({
     });
   },
 
-  /**
-   * Resizes itself.
-   */
-  resize(MAX_WIDTH, MAX_HEIGHT, callback) {
-    const that = this;
-    ImageModel.resize(this.getURL(), this.get('type'), MAX_WIDTH, MAX_HEIGHT,
-      (err, image, data) => {
-        if (err) {
-          callback && callback(err);
-          return;
-        }
-        that.set('data', data);
-        callback && callback(null, image, data);
-      });
-  },
+  // /**
+  //  * Resizes itself.
+  //  */
+  // resize(MAX_WIDTH, MAX_HEIGHT, callback) {
+  //   const that = this;
+  //   ImageModel.resize(this.getURL(), this.get('type'), MAX_WIDTH, MAX_HEIGHT,
+  //     (err, image, data) => {
+  //       if (err) {
+  //         callback && callback(err);
+  //         return;
+  //       }
+  //       that.set('data', data);
+  //       callback && callback(null, image, data);
+  //     });
+  // },
 
   /**
    * Adds a thumbnail to image model.
@@ -127,16 +173,15 @@ const ImageModel = Backbone.Model.extend({
           that.set('thumbnail', data);
           callback && callback();
         });
-      return;
+    } else {
+      ImageModel.getDataURI(this.getURL(), (err, data) => {
+        that.set('thumbnail', data);
+        callback && callback();
+      }, {
+        width: THUMBNAIL_WIDTH || options.width,
+        height: THUMBNAIL_HEIGHT || options.height,
+      });
     }
-
-    ImageModel.getDataURI(this.getURL(), (err, data) => {
-      that.set('thumbnail', data);
-      callback && callback();
-    }, {
-      width: THUMBNAIL_WIDTH || options.width,
-      height: THUMBNAIL_HEIGHT || options.height,
-    });
   },
 
   toJSON() {
@@ -164,50 +209,57 @@ _.extend(ImageModel, {
     if (typeof file === 'string') {
       // get extension
       let fileType = file.replace(/.*\.([a-z]+)$/i, '$1');
-      if (fileType === 'jpg') fileType = 'jpeg'; // to match media types image/jpeg
+      if (fileType === 'jpg') {
+        // to match media types image/jpeg
+        fileType = 'jpeg';
+      }
 
       ImageModel.resize(file, fileType, options.width, options.height, (err, image, dataURI) => {
         callback(null, dataURI, fileType, image.width, image.height);
       });
-      return;
-    }
+    } else {
+      // file inputs
+      if (!window.FileReader) {
+        const message = 'No File Reader';
+        const error = new Error(message);
+        console.error(message);
 
-    // file inputs
-    if (!window.FileReader) {
-      const message = 'No File Reader';
-      const error = new Error(message);
-      console.error(message);
-
-      callback(error);
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      if (options.width || options.height) {
-        // resize
-        ImageModel.resize(event.target.result, file.type, options.width, options.height, (err, image, dataURI) => {
-          callback(null, dataURI, file.type, image.width, image.height);
-        });
-      } else {
-        const image = new window.Image(); // native one
-
-        image.onload = () => {
-          const type = file.type.replace(/.*\/([a-z]+)$/i, '$1');
-          callback(null, event.target.result, type, image.width, image.height);
-        };
-        image.src = event.target.result;
+        callback(error);
+        return;
       }
-    };
-    reader.readAsDataURL(file);
-    return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        if (options.width || options.height) {
+          // resize
+          ImageModel.resize(
+            event.target.result,
+            file.type,
+            options.width,
+            options.height,
+            (err, image, dataURI) => {
+              callback(null, dataURI, file.type, image.width, image.height);
+            }
+            );
+        } else {
+          const image = new window.Image(); // native one
+
+          image.onload = () => {
+            const type = file.type.replace(/.*\/([a-z]+)$/i, '$1');
+            callback(null, event.target.result, type, image.width, image.height);
+          };
+          image.src = event.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   },
 
   /**
    * http://stackoverflow.com/questions/2516117/how-to-scale-an-image-in-data-uri-format-in-javascript-real-scaling-not-usin
-   * @param data
-   * @param width
-   * @param height
+   * @param {string} data
+   * @param {number} width
+   * @param {number} height
    * @param callback
    */
   resize(data, fileType, MAX_WIDTH, MAX_HEIGHT, callback) {
@@ -229,8 +281,8 @@ _.extend(ImageModel, {
         res = height / maxHeight;
       }
 
-      width = width / res;
-      height = height / res;
+      width /= res;
+      height /= res;
 
       // Create a canvas with the desired dimensions
       canvas = document.createElement('canvas');

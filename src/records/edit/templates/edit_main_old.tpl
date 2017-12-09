@@ -36,27 +36,11 @@
     </a>
   </li>
   <li class="table-view-cell">
-    <a href="#records/<%- obj.id %>/edit/date" id="date-button"
-       class="<%- obj.locks['date'] ? 'lock' : 'navigate-right' %>">
-      <span class="media-object pull-left icon icon-calendar"></span>
-      <span class="media-object pull-right descript<%- obj.dateRangeError ? ' date-warn' : '' %>"><%- obj.date %></span>
-      Date
-    </a>
-  </li>
-  <li class="table-view-cell">
     <a href="#records/<%- obj.id %>/edit/comment" id="comment-button"
        class="<%- obj.locks['comment'] ? 'lock' : 'navigate-right' %>">
       <span class="media-object pull-left icon icon-comment"></span>
       <span class="media-object pull-right descript"><%= obj.comment %></span>
       Comment
-    </a>
-  </li>
-  <li class="table-view-cell">
-    <a href="#records/<%- obj.id %>/edit/recorder" id="recorder-button"
-       class="<%- obj.locks['recorder'] ? 'lock' : 'navigate-right' %>">
-      <span class="media-object pull-left icon icon-user-plus"></span>
-      <span class="media-object pull-right descript"><%= obj.recorder %></span>
-      Recorder
     </a>
   </li>
 </ul>

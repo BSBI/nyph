@@ -6,9 +6,9 @@ import { Log, LocHelp } from 'helpers';
 import locationNameFinder from './location_name_search';
 
 const headerFunctions = {
-  changeName(e) {
-    this.triggerMethod('location:name:change', $(e.target).val());
-  },
+  // changeName(e) {
+  //   this.triggerMethod('location:name:change', $(e.target).val());
+  // },
 
   blurInput() {
     this._refreshMapHeight();
@@ -20,7 +20,7 @@ const headerFunctions = {
   keyupGridRef(e) {
     switch (e.keyCode) {
       case 13:
-      // press Enter
+      // pressed Enter
       case 38:
       // Up
       case 40:
@@ -73,18 +73,18 @@ const headerFunctions = {
     this.triggerMethod('location:gridref:change', $(e.target).val());
   },
 
-  addLocationNameSearch() {
-    this.$el.find('.typeahead').typeahead({
-        hint: false,
-        highlight: false,
-        minLength: 0,
-      },
-      {
-        limit: 3,
-        name: 'names',
-        source: locationNameFinder(3),
-      });
-  },
+  // addLocationNameSearch() {
+  //   this.$el.find('.typeahead').typeahead({
+  //       hint: false,
+  //       highlight: false,
+  //       minLength: 0,
+  //     },
+  //     {
+  //       limit: 3,
+  //       name: 'names',
+  //       source: locationNameFinder(3),
+  //     });
+  // },
 
 
   _refreshGrErrorState(isError) {
@@ -146,7 +146,7 @@ const headerFunctions = {
     const appModel = this.model.get('appModel');
     const recordModel = this.model.get('recordModel');
     const location = recordModel.get('location') || {};
-    const name = recordModel.get('location_name');
+    //const name = recordModel.get('location_name');
 
     // location lock
     const $locationLockBtn = this.$el.find('#location-lock-btn');
@@ -160,15 +160,15 @@ const headerFunctions = {
     }
 
     // location name lock
-    const $nameLockBtn = this.$el.find('#name-lock-btn');
-    const nameLocked = appModel.isAttrLocked('location_name', name);
-    if (nameLocked) {
-      $nameLockBtn.addClass('icon-lock-closed');
-      $nameLockBtn.removeClass('icon-lock-open');
-    } else {
-      $nameLockBtn.addClass('icon-lock-open');
-      $nameLockBtn.removeClass('icon-lock-closed');
-    }
+    // const $nameLockBtn = this.$el.find('#name-lock-btn');
+    // const nameLocked = appModel.isAttrLocked('location_name', name);
+    // if (nameLocked) {
+    //   $nameLockBtn.addClass('icon-lock-closed');
+    //   $nameLockBtn.removeClass('icon-lock-open');
+    // } else {
+    //   $nameLockBtn.addClass('icon-lock-open');
+    //   $nameLockBtn.removeClass('icon-lock-closed');
+    // }
   },
 };
 

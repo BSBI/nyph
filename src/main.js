@@ -19,5 +19,4 @@ import '../node_modules/ratchet/dist/fonts/ratchicons.woff';
 import '../dist/_build/styles/icons.css';
 import './common/styles/app.scss';
 
-// Load the mighty app :)
 App.start();

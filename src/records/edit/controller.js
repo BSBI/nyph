@@ -10,7 +10,7 @@ import App from 'app';
 import appModel from '../../common/models/app_model';
 import userModel from '../../common/models/user_model';
 import recordManager from '../../common/record_manager';
-import MainView from './main_view';
+import MainView from './edit_main_view';
 import HeaderView from './header_view';
 import FooterView from './footer_view';
 
@@ -34,12 +34,12 @@ const API = {
         return;
       }
 
-      // can't edit a saved one - to be removed when record update
-      // is possible on the server
-      if (recordModel.getSyncStatus() === Morel.SYNCED) {
-        App.trigger('records:show', recordID, { replace: true });
-        return;
-      }
+      // // can't edit a saved one - to be removed when record update
+      // // is possible on the server
+      // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+      //   App.trigger('records:show', recordID, { replace: true });
+      //   return;
+      // }
 
 
       // MAIN
@@ -211,6 +211,7 @@ const API = {
         return;
       }
       occurrence.addImage(image);
+      occurrence.markChanged();
 
       occurrence.save(null, {
         success: () => {

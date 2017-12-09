@@ -21,6 +21,13 @@ let AppModel = Backbone.Model.extend({
     useGridRef: true,
     useGridMap: true,
     useTraining: process.env.TRAINING,
+    nyphListEmail: '',
+    nyphListRecorders: '',
+    nyphListComments: '',
+    nyphListPlacename: '',
+    nyphListTitle: '',
+    nyphListDate: null,
+    nyphListUUID: null,
   },
 
   localStorage: new Store(CONFIG.name),
@@ -31,21 +38,40 @@ let AppModel = Backbone.Model.extend({
   initialize() {
     this.fetch();
 
+    const currentNyphListUUID = this.get('nyphListUUID');
+    if (!currentNyphListUUID) {
+      this.set('nyphListUUID', this.uuid());
+    }
+
     // attr lock recorder on login
     userModel.on('login logout', () => {
       if (userModel.hasLogIn()) {
-          if (!window.nyphAdminMode) {
+        if (!window.nyphAdminMode) {
             // only set and lock recorder name for normal user
             // and not for the generic Plant Hunt admin account
-            
-            const surname = userModel.get('surname');
-            const name = userModel.get('name');
-            const recorder = `${surname}, ${name}`;
-            this.setAttrLock('recorder', recorder);
-          }
+
+          const surname = userModel.get('surname');
+          const name = userModel.get('name');
+          const recorder = `${surname}, ${name}`;
+          this.setAttrLock('recorder', recorder);
+        }
       } else {
         this.unsetAttrLock('recorder');
       }
+    });
+  },
+
+  /**
+   *
+   * @returns {string}
+   */
+  uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      // eslint-disable-next-line
+      const r = Math.random() * 16 | 0;
+      // eslint-disable-next-line
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
     });
   },
 });

@@ -1,6 +1,6 @@
 <ul class="table-view">
   <li>
-    <p><strong>Welcome to the BSBI's 2017 New Year Plant Hunt</strong></p>
+    <p><strong>Welcome to the BSBI's 2018 New Year Plant Hunt</strong></p>
     <p>
       For the sixth year running you are cordially invited to join in our
       BSBI New Year Plant Hunt. The aim is to find and record as many wild
@@ -12,7 +12,7 @@
       areas and over different years:
     </p>
     <ol>
-      <li>Pick a day over the New Year between Sunday 1st and Wednesday 4th January 2017, when the
+      <li>Pick a day over the New Year between Saturday 30th and Tuesday 2nd January, when the
         weather is decent enough to record in.</li>
       <li>Record wild and naturalised plants in flower (but not planted
         species in gardens or parks). Please check that plants are actually flowering: that catkins are open, that grasses have open florets, stigmas or anthers on show etc.</li>
