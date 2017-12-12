@@ -136,6 +136,8 @@ export default function (species, commonNamePointersArray, searchPhrase, results
       results[results.length] = currentQualified;
     }
   });
+
+
   
   return results;
 }

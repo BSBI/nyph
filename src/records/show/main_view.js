@@ -15,6 +15,12 @@ export default Marionette.View.extend({
     'click img': 'photoView',
   },
 
+  initialize() {
+    // fix zIndex bug if navigating back from maps view
+    // as Marionette doesn't play well with chrome's back button
+    document.getElementById('main').style.zIndex = 'auto';
+  },
+
   photoView(e) {
     e.preventDefault();
 

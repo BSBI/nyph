@@ -12,9 +12,17 @@ export default {
   name: APP_NAME,
 
   UNKNOWN_SPECIES: {
+    entityId: '2cd4p9h.appfwd', // Spermatopsida
     warehouse_id: 125442, // Plantae kingdom
-    scientific_name: 'Unknown flowering plant',
+    scientific_name: 'Unknown plant',
     found_in_name: 'scientific_name',
+    authority: '',
+    formatted: '<span class="italictaxon">Unknown plant</span>',
+    name: "Unknown plant",
+    qname: "Unknown plant",
+    qualifier: "",
+    uname: "Unknown plant",
+    vernacular: "Unknown plant",
   },
   /**
    * if set then the most recently submitted location is auto-locked
@@ -31,7 +39,7 @@ export default {
 
   // logging
   log: {
-    states: ['e', 'w'], // see log helper
+    states: ['e', 'w', 'i', 'd'], // see log helper
     ga_error: true,
   },
 
@@ -67,7 +75,7 @@ export default {
       appsecret: API_SECRET,
       website_id: 23,
       survey_id: 427,
-      input_form: 'enter-NYPH-2017' // was 'enter-app-record',
+      input_form: 'enter-NYPH-2018' // was 'enter-app-record',
     },
     sample: {
       location: {
@@ -91,12 +99,12 @@ export default {
             //location_type: location.gridref ? 'OSGB' : 4326, // this should eventually also accomodate Irish gridrefs
           };
           
-          if (window.nyphAdminMode) {
-              // mark that record has been entered using the website admin version of the app
-              attributes.location_source = 'transcript';
-          } else {
+          // if (window.nyphAdminMode) {
+          //     // mark that record has been entered using the website admin version of the app
+          //     attributes.location_source = 'transcript';
+          // } else {
               attributes.location_source = location.source;
-          }
+          // }
           
           if (location.gridref) {
               // send GB and Channel Island refs as 'OSGB'; Irish as 'OSIE'
@@ -142,28 +150,28 @@ export default {
 
       device_version: { id: 759 },
 
-      date: {
-        values(date) {
-          return DateHelp.print(date);
-        },
-      },
+      // date: {
+      //   values(date) {
+      //     return DateHelp.print(date);
+      //   },
+      // },
 
       entry_time: {
         id: 939,
       },
 
-      recorder: {
-        id: 127,
-      }
+      // recorder: {
+      //   id: 127,
+      // }
     },
     occurrence: {
-      training: {
-        id: 'training',
-      },
+      // training: {
+      //   id: 'training',
+      // },
 
       taxon: {
         values(taxon) {
-          return taxon.warehouse_id;
+          return taxon.entityId;
         },
       },
     },

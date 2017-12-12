@@ -12,13 +12,13 @@ export default Marionette.View.extend({
   template: JST['settings/menu/main'],
 
   events: {
-    'toggle #use-training-btn': 'onSettingToggled',
-    'click #use-training-btn': 'onSettingToggled',
+    // 'toggle #use-training-btn': 'onSettingToggled',
+    // 'click #use-training-btn': 'onSettingToggled',
   },
 
   triggers: {
-    'click #delete-all-btn': 'records:delete:all',
-    'click #submit-all-btn': 'records:submit:all',
+    // 'click #delete-all-btn': 'records:delete:all',
+    // 'click #submit-all-btn': 'records:submit:all',
     'click #app-reset-btn': 'app:reset',
   },
 
@@ -39,7 +39,7 @@ export default Marionette.View.extend({
   serializeData() {
     const appModel = this.model;
     return {
-      useTraining: appModel.get('useTraining'),
+      // useTraining: appModel.get('useTraining'),
     };
   },
 });

@@ -5,12 +5,12 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Morel from 'morel';
 import CONFIG from 'config';
-import recordManager from '../record_manager';
 import { Log } from 'helpers';
+import recordManager from '../record_manager';
 import Occurrence from './occurrence';
 import GeolocExtension from './sample_geoloc_ext';
 
-let Sample = Morel.Sample.extend({
+const Sample = Morel.Sample.extend({
   constructor(...args) {
     this.manager = recordManager;
     Morel.Sample.prototype.constructor.apply(this, args);
@@ -20,7 +20,7 @@ let Sample = Morel.Sample.extend({
     this.set('form', CONFIG.morel.manager.input_form);
   },
   set_entry_time() {
-    this.set('entry_time', new Date().toString());
+    this.set('entry_time', new Date().toISOString());
   },
 
   Occurrence,
@@ -31,47 +31,40 @@ let Sample = Morel.Sample.extend({
     const sample = {};
     const occurrences = {};
 
-    // // todo: remove this bit once sample DB update is possible
-    // // check if saved
-    // if (!this.metadata.saved) {
-    //   sample.send = false;
-    // }
-
     // location
     const location = attrs.location || {};
     if (!location.latitude || !location.longitude) {
       sample.location = 'missing';
     }
-    // location name
-    if (!attrs.location_name) {
-      sample['location name'] = 'missing';
-    }
-    
-    if (window.nyphAdminMode) {
-      if (!attrs.recorder) {
-        sample['recorder'] = 'missing';
-      }
-    }
+    // // location name
+    // if (!attrs.location_name) {
+    //   sample['location name'] = 'missing';
+    // }
 
-    // date
-    if (!attrs.date) {
-      sample.date = 'missing';
-    } else {
-      const date = new Date(attrs.date);
+    // if (window.nyphAdminMode) {
+    //   if (!attrs.recorder) {
+    //     sample.recorder = 'missing';
+    //   }
+    // }
 
-      if (CONFIG.ENFORCE_DATE_CONSTRAINT) {
-        // use NYPH constrained dates
-
-        if (date === 'Invalid Date' || date < CONFIG.MIN_RECORDING_DATE || date > CONFIG.MAX_RECORDING_DATE) {
-          sample.date = (date === 'Invalid Date') ? 'invalid' : 'date is not within the permitted range';
-        }
-      } else {
-        // enforce only presence and non-future date
-        if (date === 'Invalid Date' || date > new Date()) {
-          sample.date = (date === 'Invalid Date') ? 'invalid' : 'future date';
-        }
-      }
-    }
+    // // date
+    // if (!attrs.date) {
+    //   sample.date = 'missing';
+    // } else {
+    //   const date = new Date(attrs.date);
+    //
+    //   if (CONFIG.ENFORCE_DATE_CONSTRAINT) {
+    //     // use NYPH constrained dates
+    //
+    //     if (date === 'Invalid Date' || date < CONFIG.MIN_RECORDING_DATE || date > CONFIG.MAX_RECORDING_DATE) {
+    //       sample.date = (date === 'Invalid Date') ? 'invalid' : 'date is not within the permitted range';
+    //     }
+    //   } else if (date === 'Invalid Date' || date > new Date()) {
+    //     // enforce only presence and non-future date
+    //
+    //     sample.date = (date === 'Invalid Date') ? 'invalid' : 'future date';
+    //   }
+    // }
 
     // location type
     if (!attrs.location_type) {
@@ -89,13 +82,16 @@ let Sample = Morel.Sample.extend({
         // don't allow 'unknown species' if no photo
         if (occurrence.images.length === 0 &&
           occurrence.get('taxon').warehouse_id === CONFIG.UNKNOWN_SPECIES.warehouse_id) {
-        	errors = errors || {};
-        	errors.taxon = 'Taxon name or photo needed';
+          errors = errors || {};
+          errors.taxon = 'Taxon name or photo needed';
         }
 
         if (errors) {
           const occurrenceID = occurrence.id || occurrence.cid;
           occurrences[occurrenceID] = errors;
+
+          Log('error status follows');
+          Log(errors);
         }
       });
     }
@@ -105,6 +101,10 @@ let Sample = Morel.Sample.extend({
         sample,
         occurrences,
       };
+
+      Log('error status follows');
+      Log(errors);
+
       return errors;
     }
 
@@ -137,19 +137,17 @@ let Sample = Morel.Sample.extend({
     return promise;
   },
 
-  isLocalOnly() {
-    const status = this.getSyncStatus();
-    if (this.metadata.saved && (
-      status === Morel.LOCAL ||
-      status === Morel.SYNCHRONISING)) {
-      return true;
-    }
-    return false;
-  },
-});
-
-// add geolocation functionality
-Sample = Sample.extend(GeolocExtension);
+  // isLocalOnly appears never to be called
+  // isLocalOnly() {
+  //   const status = this.getSyncStatus();
+  //   if (this.metadata.saved && (
+  //     status === Morel.LOCAL ||
+  //     status === Morel.SYNCHRONISING)) {
+  //     return true;
+  //   }
+  //   return false;
+  // },
+}).extend(GeolocExtension); // add geolocation functionality
 
 $.extend(true, Morel.Sample.keys, CONFIG.morel.sample);
 export { Sample as default };

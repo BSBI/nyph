@@ -13,10 +13,6 @@ export default Marionette.View.extend({
   template: JST['records/edit/edit_main'],
 
   initialize() {
-    // fix zIndex bug if navigating back from maps view
-    // as Marionette doesn't play well with chrome's back button
-    document.getElementById('main').style.zIndex = 'auto';
-
     const recordModel = this.model.get('recordModel');
     this.listenTo(recordModel, 'request sync error geolocation', this.render);
   },
@@ -25,12 +21,12 @@ export default Marionette.View.extend({
     // recordModel is Sample
     const recordModel = this.model.get('recordModel');
     const occ = recordModel.occurrences.at(0);
-    const taxonDescriptor = occ.get('taxon') || {};
+    const species = occ.get('taxon') || {};
     const appModel = this.model.get('appModel');
 
     // taxon
-    const scientificName = taxonDescriptor.qname;
-    const commonName = taxonDescriptor.vernacular;
+    const scientificName = species.scientific_name;
+    const commonName = species.common_name;
 
     // const locationPrint = recordModel.printLocation();
     const location = recordModel.get('location') || {};
@@ -51,7 +47,6 @@ export default Marionette.View.extend({
       id: recordModel.id || recordModel.cid,
       scientificName,
       commonName,
-      taxonDescriptor,
       isLocating: recordModel.isGPSRunning(),
       isSynchronising: recordModel.getSyncStatus() === Morel.SYNCHRONISING,
       gridref: location.gridref,

@@ -4,6 +4,7 @@
 import Backbone from 'backbone';
 import Store from 'backbone.localstorage';
 import CONFIG from 'config';
+import { Validate, Log } from 'helpers';
 import userModel from './user_model';
 import pastLocationsExtension from './app_model_past_loc_ext';
 import attributeLockExtension from './app_model_attr_lock_ext';
@@ -40,7 +41,9 @@ let AppModel = Backbone.Model.extend({
 
     const currentNyphListUUID = this.get('nyphListUUID');
     if (!currentNyphListUUID) {
-      this.set('nyphListUUID', this.uuid());
+      //this.set('nyphListUUID', this.uuid());
+      this.setUuid();
+      this.save();
     }
 
     // attr lock recorder on login
@@ -59,6 +62,57 @@ let AppModel = Backbone.Model.extend({
         this.unsetAttrLock('recorder');
       }
     });
+  },
+
+  setUuid() {
+    this.set('nyphListUUID', this.uuid());
+  },
+
+  /**
+   * called by backbone isValid()
+   * return 'errors' object containing attribute keys with value error messages
+   * or null if no errors
+   *
+   * can't use the standard validate() method as don't want to block saving locally
+   *
+   * @param attributes
+   * @return string|null
+   */
+  testValidation() {
+    const errors = [];
+
+    const nyphListEmail = this.get('nyphListEmail').trim();
+    if (nyphListEmail !== '' && !Validate.email(nyphListEmail)) {
+      errors[errors.length] = 'Email address appears to be invalid.';
+    }
+
+    const nyphListRecorders = this.get('nyphListRecorders').trim();
+    if (nyphListRecorders === '') {
+      errors[errors.length] = 'Please let us know who took part in your plant hunt.';
+    }
+
+    const nyphListPlacename = this.get('nyphListPlacename').trim();
+    if (nyphListPlacename === '') {
+      errors[errors.length] = 'Please let us know where you went for your plant hunt.';
+    }
+
+    const errorsString = errors.join(' ');
+
+    return errorsString || null;
+  },
+
+  /**
+   * marks changed and saves Occurrence and parent Sample
+   *
+   */
+  markChangedAndResave(attrs, options = {}) {
+    // this.metadata.updated_on = new Date();
+    // this.metadata.synced_on = null; // set when fully initialized only
+    // this.metadata.server_on = null; // updated on server
+
+    console.log('app level attributes changed, need to mark samples as unsaved.');
+
+    return this.save(attrs, options);
   },
 
   /**

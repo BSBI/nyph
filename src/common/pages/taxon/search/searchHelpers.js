@@ -161,10 +161,10 @@ const helpers = {
     if (high < low) return null;
 
     const mid = parseInt((low + high) / 2);
-    const campared = comparator(mid);
-    if (campared > 0) {
+    const compared = comparator(mid);
+    if (compared > 0) {
       return helpers.binarySearch(array, comparator, low, mid - 1);
-    } else if (campared < 0) {
+    } else if (compared < 0) {
       return helpers.binarySearch(array, comparator, mid + 1, high);
     }
     return mid;

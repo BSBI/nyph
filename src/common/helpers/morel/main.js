@@ -70,21 +70,28 @@ class Morel {
       const toWait = [];
       collectionToSync.each((model) => {
         // todo: reuse the passed options model
-        const promise = model.save(null, {
-          remote: true,
-          timeout: options.timeout,
-        });
-        const passingPromise = new $.Deferred();
-        if (!promise) {
-          // model was invalid
-          passingPromise.resolve();
-        } else {
-          // valid model, but in case it fails sync carry on
-          promise.always(() => {
-            passingPromise.resolve();
+
+        const syncStatus = model.getSyncStatus();
+
+        if (syncStatus !== CONST.SYNCED) {
+          const promise = model.save(null, {
+            remote: true,
+            timeout: options.timeout,
           });
+          const passingPromise = new $.Deferred();
+          if (!promise) {
+            // model was invalid
+            passingPromise.resolve();
+          } else {
+            // valid model, but in case it fails sync carry on
+            promise.always(() => {
+              passingPromise.resolve();
+            });
+          }
+          toWait.push(passingPromise);
+        } else {
+          console.log(`already synch'ed ${model.id} or ${model.cid}`);
         }
-        toWait.push(passingPromise);
       });
 
       const dfd = $.when(...toWait);
@@ -105,6 +112,8 @@ class Morel {
           return;
         }
 
+        // @todo should include early test to prevent resync of unmodified
+
         syncEach(receivedCollection);
       });
     }
@@ -119,9 +128,11 @@ class Morel {
    * @param options
    */
   sync(method, model, options = {}) {
+    const syncStatus = model.getSyncStatus();
+
     // don't resend
-    if (model.getSyncStatus() === CONST.SYNCED ||
-      model.getSyncStatus() === CONST.SYNCHRONISING) {
+    if (syncStatus === CONST.SYNCED ||
+      syncStatus === CONST.SYNCHRONISING) {
       return false;
     }
 
@@ -358,7 +369,7 @@ class Morel {
       name = keys[attr].id;
 
       if (!name) {
-        name = `${prefix + count}::present`;
+        name = `${prefix + count}::${attr}`;
       } else {
         if (parseInt(name, 10) >= 0) {
           name = custom + name;
@@ -400,21 +411,21 @@ class Morel {
     return flattened;
   }
 
-  /**
-   * Appends user and app authentication to the passed data object.
-   * Note: object has to implement 'append' method.
-   *
-   * @param data An object to modify
-   * @returns {*} A data object
-   */
-  appendAuth(data) {
-    // app logins
-    this._appendAppAuth(data);
-    // warehouse data
-    this._appendWarehouseAuth(data);
-
-    return data;
-  }
+  // /**
+  //  * Appends user and app authentication to the passed data object.
+  //  * Note: object has to implement 'append' method.
+  //  *
+  //  * @param data An object to modify
+  //  * @returns {*} A data object
+  //  */
+  // appendAuth(data) {
+  //   // app logins
+  //   this._appendAppAuth(data);
+  //   // warehouse data
+  //   this._appendWarehouseAuth(data);
+  //
+  //   return data;
+  // }
 
   /**
    * Hacky addition of global NYPH list details

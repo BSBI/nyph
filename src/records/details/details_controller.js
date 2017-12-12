@@ -17,6 +17,7 @@ import appModel from '../../common/models/app_model';
 // import recordManager from '../../common/record_manager';
 import MainView from './details_main_view';
 import HeaderView from './details_header_view';
+import recordManager from '../../common/record_manager';
 // import FooterView from './details_footer_view';
 
 const API = {
@@ -59,7 +60,22 @@ const API = {
     // });
 
     // App.regions.getRegion('footer').show(footerView);
+
+    mainView.on('details:attribute:change', () => {
+      console.log('details:attribute:change');
+
+      appModel.save();
+
+      recordManager.getAll((getError, recordsCollection) => {
+        // if a top-level list attribute changes then
+        // unfortunately all the samples need to be marked as changed.
+        recordsCollection.each((sample) => {
+          sample.markChangedAndResave();
+        });
+      });
+    });
   },
+
 
   // showInvalidsMessage(invalids) {
   //   delete invalids.sample.saved; // it wasn't saved so of course this error

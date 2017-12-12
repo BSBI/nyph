@@ -24,7 +24,10 @@ const RecordListController = {
       Log('Records:List:Controller: showing');
       if (getError) {
         Log(getError, 'e');
-        App.regions.getRegion('dialog').error(getError);
+        App.regions.getRegion('dialog').error({
+          code: 'notify',
+          message: getError,
+        });
         return;
       }
 
@@ -41,6 +44,18 @@ const RecordListController = {
       mainView.on('childview:record:delete', (childView) => {
         const recordModel = childView.model;
         RecordListController.recordDelete(recordModel);
+      });
+
+      mainView.on('list:attribute:change', () => {
+        console.log('list:attribute:change');
+
+        appModel.save();
+
+        // if a top-level list attribute changes then
+        // unfortunately all the samples need to be marked as changed.
+        recordsCollection.each((sample) => {
+          sample.markChangedAndResave();
+        });
       });
 
       App.regions.getRegion('main').show(mainView);
@@ -74,7 +89,7 @@ const RecordListController = {
     Log('Records:List:Controller: deleting record');
 
     const syncStatus = recordModel.getSyncStatus();
-    let body = 'This record hasn\'t been saved to iRecord yet, ' +
+    let body = 'This record hasn\'t been saved yet, ' +
       'are you sure you want to remove it from your device?';
 
     if (syncStatus === Morel.SYNCED) {
@@ -188,8 +203,8 @@ const RecordListController = {
 
   showSendAllDialog() {
     App.regions.getRegion('dialog').show({
-      title: 'Submit All',
-      body: 'Are you sure you want to set all valid records for submission?',
+      title: 'Send finds',
+      body: 'Please confirm that you want to send your list.',
       buttons: [
         {
           title: 'Cancel',
@@ -198,7 +213,7 @@ const RecordListController = {
           },
         },
         {
-          title: 'OK',
+          title: 'Send',
           class: 'btn-positive',
           onClick: RecordListController.sendAllRecords,
         },
@@ -206,12 +221,23 @@ const RecordListController = {
     });
   },
 
-  showIncompleteDialog() {
-    App.regions.getRegion('dialog').show({
-      title: 'Sorry',
-      body: 'Some records could not be submitted at the moment. ' +
-      'Try again later',
-    });
+  showIncompleteDialog(statusObject) {
+    let message = '';
+
+    if (statusObject.synchFailed) {
+      message += `${statusObject.synchFailed} record${(statusObject.synchFailed === 1 ? '' : 's')} failed to be sent, please try again. `;
+    }
+
+    if (statusObject.notValid) {
+      message += `${statusObject.notValid} record${(statusObject.notValid === 1 ? ' was' : 's were')} not incomplete or were invalid, please correct these and resend. `;
+    }
+
+    const options = {
+      title: 'Not sent',
+      body: message,
+    };
+
+    App.regions.getRegion('dialog').show(options);
   },
 
   showThanksDialog() {
@@ -233,18 +259,26 @@ const RecordListController = {
   sendAllRecords() {
     Log('Settings:Menu:Controller: sending all records');
 
+    App.regions.getRegion('dialog').hide();
+
     // try to send all records
-    recordManager.setAllToSend((err) => {
-      if (err) {
-        App.regions.getRegion('dialog').error(err);
-        return;
-      }
-      App.regions.getRegion('dialog').hide();
-    }).then(() => {
+    // recordManager.setAllToSend((err) => {
+    //   if (err) {
+    //     App.regions.getRegion('dialog').error(err);
+    //     return;
+    //   }
+    //   App.regions.getRegion('dialog').hide();
+    // }).then(() => {
+
+    // try to send all records
+    recordManager.setAllToSend().then(() => {
       // check if there are any unsent changes
       // retrieve the records again and check that all are marked as synch'ed
 
-      let incomplete = false;
+      let notSynched = 0;
+      let notValid = 0;
+      let synchFailed = 0;
+
       recordManager.getAll((err, records) => {
         if (err) {
           Log(err, 'e');
@@ -252,18 +286,36 @@ const RecordListController = {
         }
         records.each((record) => {
           const status = record.getSyncStatus();
-          if (record.metadata.saved && status !== Morel.SYNCED) {
-            incomplete = true;
+
+          if (status !== Morel.SYNCED) {
+            notSynched++;
+
+            if (record.validate()) {
+              notValid++;
+            } else {
+              synchFailed++;
+            }
           }
+
+          // if (record.metadata.saved && status !== Morel.SYNCED) {
+          //   incomplete = true;
+          // }
         });
 
         // give feedback
-        if (incomplete) {
-          RecordListController.showIncompleteDialog();
+        if (notSynched) {
+          RecordListController.showIncompleteDialog({ notSynched, notValid, synchFailed });
         } else {
           RecordListController.showThanksDialog();
         }
       });
+    }, (errorState) => {
+      Log('Caught an error state while saving');
+      Log(errorState);
+
+      App.regions.getRegion('dialog').error({
+        code: 'notify',
+        message: errorState });
     });
   },
 };

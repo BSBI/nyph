@@ -11,7 +11,7 @@ import MainView from './main_view';
 import HeaderView from '../../common/views/header_view';
 import LockView from '../../common/views/attr_lock_view';
 
-const API = {
+const AttributeController = {
   show(recordID, attr) {
     Log('Records:Attr:Controller: showing');
     recordManager.get(recordID, (err, recordModel) => {
@@ -44,12 +44,12 @@ const API = {
       const lockView = new LockView({
         model: new Backbone.Model({ appModel, recordModel }),
         attr,
-        onLockClick: API.onLockClick,
+        onLockClick: AttributeController.onLockClick,
       });
 
       const headerView = new HeaderView({
         onExit() {
-          API.onExit(mainView, recordModel, attr, () => {
+          AttributeController.onExit(mainView, recordModel, attr, () => {
             window.history.back();
           });
         },
@@ -61,7 +61,7 @@ const API = {
 
       // if exit on selection click
       mainView.on('save', () => {
-        API.onExit(mainView, recordModel, attr, () => {
+        AttributeController.onExit(mainView, recordModel, attr, () => {
           window.history.back();
         });
       });
@@ -82,7 +82,7 @@ const API = {
   onExit(mainView, recordModel, attr, callback) {
     Log('Records:Attr:Controller: exiting');
     const values = mainView.getValues();
-    API.save(attr, values, recordModel, callback);
+    AttributeController.save(attr, values, recordModel, callback);
   },
 
   /**
@@ -94,48 +94,56 @@ const API = {
     let currentVal;
     let newVal;
     const occ = recordModel.occurrences.at(0);
+    
+    let changed;
 
     switch (attr) {
-      case 'date':
-        currentVal = recordModel.get('date');
-
-        // validate before setting up
-        if (values.date && values.date.toString() !== 'Invalid Date') {
-          newVal = values.date;
-          recordModel.set('date', newVal);
-        }
-        break;
-      case 'recorder':
-        currentVal = recordModel.get('recorder');
-
-        // todo:validate before setting up
-        // don't save default values
-        newVal = values.recorder;
-        recordModel.set('recorder', newVal);
-        break;
+      // case 'date':
+      //   currentVal = recordModel.get('date');
+      //
+      //   // validate before setting up
+      //   if (values.date && values.date.toString() !== 'Invalid Date') {
+      //     newVal = values.date;
+      //     recordModel.set('date', newVal);
+      //   }
+      //   break;
+      // case 'recorder':
+      //   currentVal = recordModel.get('recorder');
+      //
+      //   // todo:validate before setting up
+      //   // don't save default values
+      //   newVal = values.recorder;
+      //   recordModel.set('recorder', newVal);
+      //   break;
       case 'comment':
         currentVal = occ.get('comment');
 
         // todo:validate before setting up
-        newVal = values.comment;
-        occ.set('comment', newVal);
+        newVal = values.comment.trim();
+        
+        if (currentVal !== newVal) {
+          occ.set('comment', newVal);
+          changed = true;
+        }
         break;
       default:
     }
 
-    // save it
-    recordModel.save(null, {
-      success: () => {
-        // update locked value if attr is locked
-        API.updateLock(attr, newVal, currentVal);
+    if (changed) {
+      // save it
+      recordModel.markChangedAndResave(null, {
+        success: () => {
+          // update locked value if attr is locked
+          AttributeController.updateLock(attr, newVal, currentVal);
 
-        callback();
-      },
-      error: (err) => {
-        Log(err, 'e');
-        App.regions.getRegion('dialog').error(err);
-      },
-    });
+          callback();
+        },
+        error: (err) => {
+          Log(err, 'e');
+          App.regions.getRegion('dialog').error(err);
+        },
+      });
+    }
   },
 
   updateLock(attr, newVal, currentVal) {
@@ -168,4 +176,4 @@ const API = {
   },
 };
 
-export { API as default };
+export { AttributeController as default };

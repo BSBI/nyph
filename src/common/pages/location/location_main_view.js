@@ -68,9 +68,10 @@ const LocationView = Marionette.View.extend({
   serializeData() {
     Log('Location:Controller:MainView: serializing.');
 
-    const appModel = this.model.get('appModel');
+    // const appModel = this.model.get('appModel');
 
-    // const sample = this.model.get('recordModel');
+    const sample = this.model.get('recordModel');
+    const location = sample.get('location');
 
     // const location = this._getCurrentLocation();
     let gridref;
@@ -87,7 +88,7 @@ const LocationView = Marionette.View.extend({
 
     return {
       // name,
-      gridref: location.gridref,
+      gridref,
       locationSource: location.source,
       accuracy: location.accuracy,
       latitude: location.latitude,

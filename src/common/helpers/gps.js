@@ -23,7 +23,7 @@ const API = {
     // geolocation config
     const GPSoptions = {
       enableHighAccuracy: true,
-      maximumAge: 0,
+      maximumAge: 30000, // allow 30s reuse (was 0 - require fresh)
       timeout: API.TIMEOUT,
     };
 
@@ -46,6 +46,7 @@ const API = {
     // Callback if geolocation fails
     const onError = (err = {}) => {
       const error = new Error(err.message);
+      Log(`GPS error: ${err.message}`);
       callback && callback(error);
     };
 

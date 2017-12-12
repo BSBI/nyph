@@ -30,8 +30,8 @@ const API = {
       App.regions.getRegion('dialog').show({
         title: 'Reset',
         class: 'error',
-        body: 'Are you sure you want to reset the application to its initial state? ' +
-        'This will wipe all the locally stored app data!',
+        body: 'Are you sure you want to clear all records from list?' +
+        '</br>Choose this option if you want to start a new Plant Hunt list',
         buttons: [
           {
             title: 'Cancel',
@@ -67,11 +67,11 @@ const API = {
   },
 
   deleteAllRecords() {
-    let body = 'Are you sure you want to delete all successfully synchronised local records?';
-    body += '</br><i><b>Note:</b> records on the server will not be touched.</i>';
+    let body = 'Are you sure you want to clear all records from list?' +
+        '</br>Choose this option if you want to start a new Plant Hunt list';
 
     App.regions.getRegion('dialog').show({
-      title: 'Delete All',
+      title: 'Clear list',
       body,
       buttons: [
         {
@@ -81,10 +81,10 @@ const API = {
           },
         },
         {
-          title: 'Delete',
+          title: 'Clear',
           class: 'btn-negative',
           onClick() {
-            Log('Settings:Menu:Controller: deleting all records');
+            Log('Settings:Menu:Controller: removing all records');
 
             // delete all
             recordManager.removeAllSynced(() => {
@@ -140,6 +140,7 @@ const API = {
     Log('Settings:Menu:Controller: resetting the application!', 'w');
 
     appModel.clear().set(appModel.defaults);
+    appModel.setUuid();
     appModel.save();
 
     userModel.clear().set(userModel.defaults);

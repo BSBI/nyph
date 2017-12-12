@@ -50,10 +50,10 @@ const API = {
 
       // on finish sync move to show
       function checkIfSynced() {
-        if (recordModel.getSyncStatus() === Morel.SYNCED) {
-          App.trigger('records:show', recordID, { replace: true });
-          return;
-        }
+        // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+        //   App.trigger('records:show', recordID, { replace: true });
+        //   return;
+        // }
       }
       recordModel.on('request sync error', checkIfSynced);
       mainView.on('destroy', () => {
@@ -211,9 +211,8 @@ const API = {
         return;
       }
       occurrence.addImage(image);
-      occurrence.markChanged();
 
-      occurrence.save(null, {
+      occurrence.markChangedAndResave(null, {
         success: () => {
           callback();
         },

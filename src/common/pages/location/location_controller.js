@@ -80,14 +80,14 @@ const LocationController = {
     recordModel.save(null, {
       success: () => {
         // save to past locations and update location ID on record
-        const location = recordModel.get('location') || {};
-        if ((location.latitude && location.longitude)) {
-          const locationName = recordModel.get('location_name');
-          location.id = appModel.setLocation(location, locationName);
-          recordModel.set('location', location);
-        }
-
-        LocationController.updateLocks(recordModel, locationIsLocked);
+        // const location = recordModel.get('location') || {};
+        // if ((location.latitude && location.longitude)) {
+        //   const locationName = recordModel.get('location_name');
+        //   location.id = appModel.setLocation(location, locationName);
+        //   recordModel.set('location', location);
+        // }
+        //
+        // LocationController.updateLocks(recordModel, locationIsLocked);
 
         window.history.back();
       },
@@ -204,6 +204,9 @@ const LocationController = {
 
       LocationController.onLocationSelect(recordModel, location);
     }
+
+    recordModel.markChangedAndResave(); // newly added by TH
+    // @todo Should probably remove the save in exit()
 
     // if (!validationError) {
     //  App.trigger('gridref:form:data:invalid', {}); // update form

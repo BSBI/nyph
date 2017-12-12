@@ -2,7 +2,7 @@
   <li>
     <p><strong>Welcome to the BSBI's 2018 New Year Plant Hunt</strong></p>
     <p>
-      For the sixth year running you are cordially invited to join in our
+      For the seventh year running you are cordially invited to join in our
       BSBI New Year Plant Hunt. The aim is to find and record as many wild
       species in bloom as you can in up to three hours over the New Year
       period.
@@ -19,7 +19,7 @@
       <li>Record for up to 3 hours (you can “stop the clock” for tea-breaks and
         comfort stops!)</li>
       <li>You can contribute as many different lists as you like from
-        different areas between 1st and 4th January, as long as you don’t exceed the 3 hour limit for each new list.</li>
+        different areas, as long as you don’t exceed the 3 hour limit for each new list.</li>
     </ol>
   </li>
   <li>

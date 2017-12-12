@@ -2,46 +2,45 @@
   <li>
     <p><strong>Use of your name</strong></p>
 
-    <p>If you choose to create a user account for the app, this will be created on the
-      <a href="http://irecord.org.uk" rel="external">Biological Record Centre's iRecord system</a>.
-      This enables you to log in and see your records and those submitted by other people for all
-      species. Your name, as specified when you create the account, will appear next to your
-      records and will be viewable by other users of iRecord.</p>
+    <p>Plant Hunt records that you send will be associated with the name(s) that you enter in the participants field.
+      We retain this information because the name of the recorder is an important part of a biological record. The name(s) you enter
+      form part of a permanent plant occurrence record, that may appear as part of publicly accessible records.</p>
+      <p>We respect your right to anonymity, so if you prefer then you could enter the name of your group, first names only, or some
+      pseudonym of your choice.<p>
   </li>
   <li>
     <p><strong>E-mail address</strong></p>
 
-    <p>To create an account you will need to supply your e-mail address, which will be used in order
-      to validate your account and to send you periodic updates and important information about the
-      project. Your email address will not be shown and disseminated with your records but will be
+    <p>If you choose to provide your email address then this will be used to send notifications about your plant records
+      and New Year Plant Hunt progress reports and results.</p>
+      <p>Your email address will not be shown and disseminated with your records but will be
       available to the verifying experts if they need to contact you about your sightings. You are
-      able to delete your iRecord account or opt out of receiving emails at any time.</p>
+      able to opt out of receiving emails at any time.</p>
+      <p>Only those directly involved in running the New Year Plant Hunt will have access to your email address.</p>
   </li>
   <li>
     <p><strong>Other information collected by the application</strong></p>
 
-    <p>All records submitted will be stored permanently on a secure server at the Biological Record
-      Centre. Records will be made accessible to the Botanical Society of Britain and Ireland, Local Environmental Record Centres, conservation
-      organisations, scientific researchers, the NBN Gateway and the public.</p>
+    <p>Records submitted will be stored permanently on a secure server controlled by the Botanical Society of Britain and Ireland (BSBI).
+      Records may be made accessible to the BSBI, Local Environmental Record Centres, conservation
+      organisations, scientific researchers, the NBN Atlas and to the public.</p>
   </li>
   <li>
     <p><strong>How long will my data be stored?</strong></p>
 
-    <p>Your submitted records will be stored permanently and used to inform the conservation and study
+    <p>Your submitted records may be stored permanently and used to inform the conservation and study
       of the recorded species in the future.</p>
-  </li>
-  <li>
-    <p><strong>Who will have access to my personal data?</strong></p>
-
-    <p>Only those directly involved in developing this app or running the New Year Plant Hunt will have access to your email address.
-      Unless required by law, data will not be made available to any third parties unless we have
-      obtained your permission to do so.</p>
   </li>
   <li>
     <p><strong>Use of images submitted with the app</strong></p>
 
-    <p>By submitting a photograph with this app you:</p>
+    <p>By submitting photographs or plant records with this app you:</p>
     <ul>
+    <li>
+       <p>Agree to apply the <a href="https://creativecommons.org/licenses/by/4.0/" target='_blank'>Creative Common Attribution license (CC BY)</a> to your work. Under this Open Access license, you as
+        copyright holder agree that anyone can reuse your work in whole or part for any purpose.</p>
+       <p>Anyone may copy, distribute, or reuse the content as long as the author and original source are properly cited.</p>
+      </li>
       <li>
         <p>Give the project and its partners permission to publish the file/s on their respective websites
           and to use the file/s in any publicity materials they produce.</p>
@@ -59,10 +58,5 @@
           ownership of the copyright in your file(s) as its author.</p>
       </li>
     </ul>
-  </li>
-  <li>
-    <p>Wherever possible you will receive credit for the reproduction of your work on, or next to, your
-      photograph or file, although we reserve the right to exclude a direct attribution where this
-      affects the aesthetic of the reproduction.</p>
   </li>
 </ul>

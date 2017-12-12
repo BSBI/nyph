@@ -12,6 +12,7 @@
       <% } %>
     </div>
     <div class="pull-right">
+    <% if (obj.saved) { %>
       <% if (obj.isSynchronising) { %>
          <div class="online-status icon icon-plus spin"></div>
       <% } else { %>
@@ -29,10 +30,21 @@
         <% } %>
         <div title="delete record" class="delete icon icon-cancel"></div>
       </div>
+
+    <% } else { %>
+      <div class="edit">
+        <% if (obj.taxon) { %>
+        <div data-attr="location" class="js-attr icon icon-location"></div>
+        <div data-attr="comment" class="js-attr icon icon-comment"></div>
+        <% } %>
+
+        <div title="delete record" class="delete icon icon-cancel"></div>
+      </div>
+    <% } %>
     </div>
 
     <div class="media-body">
-      <div class="species"> <%= obj.taxon.formatted ? obj.taxon.formatted : 'missing species' %></div>
+      <div class="species"> <%= obj.taxon %></div>
 
       <% if (obj.date) { %>
         <div class="date"><%= obj.date %></div>

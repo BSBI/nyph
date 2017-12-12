@@ -25,7 +25,7 @@ export default Marionette.View.extend({
     const that = this;
 
     // create camera/gallery selection
-    if (window.cordova) {
+    if (false && window.cordova) {
       this.$el.find('.img-picker input').remove();
 
       this.$el.find('.img-picker').on('click', () => {

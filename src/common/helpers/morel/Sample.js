@@ -81,6 +81,18 @@ const Sample = Backbone.Model.extend({
   },
 
   /**
+   * marks changed and saves Occurrence and parent Sample
+   *
+   */
+  markChangedAndResave(attrs, options = {}) {
+    this.metadata.updated_on = new Date();
+    this.metadata.synced_on = null; // set when fully initialized only
+    this.metadata.server_on = null; // updated on server
+
+    return this.save(attrs, options);
+  },
+
+  /**
    * Saves the record to the record manager
    * if valid and options.remote is TRUE then syncs it with DB
    *
@@ -149,6 +161,8 @@ const Sample = Backbone.Model.extend({
   },
 
   validate(attributes) {
+    console.log('validating sample');
+
     const attrs = _.extend({}, this.attributes, attributes);
 
     const sample = {};
@@ -164,15 +178,15 @@ const Sample = Backbone.Model.extend({
       sample.location_type = 'can\'t be blank';
     }
 
-    // date
-    if (!attrs.date) {
-      sample.date = 'can\'t be blank';
-    } else {
-      const date = new Date(attrs.date);
-      if (date === 'Invalid Date' || date > new Date()) {
-        sample.date = (new Date(date) > new Date) ? 'future date' : 'invalid';
-      }
-    }
+    // // date
+    // if (!attrs.date) {
+    //   sample.date = 'can\'t be blank';
+    // } else {
+    //   const date = new Date(attrs.date);
+    //   if (date === 'Invalid Date' || date > new Date()) {
+    //     sample.date = (new Date(date) > new Date()) ? 'future date' : 'invalid';
+    //   }
+    // }
 
     // occurrences
     if (this.occurrences.length === 0) {
@@ -187,11 +201,15 @@ const Sample = Backbone.Model.extend({
       });
     }
 
-    if (! _.isEmpty(sample) || ! _.isEmpty(occurrences)) {
+    if (!_.isEmpty(sample) || !_.isEmpty(occurrences)) {
       const errors = {
         sample,
         occurrences,
       };
+
+      Log('error status follows');
+      Log(errors);
+
       return errors;
     }
 
@@ -245,30 +263,25 @@ const Sample = Backbone.Model.extend({
       return CONST.SYNCHRONISING;
     }
 
-    if (meta.warehouse_id) {
-      // fully initialized
-      if (meta.synced_on) {
-        // changed_locally
-        if (meta.synced_on < meta.updated_on) {
-          // changed_server - conflict!
-          if (meta.synced_on < meta.server_on) {
-            return CONST.CONFLICT;
-          }
-          return CONST.CHANGED_LOCALLY;
-          // changed_server
-        } else if (meta.synced_on < meta.server_on) {
-          return CONST.CHANGED_SERVER;
+    console.log(`synced_on: ${meta.synced_on}`);
+    if (meta.synced_on) {
+      console.log(`(got here) synced_on: ${meta.synced_on}`);
+
+      // changed_locally
+      if (meta.synced_on < meta.updated_on) {
+        // changed_server - conflict!
+        if (meta.synced_on < meta.server_on) {
+          return CONST.CONFLICT;
         }
-        return CONST.SYNCED;
-
-        // partially initialized - we know the record exists on
-        // server but has not yet been downloaded
+        return CONST.CHANGED_LOCALLY;
+        // changed_server
+      } else if (meta.synced_on < meta.server_on) {
+        return CONST.CHANGED_SERVER;
       }
-      return CONST.SERVER;
-
-      // local only
+      return CONST.SYNCED;
+    } else {
+      return CONST.LOCAL; // default to local only
     }
-    return CONST.LOCAL;
   },
 
   /**

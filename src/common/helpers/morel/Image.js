@@ -6,7 +6,7 @@ import Backbone from 'backbone';
 import _ from 'underscore';
 import helpers from './helpers';
 import Error from './Error';
-import CONST from "./constants";
+import CONST from './constants';
 
 const THUMBNAIL_WIDTH = 100; // px
 const THUMBNAIL_HEIGHT = 100; // px
@@ -50,8 +50,26 @@ const ImageModel = Backbone.Model.extend({
     this.initialize.apply(this, arguments);
   },
 
+  /**
+   * marks changed and saves Occurrence and parent Sample
+   *
+   */
+  markChangedAndResave(attrs, options = {}) {
+    if (!this.occurrence) {
+      return false;
+    }
+
+    this.metadata.updated_on = new Date();
+    this.metadata.synced_on = null; // set when fully initialized only
+    this.metadata.server_on = null; // updated on server
+
+    return this.occurrence.markChangedAndResave(attrs, options);
+  },
+
   save(attrs, options = {}) {
-    if (!this.occurrence) return false;
+    if (!this.occurrence) {
+      return false;
+    }
     return this.occurrence.save(attrs, options);
   },
 
@@ -66,29 +84,22 @@ const ImageModel = Backbone.Model.extend({
       return CONST.SYNCHRONISING;
     }
 
-    if (meta.warehouse_id) {
-      // fully initialized
-      if (meta.synced_on) {
-        // changed_locally
-        if (meta.synced_on < meta.updated_on) {
-          // changed_server - conflict!
-          if (meta.synced_on < meta.server_on) {
-            return CONST.CONFLICT;
-          }
-          return CONST.CHANGED_LOCALLY;
-          // changed_server
-        } else if (meta.synced_on < meta.server_on) {
-          return CONST.CHANGED_SERVER;
+    if (meta.synced_on) {
+      // changed_locally
+      if (meta.synced_on < meta.updated_on) {
+        // changed_server - conflict!
+        if (meta.synced_on < meta.server_on) {
+          return CONST.CONFLICT;
         }
-        return CONST.SYNCED;
-
-        // partially initialized - we know the record exists on
-        // server but has not yet been downloaded
+        return CONST.CHANGED_LOCALLY;
+        // changed_server
+      } else if (meta.synced_on < meta.server_on) {
+        return CONST.CHANGED_SERVER;
       }
-      return CONST.SERVER;
-
-      // local only
+      return CONST.SYNCED;
     }
+
+    // default to local only
     return CONST.LOCAL;
   },
 
@@ -107,7 +118,8 @@ const ImageModel = Backbone.Model.extend({
       };
 
       // save the changes permanently
-      this.save(null, options);
+      // was this.save(null, options);
+      this.markChangedAndResave(null, options);
     } else {
       dfd.resolve();
       options.success && options.success();

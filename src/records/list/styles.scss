@@ -60,6 +60,14 @@
   }
 }
 
+P.validationmessage {
+  display: none;
+}
+
+input.validationsubject:invalid+P.validationmessage {
+  display: block;
+}
+
 .img-picker {
   width: 33%;
   display: inline-block;

@@ -32,6 +32,10 @@ const RecordView = Marionette.View.extend({
 
   initialize() {
     this.template = JST[`records/list/record${(Device.isMobile() ? '_mobile' : '')}`];
+
+    // fix zIndex bug if navigating back from maps view
+    // as Marionette doesn't play well with chrome's back button
+    document.getElementById('main').style.zIndex = 'auto';
   },
 
   photoView(e) {
@@ -57,7 +61,9 @@ const RecordView = Marionette.View.extend({
 
     // add mobile swipe events
     // early return
-    if (!Device.isMobile()) return;
+    if (!Device.isMobile()) {
+      return;
+    }
 
     this.$record = this.$el.find('a');
     this.docked = false;
@@ -103,20 +109,30 @@ const RecordView = Marionette.View.extend({
     const recordModel = this.model;
     const occ = recordModel.occurrences.at(0);
     const date = DateHelp.prettyPrintStamp(recordModel);
-    const species = occ.get('taxon') || {};
+    const taxonDescriptor = occ.get('taxon') || {};
     const images = occ.images;
     const img = images.length && images.at(0).get('thumbnail');
 
-    const taxon = species[species.found_in_name];
+    // const taxon = species[species.found_in_name];
 
     const syncStatus = this.model.getSyncStatus();
 
     const locationPrint = recordModel.printLocation();
     const location = recordModel.get('location') || {};
-    const locationName = StringHelp.escape(recordModel.get('location_name'));
+    // const locationName = StringHelp.escape(recordModel.get('location_name'));
 
     // regardless of CONFIG.ENFORCE_DATE_CONSTRAINT, flag date range problems in UI
     const modelDate = new Date(recordModel.get('date'));
+
+    const taxonMobileName = taxonDescriptor ?
+      (
+        taxonDescriptor.vernacularMatched ?
+          StringHelp.escape(taxonDescriptor.vernacular)
+          :
+          StringHelp.escape(taxonDescriptor.qname)
+      )
+      :
+      'missing taxon';
 
     return {
       id: recordModel.id || recordModel.cid,
@@ -124,19 +140,20 @@ const RecordView = Marionette.View.extend({
       onDatabase: syncStatus === Morel.SYNCED,
       isLocating: recordModel.isGPSRunning(),
       location: locationPrint,
-      location_name: locationName,
+      // location_name: locationName,
       location_gridref: location.gridref,
-      recorder: StringHelp.escape(recordModel.get('recorder') || ''),
+      // recorder: StringHelp.escape(recordModel.get('recorder') || ''),
       isSynchronising: syncStatus === Morel.SYNCHRONISING,
       date,
-      taxon,
+      taxon: taxonDescriptor,
+      taxonMobileName,
       comment: occ.get('comment'),
       img: img ? `<img src="${img}"/>` : '',
       dateRangeError: (modelDate < CONFIG.MIN_RECORDING_DATE ||
       modelDate > CONFIG.MAX_RECORDING_DATE ||
       modelDate > (new Date())),
-      idIncomplete: (!species || species.warehouse_id === CONFIG.UNKNOWN_SPECIES.warehouse_id) &&
-      images.length === 0,
+      idIncomplete: (!taxonDescriptor || taxonDescriptor.warehouse_id === CONFIG.UNKNOWN_SPECIES.warehouse_id) &&
+        images.length === 0,
     };
   },
 
@@ -211,6 +228,10 @@ export default Marionette.CompositeView.extend({
     'change #nyph-list-place': 'placenameChange',
   },
 
+  // modelEvents: {
+  //   'change': 'render';
+  // }
+
   /**
    * fired after change or blur event on email field
    * ideally refresh code should be in the controller rather than here in the 'view'
@@ -232,10 +253,11 @@ export default Marionette.CompositeView.extend({
       if (newEmail !== currentEmail) {
         // console.log(`email address changed to ${newEmail}`);
         this.options.appModel.set('nyphListEmail', newEmail);
-        this.options.appModel.save();
+        // this.options.appModel.save();
+
+        this.trigger('list:attribute:change', 'email');
       }
     } else {
-      // @todo need to expose this message in the app
       console.log('Email address is not valid');
     }
   },
@@ -253,7 +275,8 @@ export default Marionette.CompositeView.extend({
 
     if (currentPlacename !== newPlacename) {
       this.options.appModel.set('nyphListPlacename', newPlacename);
-      this.options.appModel.save();
+      // this.options.appModel.markChangedAndResave();
+      this.trigger('list:attribute:change', 'placename');
     }
   },
 
@@ -269,7 +292,8 @@ export default Marionette.CompositeView.extend({
 
     if (currentRecorders !== newRecorders) {
       this.options.appModel.set('nyphListRecorders', newRecorders);
-      this.options.appModel.save();
+      // this.options.appModel.save();
+      this.trigger('list:attribute:change', 'recorders');
     }
   },
 
@@ -286,9 +310,9 @@ export default Marionette.CompositeView.extend({
 
   serializeData() {
     const appModel = this.options.appModel;
-    // need details descriptor (date and list title
+
     return {
-      useTraining: appModel.get('useTraining'),
+      // useTraining: appModel.get('useTraining'),
       nyphListEmail: StringHelp.escape(appModel.get('nyphListEmail')),
       nyphListRecorders: StringHelp.escape(appModel.get('nyphListRecorders')),
       nyphListPlacename: StringHelp.escape(appModel.get('nyphListPlacename')),

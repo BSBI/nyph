@@ -7,7 +7,7 @@ import Marionette from 'backbone.marionette';
 import CONFIG from 'config';
 import JST from 'JST';
 import { Log, Device } from 'helpers';
-//import informalGroups from 'informal_groups.data';
+import informalGroups from 'informal_groups.data';
 import './styles.scss';
 
 const MIN_SEARCH_LENGTH = 2;
@@ -31,26 +31,26 @@ const SpeciesView = Marionette.View.extend({
    * @returns {{}}
    */
   serializeData() {
-    // const foundInName = this.model.get('found_in_name');
-    //
-    // let name = this._prettifyName(this.model.get(foundInName), this.options.searchPhrase);
-    // name = this.model.get(foundInName);
+    const foundInName = this.model.get('found_in_name');
+
+    let name = this._prettifyName(this.model.get(foundInName), this.options.searchPhrase);
+    name = this.model.get(foundInName);
 
     return {
-      name: this.model.get('formatted'),
+      name,
       removeEditBtn: this.options.removeEditBtn,
-      // group: informalGroups[this.model.get('group')],
+      group: informalGroups[this.model.get('group')],
     };
   },
 
-  // _prettifyName(name, searchPhrase) {
-  //   const searchPos = name.toLowerCase().indexOf(searchPhrase);
-  //   const prettyName = `${name.slice(0, searchPos)}
-  //   <b>${name.slice(searchPos, searchPos + searchPhrase.length)}</b>
-  //   ${name.slice(searchPos + searchPhrase.length)}`;
-  //
-  //   return prettyName;
-  // },
+  _prettifyName(name, searchPhrase) {
+    const searchPos = name.toLowerCase().indexOf(searchPhrase);
+    const prettyName = `${name.slice(0, searchPos)}
+    <b>${name.slice(searchPos, searchPos + searchPhrase.length)}</b>
+    ${name.slice(searchPos + searchPhrase.length)}`;
+
+    return prettyName;
+  },
 
   onRender() {
     // have to manually repaint
@@ -60,10 +60,10 @@ const SpeciesView = Marionette.View.extend({
   select(e) {
     Log('taxon: selected.', 'd');
     const edit = e.target.tagName === 'BUTTON';
-    const taxon = this.model.toJSON();
-    delete taxon.selected;
+    const species = this.model.toJSON();
+    delete species.selected;
 
-    this.trigger('taxon:selected', taxon, edit);
+    this.trigger('taxon:selected', species, edit);
   },
 });
 
@@ -110,10 +110,6 @@ export default Marionette.View.extend({
 
   initialize() {
     this.selectedIndex = 0;
-
-    // fix zIndex bug if navigating back from maps view
-    // as Marionette doesn't play well with chrome's back button
-    document.getElementById('main').style.zIndex = 'auto';
   },
 
   onAttach() {
@@ -126,11 +122,12 @@ export default Marionette.View.extend({
       });
     }
 
-    // const userModel = this.model;
-    // const favouriteSpecies = statistics.species;
-    // if (favouriteSpecies.length) {
-    //   this.updateSuggestions(new Backbone.Collection(favouriteSpecies), '');
-    // }
+    const userModel = this.model;
+    const statistics = userModel.get('statistics') || { species: [] };
+    const favouriteSpecies = statistics.species;
+    if (favouriteSpecies.length) {
+      this.updateSuggestions(new Backbone.Collection(favouriteSpecies), '');
+    }
   },
 
   /**

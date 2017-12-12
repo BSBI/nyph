@@ -70,7 +70,9 @@ const Occurrence = Backbone.Model.extend({
    *
    */
   markChangedAndResave(attrs, options = {}) {
-    if (!this.sample) return false;
+    if (!this.sample) {
+      return false;
+    }
 
     this.metadata.updated_on = new Date();
     this.metadata.synced_on = null; // set when fully initialized only
@@ -80,7 +82,9 @@ const Occurrence = Backbone.Model.extend({
   },
 
   save(attrs, options = {}) {
-    if (!this.sample) return false;
+    if (!this.sample) {
+      return false;
+    }
     return this.sample.save(attrs, options);
   },
 
@@ -98,8 +102,9 @@ const Occurrence = Backbone.Model.extend({
         success && success();
       };
 
-      // save the changes permanentely
-      this.save(null, options);
+      // save the changes permanently
+      // was this.save(null, options);
+      this.markChangedAndResave(null, options);
     } else {
       dfd.resolve();
       options.success && options.success();
@@ -143,6 +148,9 @@ const Occurrence = Backbone.Model.extend({
     }
 
     if (! _.isEmpty(errors)) {
+      Log('error status follows');
+      Log(errors);
+
       return errors;
     }
 

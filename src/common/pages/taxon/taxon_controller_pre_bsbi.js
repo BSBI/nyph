@@ -12,12 +12,11 @@ import Sample from '../../models/sample';
 import Occurrence from '../../models/occurrence';
 import MainView from './main_view';
 import HeaderView from '../../views/header_view';
-import BSBITaxonSearch from './search/bsbi_taxon_search';
+import SpeciesSearchEngine from './search/taxon_search_engine';
 
 const TaxonController = {
   show(recordID) {
-    // SpeciesSearchEngine.init();
-    this.taxonSearch = new BSBITaxonSearch();
+    SpeciesSearchEngine.init();
 
     const that = this;
     this.id = recordID;
@@ -36,6 +35,13 @@ const TaxonController = {
           App.trigger('404:show', { replace: true });
           return;
         }
+
+        // // can't edit a saved one - to be removed when record update
+        // // is possible on the server
+        // if (recordModel.getSyncStatus() === Morel.SYNCED) {
+        //   App.trigger('records:show', recordID, { replace: true });
+        //   return;
+        // }
 
         let mainView;
 
@@ -68,8 +74,6 @@ const TaxonController = {
 
   _showMainView(mainView, that) {
     const sampleID = that.id;
-    const taxonSearch = that.taxonSearch;
-
     mainView.on('taxon:selected', (taxon, edit) => {
       TaxonController.updateTaxon(sampleID, taxon, (err, sample) => {
         if (err) {
@@ -81,10 +85,7 @@ const TaxonController = {
         if (edit) {
           const updatedSampleID = sample.id || sample.cid;
           App.trigger('records:edit', updatedSampleID, { replace: true });
-          // } else if (sample.get('location_name')) {
-        } else if (true) {
-          // @todo this should be based on whether using gps and have unlocked gridref
-
+        } else if (sample.get('location_name')) {
           // interfere with app flow
           // if location not set then navigate to that screen
           // otherwise go back to list
@@ -98,18 +99,11 @@ const TaxonController = {
         }
       });
     }, that);
-
     mainView.on('taxon:searched', (searchPhrase) => {
-      // SpeciesSearchEngine.search(searchPhrase, (selection) => {
-      //   mainView.updateSuggestions(new Backbone.Collection(selection), searchPhrase);
-      // });
-
-      // const taxonSearch = new BSBITaxonSearch();
-
-      mainView.updateSuggestions(
-        new Backbone.Collection(taxonSearch.lookup(searchPhrase)),
-        searchPhrase);
-    }, that);
+      SpeciesSearchEngine.search(searchPhrase, (selection) => {
+        mainView.updateSuggestions(new Backbone.Collection(selection), searchPhrase);
+      });
+    });
 
     App.regions.getRegion('main').show(mainView);
   },

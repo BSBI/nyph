@@ -11,10 +11,10 @@ export default {
     return re.test(email);
   },
 
-  gridRef(gridref) {
-    const re = /^[A-Za-z]{1,2}\d{2}(?:(?:\d{2}){1,4}|[A-Za-z])?$/;
-    return re.test(gridref);
-  },
+  // gridRef(gridref) {
+  //   const re = /^[A-Za-z]{1,2}\d{2}(?:(?:\d{2}){1,4}|[A-Za-z])?$/;
+  //   return re.test(gridref);
+  // },
 
   updateViewFormErrors($view, errors, selector) {
     const clearFormErrors = () => {

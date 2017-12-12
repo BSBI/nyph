@@ -47,10 +47,10 @@ const API = {
 
   syncRecord(recordModel) {
     if (Device.isOnline()) {
-      if (!userModel.hasLogIn()) {
-        App.trigger('user:login');
-        return;
-      }
+      // if (!userModel.hasLogIn()) {
+      //   App.trigger('user:login');
+      //   return;
+      // }
 
       recordModel.save(null, {
         remote: true,
@@ -62,7 +62,7 @@ const API = {
       });
     } else {
       App.regions.getRegion('dialog').error({
-        message: 'Looks like you are offline!',
+        message: 'You are not online.',
       });
     }
   },

@@ -10,46 +10,46 @@ const morelConfiguration = $.extend(CONFIG.morel.manager, {
   Storage: Morel.DatabaseStorage,
   Sample,
   onSend(sample) {
-    if (userModel.hasLogIn()) {
+    // if (true) {
       // attach device information
-      sample.set('device', Device.getPlatform());
-      sample.set('device_version', Device.getVersion());
+    sample.set('device', Device.getPlatform());
+    sample.set('device_version', Device.getVersion());
 
       // attach user information
-      userModel.appendSampleUser(sample);
+      // userModel.appendSampleUser(sample);
 
       // training setting
-      if (true) {
-        sample.occurrences.at(0).set('training', false); // no more training mode
-      } else {
-        sample.occurrences.at(0).set('training', appModel.get('useTraining'));
-      }
-    } else {
-      // don't send until the user has logged in
-      return true;
-    }
+      // if (true) {
+      //   sample.occurrences.at(0).set('training', false); // no more training mode
+      // } else {
+      //   sample.occurrences.at(0).set('training', appModel.get('useTraining'));
+      // }
+    // } else {
+    //   // don't send until the user has logged in
+    //   return true;
+    // }
     return null;
   },
 });
 
 class Manager extends Morel {
   syncAll(method, collection, options = {}) {
-    //if (!Device.connectionWifi()) {
+    // if (!Device.connectionWifi()) {
     //  options.timeout = 180000; // 3 min
-    //}
-    
+    // }
+
     options.timeout = 180000; // 3 min
-    
+
     return Morel.prototype.syncAll.apply(this, [method, collection, options]);
   }
 
   sync(method, model, options = {}) {
-    //if (!Device.connectionWifi()) {
+    // if (!Device.connectionWifi()) {
     //  options.timeout = 180000; // 3 min
-    //}
-    
+    // }
+
     options.timeout = 180000; // 3 min
-    
+
     return Morel.prototype.sync.apply(this, [method, model, options]);
   }
 
@@ -85,53 +85,106 @@ class Manager extends Morel {
     });
   }
 
+  /**
+   *
+   * @param callback
+   * @return Promise
+   */
   setAllToSend(callback) {
-    let returnPromiseResolve;
-    let returnPromiseReject;
-    const returnPromise = new Promise((resolve, reject) => {
-      returnPromiseResolve = resolve;
-      returnPromiseReject = reject;
-    });
-    // const that = this;
-    let noneUsed = true;
-    let saving = 0;
+    // let returnPromiseResolve;
+    // let returnPromiseReject;
+    return new Promise((resolve, reject) => {
+      // returnPromiseResolve = resolve;
+      // returnPromiseReject = reject;
 
-    this.getAll((err, records) => {
-      if (err) {
-        Log(err, 'e');
-        callback && callback(err);
-        return;
+      // const that = this;
+      // let noneUsed = true;
+      // let saving = 0;
+
+      // validate that the top-level NYPH list details are valid
+      // if (!appModel.isValid()) {
+
+      const appModelErrors = appModel.testValidation();
+
+      if (appModelErrors) {
+        Log('app model is not valid.');
+        //Log(appModel.validationError);
+        Log(appModelErrors);
+        reject(appModelErrors);
+        // reject(appModel.validationError);
       } else {
-        records.each((record) => {
-          noneUsed = false;
-          saving++;
-          const valid = record.setToSend((error) => {
-            if (error) {
-              callback && callback(error);
-              return;
-            }
-            saving--;
-            if (saving === 0) {
-              callback && callback();
+        // validate that all samples are valid
+        this.getAll((err, records) => {
+          if (err) {
+            Log(err, 'e');
+            // callback && callback(err);
 
-              // send all records remotely
-              this.syncAll().then(() => {
-                returnPromiseResolve();
+            reject(err);
+            // return;
+          } else {
+            let toSendCount = 0;
+            let notValidCount = 0;
+            // const validRecords = [];
+
+            records.each((record) => {
+              // noneUsed = false;
+              // saving++;
+              const valid = record.setToSend((error) => {
+                // if (error) {
+                //   callback && callback(error);
+                //   return;
+                // }
+
+                if (error) {
+                  reject(error);
+                  return false; // break from each()
+                }
+
+                // saving--;
+                // if (saving === 0) {
+                //   callback && callback();
+                //
+                //   // send all records remotely
+                //   this.syncAll().then(() => {
+                //     returnPromiseResolve();
+                //   });
+                // }
               });
-            }
-          });
 
-          if (!valid) {
-            saving--;
+              if (valid) {
+                const syncStatus = record.getSyncStatus();
+
+                if (syncStatus !== Morel.SYNCED) {
+                  toSendCount++;
+                }
+              } else {
+                notValidCount++;
+              }
+
+              // if (!valid) {
+              //   saving--;
+              // }
+            });
+
+            if (toSendCount) {
+              resolve(this.syncAll());
+            } else {
+              if (notValidCount) {
+                reject(`${notValidCount} record${(notValidCount === 1 ? ' was' : 's were')} incomplete or not valid.`);
+              } else {
+                reject('All your records have already been sent.');
+              }
+            }
           }
+
+          // if (noneUsed || saving === 0) {
+          //   callback && callback();
+          // }
         });
       }
-
-      if (noneUsed || saving === 0) {
-        callback && callback();
-      }
     });
-    return returnPromise;
+
+    // return returnPromise;
   }
 
   clearAll(local, callback) {

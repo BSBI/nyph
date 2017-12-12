@@ -10,6 +10,9 @@ import JST from 'JST';
 import '../styles/dialog.scss';
 
 const errorsTable = {
+  notify: {
+    class: 'notify',
+  },
   25: {
     body: 'Sorry, looks like there was a problem with the internal database.</br> ' +
     '<b>Please close the app and start it again.</b>',

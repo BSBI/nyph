@@ -208,6 +208,25 @@ const helpers = {
       return false;
     }
   },
+
+  /**
+   * Checks if the grid reference is valid and in GB land
+   * @param gridrefString
+   */
+  isValidGridRef(gridrefString) {
+    try {
+      const parsedRef = bigu.GridRefParser.factory(gridrefString);
+      if (parsedRef && bigu.MappingUtils.is_gb_hectad(parsedRef.hectad)) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      Log(e.message);
+    }
+
+    return false;
+  },
 };
 
 export default helpers;
