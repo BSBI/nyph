@@ -353,6 +353,9 @@ li h3 {
   line-height: 1.4em;
   text-shadow: none;
   text-align: center;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 

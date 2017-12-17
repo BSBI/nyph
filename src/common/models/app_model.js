@@ -96,6 +96,14 @@ let AppModel = Backbone.Model.extend({
       errors[errors.length] = 'Please let us know where you went for your plant hunt.';
     }
 
+    // kludgy way to ensure that date has a value
+    // an that it's likely to have been set when list is in use
+    const nyphListDate = this.get('nyphListDate');
+    if (!nyphListDate) {
+      this.set('nyphListDate', (new Date()).toISOString().substr(0, 10));
+      this.save();
+    }
+
     const errorsString = errors.join(' ');
 
     return errorsString || null;

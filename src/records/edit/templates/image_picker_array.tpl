@@ -1,6 +1,6 @@
 <div id="img-picker-array" class="<%- obj.isSynchronising ? 'disabled' : '' %>">
-  <div class="img-picker icon icon-camera">
+  <label class="img-picker icon icon-camera">
     <input type="file" accept="image/*" capture="environment" />
-  </div>
+  </label>
   <div id="img-array"></div>
 </div>

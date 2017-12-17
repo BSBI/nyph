@@ -131,8 +131,7 @@ const API = {
   photoDelete(photo) {
     App.regions.getRegion('dialog').show({
       title: 'Delete',
-      body: 'Are you sure you want to remove this photo from the record?' +
-      '</br><i><b>Note:</b> it will remain in the gallery.</i>',
+      body: 'Are you sure you want to remove this photo from the record?',
       buttons: [
         {
           title: 'Cancel',

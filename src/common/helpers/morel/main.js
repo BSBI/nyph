@@ -338,20 +338,21 @@ class Morel {
     let name = null;
     let value = null;
     let prefix = '';
-    let native = 'sample:';
-    let custom = 'smpAttr:';
+    let native = 'sample_';
+    // let custom = 'smpAttr:';
 
     if (this instanceof Occurrence) {
       prefix = 'sc:';
-      native = '::occurrence:';
-      custom = '::occAttr:';
+      native = 'occurrence_';
+      // custom = '::occAttr:';
     }
 
     // add external ID
     const id = this.cid || this.id;
     if (id) {
       if (this instanceof Occurrence) {
-        flattened[`${prefix + count + native}external_key`] = id;
+        //flattened[`${prefix + count + native}external_key`] = id;
+        flattened[`${native}external_key`] = id;
       } else {
         flattened[`${native}external_key`] = this.cid || this.id;
       }
@@ -369,10 +370,12 @@ class Morel {
       name = keys[attr].id;
 
       if (!name) {
-        name = `${prefix + count}::${attr}`;
+        // name = `${prefix + count}::${attr}`;
+        name = attr;
       } else {
         if (parseInt(name, 10) >= 0) {
-          name = custom + name;
+          // name = custom + name;
+          name = attr;
         } else {
           name = native + name;
         }

@@ -71,7 +71,9 @@ const LocationView = Marionette.View.extend({
     // const appModel = this.model.get('appModel');
 
     const sample = this.model.get('recordModel');
-    const location = sample.get('location');
+    const location = sample.get('location') || {};
+
+    Log(location);
 
     // const location = this._getCurrentLocation();
     let gridref;

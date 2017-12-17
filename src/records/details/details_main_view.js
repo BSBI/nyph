@@ -38,7 +38,7 @@ export default Marionette.View.extend({
     if (currentTitle !== newTitle) {
       this.model.set('nyphListTitle', newTitle);
       // this.model.markChangedAndResave();
-      this.trigger('list:attribute:change', 'title');
+      this.trigger('details:attribute:change', 'title');
     }
   },
 
@@ -55,7 +55,7 @@ export default Marionette.View.extend({
     if (currentComments !== newComments) {
       this.model.set('nyphListComments', newComments);
       // this.model.markChangedAndResave();
-      this.trigger('list:attribute:change', 'comments');
+      this.trigger('details:attribute:change', 'comments');
     }
   },
 
@@ -72,7 +72,7 @@ export default Marionette.View.extend({
     if (currentDate !== newDate) {
       this.model.set('nyphListDate', newDate);
       // this.model.markChangedAndResave();
-      this.trigger('list:attribute:change', 'date');
+      this.trigger('details:attribute:change', 'date');
     }
   },
 

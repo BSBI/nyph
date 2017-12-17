@@ -155,7 +155,7 @@ const ImageModel = Backbone.Model.extend({
   // resize(MAX_WIDTH, MAX_HEIGHT, callback) {
   //   const that = this;
   //   ImageModel.resize(this.getURL(), this.get('type'), MAX_WIDTH, MAX_HEIGHT,
-  //     (err, image, data) => {
+  //     (err, data, image) => {
   //       if (err) {
   //         callback && callback(err);
   //         return;
@@ -174,26 +174,28 @@ const ImageModel = Backbone.Model.extend({
     const that = this;
     // check if data source is dataURI
 
-    const re = /^data:/i;
-    if (re.test(this.getURL())) {
-      ImageModel.resize(
-        this.getURL(),
+    // const re = /^data:/i;
+    // const fullsizeData = this.get('data');
+
+    // if (re.test(fullsizeData)) {
+    ImageModel.resize(
+        this.get('data'), // fullsizeData, // this.getURL(),
         this.get('type'),
         THUMBNAIL_WIDTH || options.width,
         THUMBNAIL_WIDTH || options.width,
-        (err, image, data) => {
+        (err, data) => {
           that.set('thumbnail', data);
           callback && callback();
         });
-    } else {
-      ImageModel.getDataURI(this.getURL(), (err, data) => {
-        that.set('thumbnail', data);
-        callback && callback();
-      }, {
-        width: THUMBNAIL_WIDTH || options.width,
-        height: THUMBNAIL_HEIGHT || options.height,
-      });
-    }
+    // } else {
+    //   ImageModel.getDataURI(fullsizeData, (err, data) => {
+    //     that.set('thumbnail', data);
+    //     callback && callback();
+    //   }, {
+    //     width: THUMBNAIL_WIDTH || options.width,
+    //     height: THUMBNAIL_HEIGHT || options.height,
+    //   });
+    // }
   },
 
   toJSON() {
@@ -226,7 +228,7 @@ _.extend(ImageModel, {
         fileType = 'jpeg';
       }
 
-      ImageModel.resize(file, fileType, options.width, options.height, (err, image, dataURI) => {
+      ImageModel.resize(file, fileType, options.width, options.height, (err, dataURI, image) => {
         callback(null, dataURI, fileType, image.width, image.height);
       });
     } else {
@@ -249,18 +251,31 @@ _.extend(ImageModel, {
             file.type,
             options.width,
             options.height,
-            (err, image, dataURI) => {
+            (err, dataURI, image) => {
               callback(null, dataURI, file.type, image.width, image.height);
             }
             );
         } else {
-          const image = new window.Image(); // native one
+          // event.target.result already contains a data uri string
+          // if got here by taking a photo
+          // why create an Image?
+          // is it just to get width and height
 
-          image.onload = () => {
-            const type = file.type.replace(/.*\/([a-z]+)$/i, '$1');
-            callback(null, event.target.result, type, image.width, image.height);
-          };
-          image.src = event.target.result;
+          // file.type is already set to string 'image/jpeg'
+
+          const type = file.type.replace(/.*\/([a-z]+)$/i, '$1');
+
+          // width and height are not set properly
+          // but appear never to be used anyway
+          callback(null, event.target.result, type, null, null);
+
+          // const image = new window.Image(); // native one
+          //
+          // image.onload = () => {
+          //   const type = file.type.replace(/.*\/([a-z]+)$/i, '$1');
+          //   callback(null, event.target.result, type, image.width, image.height);
+          // };
+          // image.src = event.target.result;
         }
       };
       reader.readAsDataURL(file);
@@ -305,7 +320,7 @@ _.extend(ImageModel, {
       canvas.getContext('2d').drawImage(image, 0, 0, width, height);
 
       // Convert the canvas to a data URL in some format
-      callback(null, image, canvas.toDataURL(fileType));
+      callback(null, canvas.toDataURL(fileType), image);
     };
 
     image.src = data;

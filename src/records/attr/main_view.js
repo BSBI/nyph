@@ -44,19 +44,19 @@ export default Marionette.View.extend({
     const occ = this.model.occurrences.at(0);
 
     switch (this.options.attr) {
-      case 'date':
-        templateData.date = DateHelp.toDateInputValue(this.model.get('date'));
-        const today = new Date();
-
-        if (CONFIG.ENFORCE_DATE_CONSTRAINT) {
-          templateData.maxDate = DateHelp.toDateInputValue(today <= CONFIG.MAX_RECORDING_DATE ? today : CONFIG.MAX_RECORDING_DATE);
-        } else {
-          templateData.maxDate = DateHelp.toDateInputValue(new Date());
-        }
-        break;
-      case 'recorder':
-        templateData.recorder = this.model.get('recorder');
-        break;
+      // case 'date':
+      //   templateData.date = DateHelp.toDateInputValue(this.model.get('date'));
+      //   const today = new Date();
+      //
+      //   if (CONFIG.ENFORCE_DATE_CONSTRAINT) {
+      //     templateData.maxDate = DateHelp.toDateInputValue(today <= CONFIG.MAX_RECORDING_DATE ? today : CONFIG.MAX_RECORDING_DATE);
+      //   } else {
+      //     templateData.maxDate = DateHelp.toDateInputValue(new Date());
+      //   }
+      //   break;
+      // case 'recorder':
+      //   templateData.recorder = this.model.get('recorder');
+      //   break;
       case 'comment':
         templateData.comment = occ.get('comment');
         break;
