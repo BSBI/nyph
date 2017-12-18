@@ -1,7 +1,7 @@
 /** ****************************************************************************
  * Main app configuration file.
  *****************************************************************************/
-import { DateHelp, LocHelp } from 'helpers';
+// import { DateHelp, LocHelp } from 'helpers';
 
 export default {
   // variables replaced on build

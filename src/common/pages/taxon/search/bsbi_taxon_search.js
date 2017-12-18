@@ -1,35 +1,35 @@
 /** ****************************************************************************
  * Generates species list suggestions.
  *****************************************************************************/
-import Backbone from 'backbone';
-import _ from 'lodash';
+// import Backbone from 'backbone';
+// import _ from 'lodash';
 // import { Log } from 'helpers';
-import searchCommonNames from './commonNamesSearch';
-import searchSciNames from './scientificNamesSearch';
-import helpers from './searchHelpers';
-import CONFIG from 'config';
+// import searchCommonNames from './commonNamesSearch';
+// import searchSciNames from './scientificNamesSearch';
+// import helpers from './searchHelpers';
+// import CONFIG from 'config';
 import TaxonNames from './bsbi_taxon_names';
 
 // let species;
 // let loading = false;
 // let commonNamePointers;
 
-const MAX = 20;
+// const MAX = 20;
 
-const API = {
-  init(callback) {
-    // Log('Taxon search engine: initializing');
-    // const that = this;
-    //
-    // loading = true;
-    // require.ensure([], () => {
-    //   loading = false;
-    //   species = require('species.data');
-    //   commonNamePointers = require('species_names.data');
-    //   that.trigger('data:loaded');
-    //   callback && callback();
-    // }, 'data');
-  },
+// const API = {
+//   init(callback) {
+//     // Log('Taxon search engine: initializing');
+//     // const that = this;
+//     //
+//     // loading = true;
+//     // require.ensure([], () => {
+//     //   loading = false;
+//     //   species = require('species.data');
+//     //   commonNamePointers = require('species_names.data');
+//     //   that.trigger('data:loaded');
+//     //   callback && callback();
+//     // }, 'data');
+//   },
 
   /**
    * Returns an array of taxa in format
@@ -44,38 +44,38 @@ const API = {
      synonym: "Common name synonym"
    }
    */
-  search(searchPhrase, callback, maxResults = MAX, scientificOnly) {
-    let results = [];
-
-    if (!searchPhrase) {
-      results.push(Object.assign({}, CONFIG.UNKNOWN_SPECIES));
-      callback(results);
-      return;
-    }
-
-    // normalize the search phrase
-    const normSearchPhrase = searchPhrase.toLowerCase();
-
-    // check if scientific search
-    const isScientific = helpers.isPhraseScientific(normSearchPhrase);
-    if (isScientific || scientificOnly) {
-      // search sci names
-      searchSciNames(species, normSearchPhrase, results, maxResults);
-    } else {
-      // search common names
-      results = searchCommonNames(species, commonNamePointers, normSearchPhrase);
-
-      // if not enough
-      if (results.length <= MAX) {
-        // search sci names
-        searchSciNames(species, normSearchPhrase, results);
-      }
-    }
-
-    // return results in the order
-    callback(results);
-  },
-};
+  // search(searchPhrase, callback, maxResults = MAX, scientificOnly) {
+  //   let results = [];
+  //
+  //   if (!searchPhrase) {
+  //     results.push(Object.assign({}, CONFIG.UNKNOWN_SPECIES));
+  //     callback(results);
+  //     return;
+  //   }
+  //
+  //   // normalize the search phrase
+  //   const normSearchPhrase = searchPhrase.toLowerCase();
+  //
+  //   // check if scientific search
+  //   const isScientific = helpers.isPhraseScientific(normSearchPhrase);
+  //   if (isScientific || scientificOnly) {
+  //     // search sci names
+  //     searchSciNames(species, normSearchPhrase, results, maxResults);
+  //   } else {
+  //     // search common names
+  //     results = searchCommonNames(species, commonNamePointers, normSearchPhrase);
+  //
+  //     // if not enough
+  //     if (results.length <= MAX) {
+  //       // search sci names
+  //       searchSciNames(species, normSearchPhrase, results);
+  //     }
+  //   }
+  //
+  //   // return results in the order
+  //   callback(results);
+  // },
+// };
 
 /**
  *
@@ -784,6 +784,6 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
   return results;
 };
 
-_.extend(API, Backbone.Events);
+// _.extend(API, Backbone.Events);
 
 export { BSBITaxonSearch as default };

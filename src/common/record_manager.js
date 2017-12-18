@@ -4,7 +4,7 @@ import { Device, Log } from 'helpers';
 import CONFIG from 'config';
 import Sample from './models/sample';
 import appModel from './models/app_model';
-import userModel from './models/user_model';
+// import userModel from './models/user_model';
 
 const morelConfiguration = $.extend(CONFIG.morel.manager, {
   Storage: Morel.DatabaseStorage,

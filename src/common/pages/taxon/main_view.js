@@ -2,12 +2,12 @@
  * Taxon main view.
  *****************************************************************************/
 import _ from 'lodash';
-import Backbone from 'backbone';
+// import Backbone from 'backbone';
 import Marionette from 'backbone.marionette';
 import CONFIG from 'config';
 import JST from 'JST';
 import { Log, Device } from 'helpers';
-//import informalGroups from 'informal_groups.data';
+// import informalGroups from 'informal_groups.data';
 import './styles.scss';
 
 const MIN_SEARCH_LENGTH = 2;
