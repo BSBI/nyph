@@ -10,7 +10,7 @@ import appModel from './app_model';
 
 const extension = {
   startGPS(accuracyLimit) {
-    const that = this; // @todo ?? should probably use arrow functions instead
+    const that = this;
     const options = {
       accuracyLimit,
       onUpdate(location) {
@@ -38,7 +38,7 @@ const extension = {
 
         that.set('location', location);
         that.markChangedAndResave();
-        //was that.save();
+        // was that.save();
 
         that.trigger('change:location');
         that.trigger('geolocation', location);

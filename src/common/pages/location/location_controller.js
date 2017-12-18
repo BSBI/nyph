@@ -4,13 +4,13 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import Backbone from 'backbone';
-import Morel from 'morel';
-import { Log, Validate, StringHelp, LocHelp, GridRefUtils } from 'helpers';
+// import Morel from 'morel';
+import { Log, GridRefUtils } from 'helpers'; // Validate, StringHelp, LocHelp,
 import App from 'app';
 import recordManager from '../../record_manager';
 import appModel from '../../models/app_model';
 import MainView from './location_main_view';
-import CONFIG from 'config';
+// import CONFIG from 'config';
 import './styles.scss';
 
 const LocationController = {
@@ -23,13 +23,6 @@ const LocationController = {
         App.trigger('404:show', { replace: true });
         return;
       }
-
-      // // can't edit a saved one - to be removed when record update
-      // // is possible on the server
-      // if (recordModel.getSyncStatus() === Morel.SYNCED) {
-      //   App.trigger('records:show', recordID, { replace: true });
-      //   return;
-      // }
 
       // MAIN
       const mainView = new MainView({
@@ -44,14 +37,14 @@ const LocationController = {
       mainView.on('gps:click', () => {
         LocationController.onGPSClick(recordModel);
       });
-      mainView.on('location:name:change', (name) => {
-        LocationController.onLocationNameChange(recordModel, name);
-      });
+      // mainView.on('location:name:change', (name) => {
+      //   LocationController.onLocationNameChange(recordModel, name);
+      // });
       mainView.on('location:gridref:change', (gridRefString) => {
         LocationController.onManualGridrefChange(recordModel, gridRefString);
       });
       mainView.on('lock:click:location', LocationController.onLocationLockClick);
-      mainView.on('lock:click:name', LocationController.onNameLockClick);
+      // mainView.on('lock:click:name', LocationController.onNameLockClick);
       const location = recordModel.get('location') || {};
       // const name = recordModel.get('location_name');
       const locationIsLocked = appModel.isAttrLocked('location', location);
@@ -87,7 +80,8 @@ const LocationController = {
         //   recordModel.set('location', location);
         // }
         //
-        // LocationController.updateLocks(recordModel, locationIsLocked);
+
+        LocationController.updateLocks(recordModel, locationIsLocked);
 
         window.history.back();
       },
@@ -102,17 +96,17 @@ const LocationController = {
     Log('Location:Controller: updating locks.');
 
     const location = recordModel.get('location') || {};
-    const locationName = recordModel.get('location_name');
+    // const locationName = recordModel.get('location_name');
     const lockedLocation = appModel.getAttrLock('location');
-    const lockedName = appModel.getAttrLock('location_name');
+    // const lockedName = appModel.getAttrLock('location_name');
 
     // reset
     if (lockedLocation === true && (!location.latitude || !location.longitude)) {
       appModel.setAttrLock('location', null);
     }
-    if (lockedName === true && !locationName) {
-      appModel.setAttrLock('location_name', null);
-    }
+    // if (lockedName === true && !locationName) {
+    //  appModel.setAttrLock('location_name', null);
+    // }
 
     // location
     if (lockedLocation) {
@@ -129,25 +123,25 @@ const LocationController = {
     }
 
     // name
-    if (lockedName && (lockedName === true || lockedName === locationName)) {
-      appModel.setAttrLock('location_name', locationName);
-    }
-    if (CONFIG.AUTO_LOCK_LOCATION_NAME && locationName) {
-      // no explicit lock request by user, but remember name anyway
-      appModel.setAttrLock('location_name', locationName);
-    }
+    // if (lockedName && (lockedName === true || lockedName === locationName)) {
+    //   appModel.setAttrLock('location_name', locationName);
+    // }
+    // if (CONFIG.AUTO_LOCK_LOCATION_NAME && locationName) {
+    //   // no explicit lock request by user, but remember name anyway
+    //   appModel.setAttrLock('location_name', locationName);
+    // }
   },
 
-  onLocationNameChange(recordModel, name) {
-    Log('Location:Controller: executing onLocationNameChange.');
-
-    if (!name || typeof name !== 'string') {
-      return;
-    }
-
-    const escapedName = StringHelp.escape(name);
-    recordModel.set('location_name', escapedName);
-  },
+  // onLocationNameChange(recordModel, name) {
+  //   Log('Location:Controller: executing onLocationNameChange.');
+  //
+  //   if (!name || typeof name !== 'string') {
+  //     return;
+  //   }
+  //
+  //   const escapedName = StringHelp.escape(name);
+  //   recordModel.set('location_name', escapedName);
+  // },
 
   onManualGridrefChange(recordModel, gridRefString) {
     Log('Location:Controller: executing onManualGridrefChange.');
@@ -278,15 +272,17 @@ const LocationController = {
     Log('Location:Controller: executing onLocationLockClick.');
     // invert the lock of the attribute
     // real value will be put on exit
+
+
     appModel.setAttrLock('location', !appModel.getAttrLock('location'));
   },
 
-  onNameLockClick() {
-    Log('Location:Controller: executing onNameLockClick.');
-    // invert the lock of the attribute
-    // real value will be put on exit
-    appModel.setAttrLock('location_name', !appModel.getAttrLock('location_name'));
-  },
+  // onNameLockClick() {
+  //   Log('Location:Controller: executing onNameLockClick.');
+  //   // invert the lock of the attribute
+  //   // real value will be put on exit
+  //   appModel.setAttrLock('location_name', !appModel.getAttrLock('location_name'));
+  // },
 };
 
 export { LocationController as default };

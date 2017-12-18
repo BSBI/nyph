@@ -2,7 +2,7 @@
  * Taxon controller.
  *****************************************************************************/
 import Backbone from 'backbone';
-import Morel from 'morel';
+// import Morel from 'morel';
 import App from 'app';
 import { Log } from 'helpers';
 import recordManager from '../../record_manager';
@@ -82,19 +82,24 @@ const TaxonController = {
           const updatedSampleID = sample.id || sample.cid;
           App.trigger('records:edit', updatedSampleID, { replace: true });
           // } else if (sample.get('location_name')) {
-        } else if (true) {
-          // @todo this should be based on whether using gps and have unlocked gridref
-
-          // interfere with app flow
-          // if location not set then navigate to that screen
-          // otherwise go back to list
-
-          // already have a satisfactory locked location
-          // return to previous page
-          window.history.back();
         } else {
-          // navigate to edit the location of the new record
-          App.trigger('records:edit:location', sample.cid, { replace: true });
+          const gpsEnabled = appModel.gpsEnabled();
+          const lockedLocation = appModel.getAttrLock('location');
+
+          if (gpsEnabled || (lockedLocation && lockedLocation.gridref)) {
+            // navigate back to list if using gps or have locked gridref
+
+            // interfere with app flow
+            // if location not set then navigate to that screen
+            // otherwise go back to list
+
+            // already have a satisfactory locked location
+            // return to previous page
+            window.history.back();
+          } else {
+            // navigate to edit the location of the new record
+            App.trigger('records:edit:location', sample.cid, { replace: true });
+          }
         }
       });
     }, that);
@@ -137,13 +142,15 @@ const TaxonController = {
         // check if location attr is not locked
         const locks = appModel.get('attrLocks');
 
-        if (!locks.location) {
-          // no previous location
-          sample.startGPS();
-        } else if (!locks.location.latitude) {
-          // previously locked location was through GPS
-          // so try again
-          sample.startGPS();
+        if (appModel.gpsEnabled()) {
+          if (!locks.location) {
+            // no previous location
+            sample.startGPS();
+          } else if (!locks.location.latitude) {
+            // previously locked location was through GPS
+            // so try again
+            sample.startGPS();
+          }
         }
 
         callback(null, sample);

@@ -2,7 +2,7 @@
  * Record Attribute controller.
  *****************************************************************************/
 import Backbone from 'backbone';
-import Morel from 'morel';
+// import Morel from 'morel';
 import { Log, DateHelp } from 'helpers';
 import App from 'app';
 import appModel from '../../common/models/app_model';
@@ -94,7 +94,7 @@ const AttributeController = {
     let currentVal;
     let newVal;
     const occ = recordModel.occurrences.at(0);
-    
+
     let changed;
 
     switch (attr) {
@@ -120,7 +120,7 @@ const AttributeController = {
 
         // todo:validate before setting up
         newVal = values.comment.trim();
-        
+
         if (currentVal !== newVal) {
           occ.set('comment', newVal);
           changed = true;
@@ -159,12 +159,12 @@ const AttributeController = {
           appModel.setAttrLock(attr, newVal);
         }
         break;
-        
+
       case 'recorder':
         if ((lockedValue && (lockedValue === true || lockedValue === currentVal)) ||
             (!lockedValue && newVal)
-            ){
-          //console.log('updating locked recorder to: ' + newVal);
+            ) {
+          // console.log('updating locked recorder to: ' + newVal);
           appModel.setAttrLock(attr, newVal);
         }
         break;

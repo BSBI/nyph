@@ -3,7 +3,7 @@
  *****************************************************************************/
 import _ from 'lodash';
 import { Log, Analytics } from 'helpers';
-import userModel from './user_model';
+// import userModel from './user_model';
 
 export default {
   setAttrLock(attr, value) {
@@ -41,10 +41,10 @@ export default {
     switch (attr) {
       case 'location':
         locked = lockedVal && lockedVal.source !== 'gps' && !!lockedVal.gridref && lockedVal.gridref === value.gridref;
-        
+
           // lock non-gps grid-refs by default
-          //locked = lockedVal && lockedVal.source !== 'gps' && lockedVal.gridref === value.gridref;
-        
+          // locked = lockedVal && lockedVal.source !== 'gps' && lockedVal.gridref === value.gridref;
+
           /*
           // map or gridref
           (lockedVal && lockedVal.source !== 'gps' &&
@@ -56,14 +56,14 @@ export default {
           (lockedVal.name === value.name && (
           !lockedVal.latitude && !lockedVal.longitude))));
           */
-        
+
         return locked;
       case 'recorder':
-        //console.log('Testing recorder name lock for lock val:');
-        //console.log(lockedVal);
-        //console.log(value);
-        
-        locked = (!value) || (value === lockedVal)
+        // console.log('Testing recorder name lock for lock val:');
+        // console.log(lockedVal);
+        // console.log(value);
+
+        locked = (!value) || (value === lockedVal);
         return locked;
       case 'date':
         lockedVal = new Date(lockedVal);
@@ -77,7 +77,7 @@ export default {
 
   appendAttrLocks(sample) {
     const locks = this.get('attrLocks');
-    const occurrence = sample.occurrences.at(0);
+    // const occurrence = sample.occurrences.at(0);
 
     _.each(locks, (value, key) => {
       // false or undefined
@@ -89,20 +89,23 @@ export default {
 
       switch (key) {
         case 'location':
+          Log(`Setting locked location: ${val}`);
+          Log(val);
           sample.set('location', val);
           break;
-        case 'location_name':
-          sample.set('location_name', val);
-          break;
-        case 'date':
-          // parse stringified date
-          sample.set('date', new Date(val));
-          break;
-        case 'recorder':
-          sample.set('recorder', val);
-          break;
+        // case 'location_name':
+        //   sample.set('location_name', val);
+        //   break;
+        // case 'date':
+        //   // parse stringified date
+        //   sample.set('date', new Date(val));
+        //   break;
+        // case 'recorder':
+        //   sample.set('recorder', val);
+        //   break;
         case 'comment':
-          occurrence.set('comment', val);
+          // don't allow locked comments
+          // occurrence.set('comment', val);
           break;
         default:
       }

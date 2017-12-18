@@ -1,25 +1,45 @@
 /** ****************************************************************************
- * Setting Menu main view.
+ * Info Menu main view.
  *****************************************************************************/
-import $ from 'jquery';
+
 import Marionette from 'backbone.marionette';
-import { Device } from 'helpers';
 import JST from 'JST';
+import { Device } from 'helpers';
+import './styles.scss';
+import $ from "jquery";
 
 export default Marionette.View.extend({
   tagName: 'ul',
-  className: 'table-view',
-  template: JST['settings/menu/main'],
+  className: 'table-view buttons',
+
+  template: JST['info/menu/main'],
 
   events: {
-    // 'toggle #use-training-btn': 'onSettingToggled',
-    // 'click #use-training-btn': 'onSettingToggled',
+    // 'click #logout-button': 'logout',
+    'toggle #gps-enabled-btn': 'onSettingToggled',
+    'click #gps-enabled-btn': 'onSettingToggled',
   },
 
   triggers: {
-    // 'click #delete-all-btn': 'records:delete:all',
-    // 'click #submit-all-btn': 'records:submit:all',
     'click #app-reset-btn': 'app:reset',
+  },
+
+  modelEvents: {
+    change: 'render',
+  },
+
+  serializeData() {
+    // let surname;
+    //
+    // if (userModel.hasLogIn()) {
+    //   surname = userModel.get('surname');
+    // }
+
+    const appModel = this.model;
+
+    return {
+      gpsEnabled: appModel.gpsEnabled(),
+    };
   },
 
   onSettingToggled(e) {
@@ -36,10 +56,7 @@ export default Marionette.View.extend({
     this.trigger('setting:toggled', setting, active);
   },
 
-  serializeData() {
-    const appModel = this.model;
-    return {
-      // useTraining: appModel.get('useTraining'),
-    };
-  },
+  // logout() {
+  //   this.trigger('user:logout');
+  // },
 });

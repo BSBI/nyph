@@ -68,7 +68,7 @@ const LocationView = Marionette.View.extend({
   serializeData() {
     Log('Location:Controller:MainView: serializing.');
 
-    // const appModel = this.model.get('appModel');
+    const appModel = this.model.get('appModel');
 
     const sample = this.model.get('recordModel');
     const location = sample.get('location') || {};
@@ -85,7 +85,7 @@ const LocationView = Marionette.View.extend({
       gridref = location.gridref;
     }
 
-    // const locationLocked = appModel.isAttrLocked('location', location);
+    const locationLocked = appModel.isAttrLocked('location', location);
     // const nameLocked = appModel.isAttrLocked('location_name', name);
 
     return {
@@ -96,7 +96,7 @@ const LocationView = Marionette.View.extend({
       latitude: location.latitude,
       longitude: location.longitude,
       accuracyLimit: CONFIG.gps_accuracy_limit, // TODO: get from GPS
-      // locationLocked,
+      locationLocked,
       // nameLocked,
     };
   },

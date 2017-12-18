@@ -32,7 +32,7 @@
   <li>
     <p><strong>What happens to the records</strong></p>
     <p>
-      Records from the App will be checked by the Botanical Society of
+      Records will be checked by the Botanical Society of
       Britain & Ireland and may be added to our database.
       The New Year Plant Hunt is partly for fun - an excuse
       to get outside and look at some plants! - but by repeating

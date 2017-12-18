@@ -8,7 +8,7 @@ import CONFIG from 'config';
 import App from 'app';
 import CommonController from '../common/controller';
 import IntroController from './intro/controller';
-import InfoMenuController from './menu/controller';
+import InfoMenuController from './menu/menu_controller';
 import './brc_approved/BRC_approved_logo.png';
 import './brc_approved/styles.scss';
 import './help/swipe_record.png';
@@ -22,30 +22,30 @@ const Router = Marionette.AppRouter.extend({
     'info/intro(/)': IntroController.show,
     'info/about(/)': () => {
       CommonController.show({
-        title: 'About',
+        title: 'NYPH 2018',
         App,
         route: 'info/about/main',
         model: new Backbone.Model({
           version: CONFIG.version,
           build: CONFIG.build,
         }),
-      }); },
+      });
+    },
     'info/help(/)': () => {
       CommonController.show({
         title: 'Help', App, route: 'info/help/main',
-      }); },
+      });
+    },
     'info/privacy(/)': () => {
       CommonController.show({
         title: 'Privacy Policy', App, route: 'info/privacy/main',
-      }); },
-    'info/brc-approved(/)': () => {
-      CommonController.show({
-        title: 'BRC Approved', App, route: 'info/brc_approved/main',
-      }); },
+      });
+    },
     'info/credits(/)': () => {
       CommonController.show({
         title: 'Credits', App, route: 'info/credits/main',
-      }); },
+      });
+    },
     'info/*path': function () { App.trigger('404:show'); },
   },
 });
@@ -63,7 +63,7 @@ App.on('info:intro', () => {
 App.on('info:about', () => {
   App.navigate('info/about');
   CommonController.show({
-    title: 'About',
+    title: 'NYPH 2018',
     App,
     route: 'info/about/main',
     model: new Backbone.Model({ version: CONFIG.version }),
@@ -81,13 +81,6 @@ App.on('info:privacy', () => {
   App.navigate('info/privacy');
   CommonController.show({
     title: 'Privacy Policy', App, route: 'info/privacy/main',
-  });
-});
-
-App.on('info:brc-approved', () => {
-  App.navigate('info/brc-approved');
-  CommonController.show({
-    title: 'BRC Approved', App, route: 'info/brc_approved/main',
   });
 });
 

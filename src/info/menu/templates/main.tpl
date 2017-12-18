@@ -18,9 +18,17 @@
   </a>
 </li>
 <li class="table-view-divider">Settings</li>
+<li id="use-training-btn-parent" class="table-view-cell">
+  Use GPS
+  <span class="media-object pull-left icon icon-location"></span>
+  <div id="gps-enabled-btn" data-setting="gpsEnabled"
+       class="toggle no-yes <%- obj.gpsEnabled ? 'active' : '' %>">
+    <div class="toggle-handle"></div>
+  </div>
+</li>
 <li class="table-view-cell">
-  <a href="#settings" class="navigate-right">
-    <span class="media-object pull-left icon icon-settings"></span>
-    App
+  <a id="app-reset-btn">
+    <span class="media-object pull-left icon icon-undo"></span>
+    Start a new list
   </a>
 </li>

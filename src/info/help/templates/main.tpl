@@ -4,34 +4,29 @@
     <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
        href="#c1" aria-expanded="false" aria-controls="c1">
       <span class="icon icon-collapse pull-left"></span>
-      How to make a new record
+      How to add a new record
     </a>
-    <p id="c1" class="collapse"
-       aria-labelledby="headingOne" aria-expanded="false">
-      There are two ways to start a record.
+    <p id="c1" class="collapse" aria-labelledby="headingOne" aria-expanded="false">
+      There are two ways to add a record.
       <br>
       <br>
       <strong>Taking a photo</strong>
       <br>
       Press the camera button <span class="icon icon-camera"></span> in the home
-      page header. This will prompt you to select the photo source: camera or gallery.
-      Once you have picked a photo, the app will create a new record without any
-      species associated with it.
+      page header. This will prompt you to select a photo to upload or activate the camera on your mobile device.
+      Once you have a photo, the app will create a new record without any
+      species associated with it.<br>
       Clicking on the newly created record will open the taxa search page.
       <br>
       <br>
-      <strong>Selecting species</strong>
+      <strong>Selecting a species</strong>
       <br>
       Please press the plus <span class="icon icon-plus"></span> button in the home page header.
-      This will bring you to the taxa search page. After selecting the species,
-      open the record (either by opening it directly from the taxa search page
+      This will bring you to the taxon search page. After selecting the species,
+      open the record (either by opening it directly from the taxon search page
       using the edit button <span class="icon edit"></span> beside the species name or through
-      the home-list page) and fill in the details of the sighting, like location,
-      date, number seen etc.
+      the home-list page)
       <br>
-      <br>
-      When finished, set for submission by pressing the paper plane
-      <span class="icon icon-send"></span> button
     </p>
   </li>
   <li class="table-view-cell">
@@ -40,11 +35,8 @@
       <span class="icon icon-collapse pull-left"></span>
       Searching for species
     </a>
-    <p id="c2" class="collapse"
-       aria-labelledby="headingOne" aria-expanded="false">
-      The application holds all of the UK’s plant species. You can search using scientific or English names. 
-      Names can be abbreviated e.g. T repens or Tri rep for <i>Tripholium repens</i>. Keep typing until the name
-      you want appears on the list.
+    <p id="c2" class="collapse" aria-labelledby="headingOne" aria-expanded="false">
+      You can search using scientific or English names. Keep typing until the name you want appears on the list.
       <br>
       If you don't know the name of the plant then leave the search box blank and click on 'Unknown flowering plant'
     </p>
@@ -53,44 +45,27 @@
     <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
        href="#c3" aria-expanded="false" aria-controls="c3">
       <span class="icon icon-collapse pull-left"></span>
-      Sync. with iRecord
+      Sending your list
     </a>
-    <p id="c3" class="collapse"
-       aria-labelledby="headingTwo" aria-expanded="false">
-      All your saved records will be shown on the home page.
-      By default a record is in <i>draft</i> mode until it is set for submission.
-      While it is in <i>draft</i> mode the application will not synchronise your
-      record with the database. To set it for sending,
-      open the record and press the <span class="icon icon-send"></span> button in the header.
-      The application will try to submit your record once there is a good network
-      connection.
-
-      If the record has reached the database a red
-      <span class="icon icon-send" style="color: red;"></span>(set for submission & saved locally)
-      will become green <span class="icon icon-send" style="color: green;"></span>
-      (synced to the database). Once it has successfully reached
-      the database the record becomes unavailable for new edits.
-      To further edit it
-      please use the <a href="http://irecord.org.uk">iRecord Website</a>.
+    <p id="c3" class="collapse" aria-labelledby="headingTwo" aria-expanded="false">
+      Records are not saved until you click on the <strong>Send</strong> button (top-right corner of the
+      record-list page). You can do this at any point, provided that you have a network connection.
       <br>
+      Records cannot be sent until all the required details are completed.  You need to fill in two fields
+      at the top of the main list to give your name(s) (or the name of your group); the place where you started
+      your Plant Hunt or did most searching.
       <br>
-      <b>Note:</b> you have to be signed in to your iRecord account and have a network connection,
-      for the records to be automatically synchronised in the background.
+      Each record must have a species name (or if you selected 'Unknown plant' then you must provide a photograph).
       <br>
-  </li>
-  <li class="table-view-cell">
-    <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-       href="#c4" aria-expanded="false" aria-controls="c4">
-      <span class="icon icon-collapse pull-left"></span>
-      Send all records
-    </a>
-    <p id="c4" class="collapse"
-       aria-labelledby="headingTwo" aria-expanded="false">
-      You can set all your draft records for submission. To do that go to the
-      settings page <span class="icon icon-settings"></span> and click Submit All
-      <span class="icon icon-send"></span> button.
-      This will try to send all the valid records.
-    </p>
+      Each record must have a grid-reference. Usually this will have been filled in automatically using GPS if you
+      are recording using a mobile phone.
+      <br>
+      Once a record has been saved, a green airplane symbol <span class="icon icon-send" style="color: green;"></span>
+      appears next to it in the list. Entries that haven't yet saved either because of a failed connection or
+      because some details are missing will have a warning message or a red symbol
+      <span class="icon icon-send" style="color: red;"></span>.  Retry sending these records once you have provided
+      any missing details and have a good connection again.
+      </p>
   </li>
   <li class="table-view-cell">
     <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
@@ -103,13 +78,7 @@
       To delete a record, swipe it left in the home-list page and click
       the delete <span class="icon icon-delete"></span> button.
       <img src="images/swipe_record.png">
-      <br><br>
-      You can also clear all the locally saved records that have been
-      successfully synchronised
-      with the database. This will leave the records on the database untouched.
-      To do that go to settings page
-      <span class="icon icon-settings"></span> and click the <i>Start a new list</i>
-      <span class="icon icon-delete"></span> button.
+      <br>
     </p>
   </li>
   <li class="table-view-cell">
@@ -131,37 +100,16 @@
       name (if one exists).
     </p>
   </li>
-
-  <li class="table-view-divider">User</li>
-  <li class="table-view-cell">
-    <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-       href="#c9" aria-expanded="false" aria-controls="c9">
-      <span class="icon icon-collapse pull-left"></span>
-      Sign in/out or register
-    </a>
-    <p id="c9" class="collapse" aria-labelledby="headingTwo" aria-expanded="false">
-      To login, open the main menu page <span class="icon icon-menu"></span>,
-      click Login <span class="icon icon-user"></span>
-      or Register <span class="icon icon-user-plus"></span> buttons and follow the instructions.
-      <br><br>
-      To logout, visit the main menu page <span class="icon icon-menu"></span>
-      and click the logout <span class="icon icon-logout"></span> button.
-      <br><br>
-      <b>Note:</b> after registering a new account you must verify your email
-      address by clicking on a verification link sent to your email.
-    </p>
-  </li>
-
-  <li class="table-view-divider">Other</li>
   <li class="table-view-cell">
     <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
        href="#c8" aria-expanded="false" aria-controls="c8">
       <span class="icon icon-collapse pull-left"></span>
-      Reset the application
+      Start a new list
     </a>
     <p id="c8" class="collapse"
        aria-labelledby="headingTwo" aria-expanded="false">
-      Go to the application settings page <span class="icon icon-settings"></span> and click on the Reset <span class="icon icon-undo"></span>button.
+      Go to the application settings page <span class="icon icon-settings"></span> and click on the <i>Start new list</i> <span class="icon icon-undo"></span>button.<br>
+      This will clear all records from your current list, so please make sure that you have saved that list first.
     </p>
   </li>
   <li>

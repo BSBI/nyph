@@ -1,13 +1,13 @@
 /** ****************************************************************************
  * App model. Persistent.
  *****************************************************************************/
+import { Device, Validate, Log } from 'helpers';
 import Backbone from 'backbone';
 import Store from 'backbone.localstorage';
 import CONFIG from 'config';
-import { Validate, Log } from 'helpers';
-import userModel from './user_model';
 import pastLocationsExtension from './app_model_past_loc_ext';
 import attributeLockExtension from './app_model_attr_lock_ext';
+// import userModel from './user_model';
 
 let AppModel = Backbone.Model.extend({
   id: 'app',
@@ -22,6 +22,7 @@ let AppModel = Backbone.Model.extend({
     useGridRef: true,
     useGridMap: true,
     useTraining: process.env.TRAINING,
+    gpsEnabled: null, // default null (initialise later based on whether on mobile device or desktop)
     nyphListEmail: '',
     nyphListRecorders: '',
     nyphListComments: '',
@@ -39,29 +40,65 @@ let AppModel = Backbone.Model.extend({
   initialize() {
     this.fetch();
 
+    // let needSave = false;
+
     const currentNyphListUUID = this.get('nyphListUUID');
     if (!currentNyphListUUID) {
-      //this.set('nyphListUUID', this.uuid());
+      // this.set('nyphListUUID', this.uuid());
       this.setUuid();
       this.save();
+      // needSave = true;
     }
 
-    // attr lock recorder on login
-    userModel.on('login logout', () => {
-      if (userModel.hasLogIn()) {
-        if (!window.nyphAdminMode) {
-            // only set and lock recorder name for normal user
-            // and not for the generic Plant Hunt admin account
+    // because of the messy way app_model is initialised, the Device.isMobile helper
+    // apparently isn't yet available when initialise is called
+    // if (this.get('gpsEnabled') === null) {
+    //   this.set('gpsEnabled', Device.isMobile());
+    //   needSave = true;
+    // }
 
-          const surname = userModel.get('surname');
-          const name = userModel.get('name');
-          const recorder = `${surname}, ${name}`;
-          this.setAttrLock('recorder', recorder);
-        }
-      } else {
-        this.unsetAttrLock('recorder');
-      }
-    });
+    // Log(`gpsEnabled value during initialization: ${this.get('gpsEnabled')}`);
+
+    // if (needSave) {
+    //   this.save();
+    // }
+
+    // attr lock recorder on login
+    // userModel.on('login logout', () => {
+    //   if (userModel.hasLogIn()) {
+    //     if (!window.nyphAdminMode) {
+    //         // only set and lock recorder name for normal user
+    //         // and not for the generic Plant Hunt admin account
+    //
+    //       const surname = userModel.get('surname');
+    //       const name = userModel.get('name');
+    //       const recorder = `${surname}, ${name}`;
+    //       this.setAttrLock('recorder', recorder);
+    //     }
+    //   } else {
+    //     this.unsetAttrLock('recorder');
+    //   }
+    // });
+  },
+
+  /**
+   * test gps enabled setting
+   * (and initialise if not defined)
+   *
+   * @return {boolean}
+   */
+  gpsEnabled() {
+    // because of the messy way app_model is initialised, the Device.isMobile helper
+    // apparently isn't yet available when initialise is called
+
+    if (this.get('gpsEnabled') === null) {
+      Log('Initialising gpsEnabled');
+
+      this.set('gpsEnabled', Device.isMobile());
+      this.save();
+    }
+    Log(`gpsEnabled value when read: ${this.get('gpsEnabled')}`);
+    return this.get('gpsEnabled');
   },
 
   setUuid() {

@@ -5,9 +5,9 @@ import Backbone from 'backbone';
 import App from 'app';
 import { Log, Analytics } from 'helpers';
 import appModel from '../../common/models/app_model';
-import userModel from '../../common/models/user_model';
+// import userModel from '../../common/models/user_model';
 import recordManager from '../../common/record_manager';
-import MainView from './main_view';
+import MainView from './settings_main_view';
 import HeaderView from '../../common/views/header_view';
 
 const API = {
@@ -26,35 +26,35 @@ const API = {
 
     mainView.on('records:submit:all', API.sendAllRecords);
     mainView.on('records:delete:all', API.deleteAllRecords);
-    mainView.on('app:reset', () => {
-      App.regions.getRegion('dialog').show({
-        title: 'Reset',
-        class: 'error',
-        body: 'Are you sure you want to clear all records from list?' +
-        '</br>Choose this option if you want to start a new Plant Hunt list',
-        buttons: [
-          {
-            title: 'Cancel',
-            onClick() {
-              App.regions.getRegion('dialog').hide();
-            },
-          },
-          {
-            title: 'Reset',
-            class: 'btn-negative',
-            onClick() {
-              // delete all
-              API.resetApp(() => {
-                App.regions.getRegion('dialog').show({
-                  title: 'Done!',
-                  timeout: 1000,
-                });
-              });
-            },
-          },
-        ],
-      });
-    });
+    // mainView.on('app:reset', () => {
+    //   App.regions.getRegion('dialog').show({
+    //     title: 'Reset',
+    //     class: 'error',
+    //     body: 'Are you sure you want to clear all records from list?' +
+    //     '</br>Choose this option if you want to start a new Plant Hunt list',
+    //     buttons: [
+    //       {
+    //         title: 'Cancel',
+    //         onClick() {
+    //           App.regions.getRegion('dialog').hide();
+    //         },
+    //       },
+    //       {
+    //         title: 'Reset',
+    //         class: 'btn-negative',
+    //         onClick() {
+    //           // delete all
+    //           API.resetApp(() => {
+    //             App.regions.getRegion('dialog').show({
+    //               title: 'Done!',
+    //               timeout: 1000,
+    //             });
+    //           });
+    //         },
+    //       },
+    //     ],
+    //   });
+    // });
 
     App.regions.getRegion('main').show(mainView);
 
@@ -67,7 +67,7 @@ const API = {
   },
 
   deleteAllRecords() {
-    let body = 'Are you sure you want to clear all records from list?' +
+    const body = 'Are you sure you want to clear all records from list?' +
         '</br>Choose this option if you want to start a new Plant Hunt list';
 
     App.regions.getRegion('dialog').show({
@@ -136,20 +136,20 @@ const API = {
     });
   },
 
-  resetApp(callback) {
-    Log('Settings:Menu:Controller: resetting the application!', 'w');
-
-    appModel.clear().set(appModel.defaults);
-    appModel.setUuid();
-    appModel.save();
-
-    userModel.clear().set(userModel.defaults);
-    userModel.save();
-
-    recordManager.clearAll(true, callback);
-
-    Analytics.trackEvent('Settings', 'reset app');
-  },
+  // resetApp(callback) {
+  //   Log('Settings:Menu:Controller: resetting the application!', 'w');
+  //
+  //   appModel.clear().set(appModel.defaults);
+  //   appModel.setUuid();
+  //   appModel.save();
+  //
+  //   userModel.clear().set(userModel.defaults);
+  //   userModel.save();
+  //
+  //   recordManager.clearAll(true, callback);
+  //
+  //   Analytics.trackEvent('Settings', 'reset app');
+  // },
 };
 
 export { API as default };

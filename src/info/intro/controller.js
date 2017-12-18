@@ -1,9 +1,9 @@
-import Backbone from 'backbone';
-import { Log } from 'helpers';
+// import Backbone from 'backbone';
+// import { Log } from 'helpers';
 import App from 'app';
 import appModel from '../../common/models/app_model';
 import MainView from './main_view';
-import HeaderView from '../../common/views/header_view';
+// import HeaderView from '../../common/views/header_view';
 
 const API = {
   show() {

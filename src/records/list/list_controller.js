@@ -4,7 +4,7 @@
 import Morel from 'morel';
 import App from 'app';
 import CONFIG from 'config';
-import { Log, Analytics, ImageHelp } from 'helpers';
+import { Log, Analytics, ImageHelp, Device } from 'helpers';
 import appModel from '../../common/models/app_model';
 // import userModel from '../../common/models/user_model';
 import recordManager from '../../common/record_manager';
@@ -183,20 +183,29 @@ const RecordListController = {
       recordManager.set(sample, (saveErr) => {
         if (saveErr) {
           callback(saveErr);
-          return;
-        }
-        // check if location attr is not locked
-        const locks = appModel.get('attrLocks');
+        } else {
+          // check if location attr is not locked
+          const locks = appModel.get('attrLocks');
 
-        if (!locks.location) {
-          // no previous location
-          sample.startGPS();
-        } else if (!locks.location.latitude || !locks.location.longitude) {
-          // previously locked location was through GPS
-          // so try again
-          sample.startGPS();
+          if (appModel.gpsEnabled()) {
+            if (!locks.location) {
+              // no previous location
+              sample.startGPS();
+            } else if (!locks.location.latitude || !locks.location.longitude) {
+              // previously locked location was through GPS
+              // so try again
+              sample.startGPS();
+            }
+          }
+          callback();
+
+          // if desktop based
+          // and no locked location then navigate to the edit screen
+
+          if (!locks.location && !Device.isMobile()) {
+            App.trigger('records:edit', sample.cid, { replace: false });
+          }
         }
-        callback();
       });
     });
   },

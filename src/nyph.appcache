@@ -1,7 +1,6 @@
 CACHE MANIFEST
 # v1.2 2017-12-17
 
-#1.data.js
 app.css
 app.css.map
 app.js
@@ -25,6 +24,8 @@ images/layers.png
 images/layers-2x.png
 images/sponsor_logo.png
 images/swipe_record.png
+
+/favicon.png
 
 https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
 
