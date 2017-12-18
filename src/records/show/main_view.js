@@ -4,7 +4,7 @@
 import Morel from 'morel';
 import Marionette from 'backbone.marionette';
 import JST from 'JST';
-import { DateHelp, StringHelp } from 'helpers';
+import { DateHelp } from 'helpers';
 import Gallery from '../../common/gallery';
 import './styles.scss';
 
@@ -51,7 +51,7 @@ export default Marionette.View.extend({
     const syncStatus = recordModel.getSyncStatus();
 
     const locationPrint = recordModel.printLocation();
-    const location = recordModel.get('location') || {};
+    // const location = recordModel.get('location') || {};
     const location_name = recordModel.get('location_name');
 
     return {

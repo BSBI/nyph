@@ -175,7 +175,7 @@ let AppModel = Backbone.Model.extend({
   },
 });
 
-// add previous/pased saved locations management
+// add previous/past saved locations management
 AppModel = AppModel.extend(pastLocationsExtension);
 // add sample/occurrence attribute management
 AppModel = AppModel.extend(attributeLockExtension);

@@ -37,7 +37,7 @@ export default Marionette.View.extend({
   },
 
   serializeData() {
-    const appModel = this.model;
+    // const appModel = this.model;
     return {
       // useTraining: appModel.get('useTraining'),
     };

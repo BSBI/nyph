@@ -4,8 +4,8 @@
 import Marionette from 'backbone.marionette';
 import Morel from 'morel';
 import JST from 'JST';
-import { DateHelp, StringHelp } from 'helpers';
-import CONFIG from 'config';
+import { StringHelp } from 'helpers';
+// import CONFIG from 'config';
 
 import './styles.scss';
 

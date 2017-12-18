@@ -5,7 +5,7 @@ import $ from 'jquery';
 import Marionette from 'backbone.marionette';
 import { Device, DateHelp, StringHelp, Log } from 'helpers';
 import JST from 'JST';
-import CONFIG from 'config';
+// import CONFIG from 'config';
 
 export default Marionette.View.extend({
   initialize(options) {

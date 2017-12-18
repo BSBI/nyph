@@ -1,92 +1,92 @@
 /** ****************************************************************************
  * App Model past locations functions.
  *****************************************************************************/
-import _ from 'lodash';
-import { UUID, LocHelp } from 'helpers';
+// import _ from 'lodash';
+import { LocHelp } from 'helpers';
 
-const MAX_SAVED = 100;
+// const MAX_SAVED = 100;
 
 export default {
-  /**
-   * Saves device location.
-   *
-   * @param location
-   */
-  setLocation(origLocation = {}, location_name) {
-    const location = _.cloneDeep(origLocation);
-    location.name = location_name; // past locations incorporate location names
+  // /**
+  //  * Saves device location.
+  //  *
+  //  * @param location
+  //  */
+  // setLocation(origLocation = {}, location_name) {
+  //   const location = _.cloneDeep(origLocation);
+  //   location.name = location_name; // past locations incorporate location names
+  //
+  //   const locations = this.get('locations');
+  //
+  //   if (!location.latitude || !location.longitude) {
+  //     return null;
+  //   }
+  //
+  //   // update existing
+  //   const existingLocationIndex = this._locationIndex(location);
+  //   if (existingLocationIndex >= 0) {
+  //     locations.splice(existingLocationIndex, 1, location);
+  //     this.trigger('change:locations');
+  //     this.save();
+  //
+  //     return location;
+  //   }
+  //
+  //   // check if not duplicating existing location without id
+  //   let duplication = false;
+  //   locations.forEach((loc) => {
+  //     if (this._isIdentical(loc, location)) {
+  //       duplication = true;
+  //     }
+  //   });
+  //   if (duplication) return null;
+  //
+  //   // add new one
+  //   location.id = UUID();
+  //   locations.splice(0, 0, location);
+  //
+  //   // check if not exceeded limits
+  //   if (locations.length > MAX_SAVED) locations.pop(); // remove old one
+  //
+  //   this.set('locations', locations);
+  //   this.trigger('change:locations');
+  //   this.save();
+  //
+  //   return location;
+  // },
 
-    const locations = this.get('locations');
+  // removeLocation(location = {}) {
+  //   const that = this;
+  //   const locations = this.get('locations');
+  //
+  //   locations.forEach((loc, i) => {
+  //     if (loc.id === location.id) {
+  //       locations.splice(i, 1);
+  //     }
+  //   });
+  //   that.set('locations', locations);
+  //   that.trigger('change:locations');
+  //   that.save();
+  //
+  //   return location;
+  // },
 
-    if (!location.latitude || !location.longitude) {
-      return null;
-    }
+  // _isIdentical(loc, location) {
+  //   return loc.name === location.name &&
+  //     loc.latitude === location.latitude &&
+  //     loc.longitude === location.longitude;
+  // },
 
-    // update existing
-    const existingLocationIndex = this._locationIndex(location);
-    if (existingLocationIndex >= 0) {
-      locations.splice(existingLocationIndex, 1, location);
-      this.trigger('change:locations');
-      this.save();
-
-      return location;
-    }
-
-    // check if not duplicating existing location without id
-    let duplication = false;
-    locations.forEach((loc) => {
-      if (this._isIdentical(loc, location)) {
-        duplication = true;
-      }
-    });
-    if (duplication) return null;
-
-    // add new one
-    location.id = UUID();
-    locations.splice(0, 0, location);
-
-    // check if not exceeded limits
-    if (locations.length > MAX_SAVED) locations.pop(); // remove old one
-
-    this.set('locations', locations);
-    this.trigger('change:locations');
-    this.save();
-
-    return location;
-  },
-
-  removeLocation(location = {}) {
-    const that = this;
-    const locations = this.get('locations');
-
-    locations.forEach((loc, i) => {
-      if (loc.id === location.id) {
-        locations.splice(i, 1);
-      }
-    });
-    that.set('locations', locations);
-    that.trigger('change:locations');
-    that.save();
-
-    return location;
-  },
-
-  _isIdentical(loc, location) {
-    return loc.name === location.name &&
-      loc.latitude === location.latitude &&
-      loc.longitude === location.longitude;
-  },
-
-  _locationIndex(location = {}) {
-    const locations = this.get('locations');
-    let index = -1;
-    locations.forEach((loc, i) => {
-      if (loc.id === location.id) {
-        index = i;
-      }
-    });
-    return index;
-  },
+  // _locationIndex(location = {}) {
+  //   const locations = this.get('locations');
+  //   let index = -1;
+  //   locations.forEach((loc, i) => {
+  //     if (loc.id === location.id) {
+  //       index = i;
+  //     }
+  //   });
+  //   return index;
+  // },
 
   printLocation(location) {
     const useGridRef = this.get('useGridRef');

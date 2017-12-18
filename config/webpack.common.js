@@ -78,7 +78,6 @@ module.exports = {
       API_KEY: JSON.stringify('ir'), // JSON.stringify(process.env.API_KEY || ''),
       ADMIN_USERNAME: JSON.stringify(process.env.ADMIN_USERNAME || ''),
       ADMIN_PASSWORD: JSON.stringify(process.env.ADMIN_PASSWORD || ''),
-      GUBBINS: JSON.stringify(process.env.GUBBINS || '')
     }),
     new CircularDependencyPlugin(),
   ],

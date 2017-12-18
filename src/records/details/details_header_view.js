@@ -2,7 +2,7 @@
  * List details header view.
  *****************************************************************************/
 import Marionette from 'backbone.marionette';
-import Morel from 'morel';
+// import Morel from 'morel';
 import JST from 'JST';
 
 export default Marionette.View.extend({

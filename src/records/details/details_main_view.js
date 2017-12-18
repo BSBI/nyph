@@ -31,7 +31,7 @@ export default Marionette.View.extend({
    *
    * @param {Event} event
    */
-  nyphListTitleChange(event) {
+  nyphListTitleChange() {
     const currentTitle = this.model.get('nyphListTitle');
     const newTitle = document.getElementById('nyph-list-title').value.trim();
 
@@ -48,7 +48,7 @@ export default Marionette.View.extend({
    *
    * @param {Event} event
    */
-  commentsChange(event) {
+  commentsChange() {
     const currentComments = this.model.get('nyphListComments');
     const newComments = document.getElementById('nyph-list-comments').value.trim();
 
@@ -65,7 +65,7 @@ export default Marionette.View.extend({
    *
    * @param {Event} event
    */
-  dateChange(event) {
+  dateChange() {
     const currentDate = this.model.get('nyphListDate');
     const newDate = document.getElementById('nyph-list-date').value;
 

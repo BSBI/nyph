@@ -55,7 +55,7 @@
       </li>
       <li>
         <p>Waive all moral rights in, and arising from your photograph(s), but retain
-          ownership of the copyright in your file(s) as its author.</p>
+          ownership of the copyright in your file(s) as author.</p>
       </li>
     </ul>
   </li>

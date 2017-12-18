@@ -11,7 +11,6 @@ module.exports = webpackMerge(commonConfig, {
       config: 'common/config_admin',
     },
   },
-  
   devtool: 'source-map',
 
   plugins: [

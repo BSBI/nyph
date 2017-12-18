@@ -62,8 +62,7 @@
       <br>
       Once a record has been saved, a green airplane symbol <span class="icon icon-send" style="color: green;"></span>
       appears next to it in the list. Entries that haven't yet saved either because of a failed connection or
-      because some details are missing will have a warning message or a red symbol
-      <span class="icon icon-send" style="color: red;"></span>.  Retry sending these records once you have provided
+      because some details are missing will have a warning message.  Retry sending these records once you have provided
       any missing details and have a good connection again.
       </p>
   </li>
@@ -96,8 +95,6 @@
       button in the attribute edit page header. This will change the symbol to
       locked <span class="icon icon-lock-closed"></span> both on the button and next to the attribute.
       <br><br>
-      Note: locking a location that was acquired through GPS will only lock its
-      name (if one exists).
     </p>
   </li>
   <li class="table-view-cell">
@@ -108,7 +105,7 @@
     </a>
     <p id="c8" class="collapse"
        aria-labelledby="headingTwo" aria-expanded="false">
-      Go to the application settings page <span class="icon icon-settings"></span> and click on the <i>Start new list</i> <span class="icon icon-undo"></span>button.<br>
+      Go to the menu page and click on the <i>Start new list</i> <span class="icon icon-undo"></span>button.<br>
       This will clear all records from your current list, so please make sure that you have saved that list first.
     </p>
   </li>

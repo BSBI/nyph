@@ -1,31 +1,31 @@
 /** ****************************************************************************
  * Some location transformation logic.
  *****************************************************************************/
-import { LatLonEllipsoidal as LatLon, OsGridRef } from 'geodesy';
+// import { LatLonEllipsoidal as LatLon, OsGridRef } from 'geodesy';
 import Log from './log';
 import GridRefUtils from './gridrefutils';
 
 const helpers = {
   /**
-   * 
+   *
    * @param {type} location
    * @returns {string}
    */
   locationLatLngToGridString(location) {
-    //const locationGranularity = helpers._getGRgranularity(location);
+    // const locationGranularity = helpers._getGRgranularity(location);
 
-    //const p = new LatLon(location.latitude, location.longitude, LatLon.datum.WGS84);
-    //const grid = OsGridRef.latLonToOsGrid(p);
+    // const p = new LatLon(location.latitude, location.longitude, LatLon.datum.WGS84);
+    // const grid = OsGridRef.latLonToOsGrid(p);
 
-    //return grid.toString(locationGranularity).replace(/\s/g, '');
-    
-    var normalisedPrecision = GridRefUtils.GridRefParser.get_normalized_precision(location.accuracy * 2); // accuracy is radius
-    var nationaGridCoords = GridRefUtils.latlng_to_grid_coords(location.latitude, location.longitude);
+    // return grid.toString(locationGranularity).replace(/\s/g, '');
+
+    const normalisedPrecision = GridRefUtils.GridRefParser.get_normalized_precision(location.accuracy * 2); // accuracy is radius
+    const nationaGridCoords = GridRefUtils.latlng_to_grid_coords(location.latitude, location.longitude);
     return nationaGridCoords.to_gridref(normalisedPrecision);
   },
-  
+
   /**
-   * 
+   *
    * @param {object} location
    * @returns {Array} latlng pairs (SW, SE, NE, NW)
    */
@@ -40,25 +40,23 @@ const helpers = {
           nationalGridRefSW.to_latLng(),
           (new parsedRef.NationalRef(nationalGridRefSW.x + parsedRef.length, nationalGridRefSW.y)).to_latLng(),
           (new parsedRef.NationalRef(nationalGridRefSW.x + parsedRef.length, nationalGridRefSW.y + parsedRef.length)).to_latLng(),
-          (new parsedRef.NationalRef(nationalGridRefSW.x, nationalGridRefSW.y + parsedRef.length)).to_latLng()
+          (new parsedRef.NationalRef(nationalGridRefSW.x, nationalGridRefSW.y + parsedRef.length)).to_latLng(),
         ];
-      } else {
-        return null;
       }
-    } else {
       return null;
     }
+    return null;
   },
 
   /**
-   * 
+   *
    * @param {string} gridrefString
    * @returns {GridRefUtils.OSRef|null} SW corner of grid square
    */
   parseGrid(gridrefString) {
-    var parser = GridRefUtils.GridRefParser.factory(gridrefString);
+    const parser = GridRefUtils.GridRefParser.factory(gridrefString);
     return parser ? parser.osRef : null;
-    
+
     /**
      * given co-ordinates of SW corner return new OsGridRef of mid-point
      *
@@ -88,38 +86,37 @@ const helpers = {
         return new OsGridRef(NaN, NaN);
       }
     }
-   
+
     /*
-     * 
+     *
      * @type OsGridRef
      */
-    //let osCoords = OsGridRef.parse(gridrefString);
-    //osCoords = osgbMidPoint(gridrefString, osCoords);
+    // let osCoords = OsGridRef.parse(gridrefString);
+    // osCoords = osgbMidPoint(gridrefString, osCoords);
 
-    //return osCoords;
-    
+    // return osCoords;
   },
 
 /**
- * 
+ *
  * @param {string} gridrefString
  * @returns {unresolved}
  */
   gridrefStringToLatLng(gridrefString) {
     try {
       const parsedRef = GridRefUtils.GridRefParser.factory(gridrefString);
-      
+
       if (parsedRef) {
         return parsedRef.osRef.to_latLng();
-      } else {
-        return null;
       }
-      
-      //const gridref = helpers.parseGrid(gridrefString);
-      //if (!isNaN(gridref.easting) && !isNaN(gridref.northing)) {
+      return null;
+
+
+      // const gridref = helpers.parseGrid(gridrefString);
+      // if (!isNaN(gridref.easting) && !isNaN(gridref.northing)) {
       //  return OsGridRef.osGridToLatLon(gridref, LatLon.datum.WGS84);
-      //}
-    } catch(e) {
+      // }
+    } catch (e) {
       Log(e.message);
     }
 
@@ -132,11 +129,11 @@ const helpers = {
    * 3 gridref digits. (100m)    -> 10
    * 4 gridref digits. (10m)     -> 12
    * 5 gridref digits. (1m)      ->
-   * 
+   *
    * @return {int} radius in metres
    */
   mapZoomToMetreRadius(zoom) {
-    var scale;
+    let scale;
     if (zoom <= 4) {
       scale = 0;
     } else if (zoom <= 5) {
@@ -153,9 +150,9 @@ const helpers = {
     }
 
     scale = 5000 / Math.pow(10, scale); // meters
-    
-    Log('map scale (radius): ' + scale);
-    
+
+    Log(`map scale (radius): ${scale}`);
+
     return scale < 1 ? 1 : scale;
   },
 
@@ -165,10 +162,10 @@ const helpers = {
    * 3 gridref digits. (100m)
    * 4 gridref digits. (10m)
    * 5 gridref digits. (1m)
-   * 
+   *
    * @deprecated
    */
-  //_getGRgranularity(location) {
+  // _getGRgranularity(location) {
   //  let locationGranularity;
 
     // calculate granularity
@@ -192,41 +189,35 @@ const helpers = {
   //    locationGranularity = 2;
   //  }
   //  return locationGranularity;
-  //},
+  // },
 
   /**
-   * 
+   *
    * @param {type} location
    * @returns {Boolean}
    */
   isInGB(location) {
     if (location.latitude) {
-
-      var nationaGridCoords = GridRefUtils.latlng_to_grid_coords(location.latitude, location.longitude); 
+      const nationaGridCoords = GridRefUtils.latlng_to_grid_coords(location.latitude, location.longitude);
       return nationaGridCoords && nationaGridCoords.country === 'GB';
-    } else {
-      return false;
     }
-  },
-
-  /**
-   * Checks if the grid reference is valid and in GB land
-   * @param gridrefString
-   */
-  isValidGridRef(gridrefString) {
-    try {
-      const parsedRef = bigu.GridRefParser.factory(gridrefString);
-      if (parsedRef && bigu.MappingUtils.is_gb_hectad(parsedRef.hectad)) {
-        return true;
-      }
-
-      return false;
-    } catch (e) {
-      Log(e.message);
-    }
-
     return false;
   },
+
+  // /**
+  //  * Checks if the grid reference is valid and in GB land
+  //  * @param gridrefString
+  //  */
+  // isValidGridRef(gridrefString) {
+  //   try {
+  //     const parsedRef = bigu.GridRefParser.factory(gridrefString);
+  //     return (parsedRef && bigu.MappingUtils.is_gb_hectad(parsedRef.hectad));
+  //   } catch (e) {
+  //     Log(e.message);
+  //   }
+  //
+  //   return false;
+  // },
 };
 
 export default helpers;

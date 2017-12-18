@@ -1,21 +1,21 @@
 /** ****************************************************************************
  * Record Edit controller.
  *****************************************************************************/
-import Marionette from 'backbone.marionette';
+// import Marionette from 'backbone.marionette';
 import Backbone from 'backbone';
 import _ from 'lodash';
-import Morel from 'morel';
-import { Device, ImageHelp, Analytics, Log, StringHelp, Validate } from 'helpers';
+// import Morel from 'morel';
+import { ImageHelp, Analytics, Log } from 'helpers';
 import App from 'app';
 import appModel from '../../common/models/app_model';
-import userModel from '../../common/models/user_model';
+// import userModel from '../../common/models/user_model';
 import recordManager from '../../common/record_manager';
 import MainView from './edit_main_view';
 import HeaderView from './header_view';
 import FooterView from './footer_view';
 
-let id;
-let record;
+// let id;
+// let record;
 
 const API = {
   show(recordID) {
