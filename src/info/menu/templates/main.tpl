@@ -18,7 +18,7 @@
   </a>
 </li>
 <li class="table-view-divider">Settings</li>
-<li id="use-training-btn-parent" class="table-view-cell">
+<li id="gps-enabled-btn-parent" class="table-view-cell">
   Use GPS
   <span class="media-object pull-left icon icon-location"></span>
   <div id="gps-enabled-btn" data-setting="gpsEnabled"
