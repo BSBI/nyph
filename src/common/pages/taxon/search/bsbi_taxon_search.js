@@ -774,8 +774,15 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
         if (a.acceptedEntityId !== b.acceptedEntityId) {
             // a or b and not an accepted name
           return a.acceptedEntityId ? 1 : 0; // prefer accepted name
+        } else {
+          if (a.qualifier == '') {
+            return b.qualifier != '' ? -1 : 0;
+          } else if (b.qualifier == '') {
+            return 1;
+          } else {
+            return (a.qualifier < b.qualifier) ? 1 : -1; // reverse sort qualifier so that ss or empty come before s.l.
+          }
         }
-        return (b.qualifier == '' || a.qualifier < b.qualifier) ? 1 : -1; // reverse sort qualifier so that ss or empty come before s.l.
       }
       return a.qname < b.qname ? -1 : 1;
     });
