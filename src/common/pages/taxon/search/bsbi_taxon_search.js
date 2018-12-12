@@ -732,6 +732,10 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
 
   if (results.length) {
     results.sort((a, b) => {
+      if (a.uname == 'Taraxacum \'Irish cambricum\'' || b.uname == 'Taraxacum \'Irish cambricum\'') {
+        logger(a.uname + " with " + b.uname);
+      }
+
       if (a.exact) {
         // logger('exact test a: ' + a.uname + ' vs ' + b.uname);
         // logger(b);
