@@ -771,9 +771,11 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
       } else if (bIsHybrid) {
         return preferHybrids ? 1 : -1;
       } else if (a.uname === b.uname) {
-        if (a.acceptedEntityId !== b.acceptedEntityId) {
-            // a or b and not an accepted name
-          return a.acceptedEntityId ? 1 : 0; // prefer accepted name
+        if ((a.acceptedEntityId || b.acceptedEntityId) &&
+          !(a.acceptedEntityId && b.acceptedEntityId)) {
+            // one of the pair is not an accepted name
+
+          return a.acceptedEntityId ? 1 : -1; // prefer accepted name
         } else {
           // for NYPH purposes agg. and s.l. should be prioritised
           // agg., s.l., empty, s.s.
