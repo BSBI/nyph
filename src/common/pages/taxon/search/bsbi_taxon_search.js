@@ -759,14 +759,14 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
         return 1;
       }
 
-      const aIsHybrid = a.uname.match(/\bx\b/i) !== null;
-      const bIsHybrid = b.uname.match(/\bx\b/i) !== null;
+      let aIsHybrid = a.uname.match(/\bx\b/i) !== null;
+      let bIsHybrid = b.uname.match(/\bx\b/i) !== null;
 
       if (aIsHybrid) {
         // logger('hybrid test: ' + a.qname + ' vs ' + b.qname);
         // logger('hybrid test: ' + a.uname + ' vs ' + b.uname);
         if (bIsHybrid) {
-          if (a.uname === b.uname) {
+          if (a.uname == b.uname) {
             return a.acceptedEntityId ? 1 : 0; // prefer accepted name
           }
           return a.qname < b.qname ? -1 : 1;
@@ -774,7 +774,7 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
         return preferHybrids ? -1 : 1;
       } else if (bIsHybrid) {
         return preferHybrids ? 1 : -1;
-      } else if (a.uname === b.uname) {
+      } else if (a.uname == b.uname) {
         if ((a.acceptedEntityId || b.acceptedEntityId) &&
           !(a.acceptedEntityId && b.acceptedEntityId)) {
             // one of the pair is not an accepted name
@@ -784,8 +784,8 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
           // for NYPH purposes agg. and s.l. should be prioritised
           // agg., s.l., empty, s.s.
 
-          const aQIndex = ['s.s.', '', 's.l.', 'agg.'].indexOf(a.qualifier);
-          const bQIndex = ['s.s.', '', 's.l.', 'agg.'].indexOf(b.qualifier);
+          let aQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(a.qualifier);
+          let bQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(b.qualifier);
 
           return aQIndex === bQIndex ? 0 : (
             aQIndex < bQIndex ? 1 : -1
