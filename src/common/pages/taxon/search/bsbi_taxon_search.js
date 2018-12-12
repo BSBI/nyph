@@ -791,7 +791,7 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
             aQIndex < bQIndex ? 1 : -1
           );
 
-          // if (a.qualifier.indexOf()) {
+          // if (a.qualifier == '') {
           //   return b.qualifier != '' ? -1 : 0;
           // } else if (b.qualifier == '') {
           //   return 1;
