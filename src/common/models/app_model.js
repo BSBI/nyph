@@ -25,6 +25,7 @@ let AppModel = Backbone.Model.extend({
     gpsEnabled: null, // default null (initialise later based on whether on mobile device or desktop)
     nyphListEmail: '',
     nyphListRecorders: '',
+    nyphListNoRecorders: '', // number of people
     nyphListComments: '',
     nyphListPlacename: '',
     nyphListTitle: '',
@@ -126,6 +127,11 @@ let AppModel = Backbone.Model.extend({
     const nyphListRecorders = this.get('nyphListRecorders').trim();
     if (nyphListRecorders === '') {
       errors[errors.length] = 'Please let us know who took part in your plant hunt.';
+    }
+
+    const nyphListNoRecorders = this.get('nyphListNoRecorders').trim();
+    if (nyphListNoRecorders === '') {
+      errors[errors.length] = 'Please let us know how many people took part.';
     }
 
     const nyphListPlacename = this.get('nyphListPlacename').trim();

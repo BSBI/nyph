@@ -209,6 +209,7 @@ class Manager extends Morel {
   appendNyphListDetails(data) {
     data.append('nyphListEmail', appModel.get('nyphListEmail'));
     data.append('nyphListRecorders', appModel.get('nyphListRecorders'));
+    data.append('nyphListNoRecorders', appModel.get('nyphListNoRecorders'));
     data.append('nyphListPlacename', appModel.get('nyphListPlacename'));
     data.append('nyphListTitle', appModel.get('nyphListTitle'));
     data.append('nyphListComments', appModel.get('nyphListComments'));

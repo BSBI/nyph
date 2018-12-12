@@ -14,9 +14,16 @@
     </label>
   </li>
   <li class="table-view-cell">
+      <span class="media-object pull-left icon icon-user-plus"></span>
+      <label class="pull-left " style="margin: 0px; padding: 0px;">
+        <input id="nyph-list-no-recorders" required class="validationsubject" type="number" placeholder="How many people?" name="nyph-list-no-recorders" value="<%= obj.nyphListNoRecorders %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
+        <p class="validationmessage"><br>Please let us know how many people took part in your Plant Hunt.</p>
+      </label>
+    </li>
+  <li class="table-view-cell">
       <span class="media-object pull-left icon icon-mail"></span>
       <label class="pull-left " style="margin: 0px; padding: 0px;">
-        <input id="nyph-list-email" type="email" class="validationsubject" placeholder="Email address (optional)" name="nyph-list-email" value="<%= obj.nyphListEmail %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
+        <input id="nyph-list-email" type="email" class="validationsubject" placeholder="Email address" name="nyph-list-email" value="<%= obj.nyphListEmail %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
         <p class="validationmessage"><br>Email address appears to be invalid.</p>
       </label>
   </li>

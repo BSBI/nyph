@@ -224,6 +224,8 @@ export default Marionette.CompositeView.extend({
     'change #nyph-list-email': 'emailChange',
     'blur #nyph-list-recorders': 'recordersChange',
     'change #nyph-list-recorders': 'recordersChange',
+    'blur #nyph-list-no-recorders': 'recorderNumberChange',
+    'change #nyph-list-no-recorders': 'recorderNumberChange',
     'blur #nyph-list-place': 'placenameChange',
     'change #nyph-list-place': 'placenameChange',
   },
@@ -297,6 +299,23 @@ export default Marionette.CompositeView.extend({
     }
   },
 
+  /**
+   * fired after change or blur event on number-of-people field
+   * ideally refresh code should be in the controller rather than here in the 'view'
+   *
+   * @param {Event} event
+   */
+  recorderNumberChange(event) {
+    const currentRecorderNumber = this.options.appModel.get('nyphListNoRecorders');
+    const newRecorders = document.getElementById('nyph-list-no-recorders').value.trim();
+
+    if (currentRecorderNumber !== newRecorders) {
+      this.options.appModel.set('nyphListNoRecorders', newRecorders);
+      // this.options.appModel.save();
+      this.trigger('list:attribute:change', 'norecorders');
+    }
+  },
+
   // invert the order
   attachHtml(collectionView, childView) {
     collectionView.$el.find(this.childViewContainer).prepend(childView.el);
@@ -315,6 +334,7 @@ export default Marionette.CompositeView.extend({
       // useTraining: appModel.get('useTraining'),
       nyphListEmail: StringHelp.escape(appModel.get('nyphListEmail')),
       nyphListRecorders: StringHelp.escape(appModel.get('nyphListRecorders')),
+      nyphListNoRecorders: StringHelp.escape(appModel.get('nyphListNoRecorders')),
       nyphListPlacename: StringHelp.escape(appModel.get('nyphListPlacename')),
     };
   },

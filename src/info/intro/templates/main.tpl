@@ -1,13 +1,13 @@
 <ul class="table-view">
   <li>
     <p style="text-align: center;">
-      <strong>Welcome to the BSBI's <br> 2018 New Year Plant Hunt</strong>
+      <strong>Welcome to the BSBI’s <br> 2019 New Year Plant Hunt</strong>
     </p>
     <p>
       Please follow these rules, so that the records collected are comparable.
     </p>
     <ul>
-        <li>Pick a day over the New Year between Saturday 30<sup>th</sup> and Tuesday 2<sup>nd</sup> January, when the
+        <li>Pick a day over the New Year between Saturday 29<sup>th</sup> and Tuesday 1<sup>st</sup> January, when the
         weather is decent enough to record in.</li>
       <li>Plan to walk for up to three hours (but you can take breaks), recording as many wild or 
       naturalised plants in flower as you can, but ignore planted species in gardens or parks.

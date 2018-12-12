@@ -32,8 +32,8 @@ export default {
    * if set then limit dates to the range specified by MIN_RECORDING_DATE, MAX_RECORDING_DATE
    */
   ENFORCE_DATE_CONSTRAINT: false,
-  MIN_RECORDING_DATE: new Date(2017, 11, 30),
-  MAX_RECORDING_DATE: new Date(2018, 0, 6, 23, 59), // stretched beyond the published deadline
+  MIN_RECORDING_DATE: new Date(2018, 11, 30),
+  MAX_RECORDING_DATE: new Date(2019, 0, 6, 23, 59), // stretched beyond the published deadline
 
   gps_accuracy_limit: 100,
 
@@ -75,7 +75,7 @@ export default {
       appsecret: API_SECRET,
       website_id: 23,
       survey_id: 427,
-      input_form: 'enter-NYPH-2018' // was 'enter-app-record',
+      input_form: 'enter-NYPH-2019', // was 'enter-app-record',
     },
     sample: {
       location: {
