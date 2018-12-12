@@ -775,13 +775,23 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
             // a or b and not an accepted name
           return a.acceptedEntityId ? 1 : 0; // prefer accepted name
         } else {
-          if (a.qualifier == '') {
-            return b.qualifier != '' ? -1 : 0;
-          } else if (b.qualifier == '') {
-            return 1;
-          } else {
-            return (a.qualifier < b.qualifier) ? 1 : -1; // reverse sort qualifier so that ss or empty come before s.l.
-          }
+          // for NYPH purposes agg. and s.l. should be prioritised
+          // agg., s.l., empty, s.s.
+
+          const aQIndex = a.qualifier.indexOf(['s.s.', '', 's.l.', 'agg.']);
+          const bQIndex = b.qualifier.indexOf(['s.s.', '', 's.l.', 'agg.']);
+
+          return aQIndex === bQIndex ? 0 : (
+            aQIndex < bQIndex ? 1 : -1
+          );
+
+          // if (a.qualifier.indexOf()) {
+          //   return b.qualifier != '' ? -1 : 0;
+          // } else if (b.qualifier == '') {
+          //   return 1;
+          // } else {
+          //   return (a.qualifier < b.qualifier) ? 1 : -1; // reverse sort qualifier so that ss or empty come before s.l.
+          // }
         }
       }
       return a.qname < b.qname ? -1 : 1;
