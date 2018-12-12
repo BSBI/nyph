@@ -29,7 +29,7 @@ const newConfig = $.extend(true, config, {
   // morel configuration
   morel: {
     manager: {
-      url: 'http://192.171.199.230/irecord7/mobile/submit',
+      url: 'https://nyph.bsbi.org/appsubmit.php', // http://192.171.199.230/irecord7/mobile/submit',
       survey_id: 419,
     },
   },
