@@ -774,7 +774,7 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
         return preferHybrids ? -1 : 1;
       } else if (bIsHybrid) {
         return preferHybrids ? 1 : -1;
-      } else if (a.uname == b.uname) {
+      } else if (a.uname === b.uname) {
         if ((a.acceptedEntityId || b.acceptedEntityId) &&
           !(a.acceptedEntityId && b.acceptedEntityId)) {
             // one of the pair is not an accepted name
@@ -787,11 +787,11 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
           let aQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(a.qualifier);
           let bQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(b.qualifier);
 
-          // return (aQIndex === bQIndex) ? 0 : (
-          //   (aQIndex < bQIndex) ? 1 : -1
-          // );
+          return (aQIndex === bQIndex) ? 0 : (
+            (aQIndex < bQIndex) ? 1 : -1
+          );
 
-          return (aQIndex < bQIndex) ? 1 : -1;
+          // return (aQIndex < bQIndex) ? 1 : -1;
 
           // if (a.qualifier == '') {
           //   return b.qualifier != '' ? -1 : 0;
@@ -802,7 +802,7 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
           // }
         }
       }
-      return a.qname < b.qname ? -1 : 1;
+      return a.uname < b.uname ? -1 : 1;
     });
   }
 
