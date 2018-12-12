@@ -38,7 +38,7 @@ class Manager extends Morel {
     //  options.timeout = 180000; // 3 min
     // }
 
-    options.timeout = 180000; // 3 min
+    options.timeout = 900000; // 10 min
 
     return Morel.prototype.syncAll.apply(this, [method, collection, options]);
   }
@@ -48,7 +48,7 @@ class Manager extends Morel {
     //  options.timeout = 180000; // 3 min
     // }
 
-    options.timeout = 180000; // 3 min
+    options.timeout = 600000; // 15 min
 
     return Morel.prototype.sync.apply(this, [method, model, options]);
   }

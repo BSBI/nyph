@@ -14,8 +14,8 @@ import MainView from './edit_main_view';
 import HeaderView from './header_view';
 import FooterView from './footer_view';
 
-// let id;
-// let record;
+let id;
+let record;
 
 const API = {
   show(recordID) {

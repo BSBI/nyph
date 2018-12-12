@@ -95,6 +95,17 @@ class Morel {
       });
 
       const dfd = $.when(...toWait);
+
+      // // should fire these sequentially not simultaneously
+      // const dfd = Promise.resolve();
+      // for (let i = 0; i < toWait.length; i++) {
+      //   (function (n) {
+      //     dfd.then(function () {
+      //       return Promise.resolve(toWait[n]);
+      //     });
+      //   })(i);
+      // }
+
       dfd.then(() => {
         returnPromise.resolve();
         options.success && options.success();
@@ -216,7 +227,7 @@ class Morel {
         data: formData,
         processData: false,
         contentType: false,
-        timeout: options.timeout || 120000, // 120s
+        timeout: options.timeout || 900000, // 15 mins
         success: options.success,
         error: options.error,
       });
@@ -386,7 +397,7 @@ class Morel {
       }
 
       // no need to send undefined
-      if (!attributes[attr]) continue;
+      // if (!attributes[attr]) continue;
 
       value = attributes[attr];
 
@@ -408,6 +419,8 @@ class Morel {
       // don't need to send null or undefined
       if (value) {
         flattened[name] = value;
+      } else {
+        flattened[name] = null;
       }
     }
 

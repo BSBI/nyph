@@ -34,10 +34,6 @@
     <div class="media-body">
       <div class="species"> <%= obj.taxon.formatted ? obj.taxon.formatted : 'missing species' %></div>
 
-      <% if (obj.date) { %>
-        <div class="date"><%= obj.date %></div>
-      <% } %>
-
       <% if (obj.location_gridref) { %>
         <div class="gridref"><%= obj.location_gridref %></div>
       <% } else { %>
