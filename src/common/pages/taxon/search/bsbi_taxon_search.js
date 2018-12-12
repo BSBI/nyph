@@ -787,9 +787,11 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
           let aQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(a.qualifier);
           let bQIndex = ['s.s.', '', null, 's.l.', 'agg.'].indexOf(b.qualifier);
 
-          return aQIndex === bQIndex ? 0 : (
-            aQIndex < bQIndex ? 1 : -1
-          );
+          // return (aQIndex === bQIndex) ? 0 : (
+          //   (aQIndex < bQIndex) ? 1 : -1
+          // );
+
+          return (aQIndex < bQIndex) ? 1 : -1;
 
           // if (a.qualifier == '') {
           //   return b.qualifier != '' ? -1 : 0;
