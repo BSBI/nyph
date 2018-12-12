@@ -778,8 +778,8 @@ BSBITaxonSearch.prototype.compile_results = function (matchedIds, preferHybrids)
           // for NYPH purposes agg. and s.l. should be prioritised
           // agg., s.l., empty, s.s.
 
-          const aQIndex = a.qualifier.indexOf(['s.s.', '', 's.l.', 'agg.']);
-          const bQIndex = b.qualifier.indexOf(['s.s.', '', 's.l.', 'agg.']);
+          const aQIndex = ['s.s.', '', 's.l.', 'agg.'].indexOf(a.qualifier);
+          const bQIndex = ['s.s.', '', 's.l.', 'agg.'].indexOf(b.qualifier);
 
           return aQIndex === bQIndex ? 0 : (
             aQIndex < bQIndex ? 1 : -1
