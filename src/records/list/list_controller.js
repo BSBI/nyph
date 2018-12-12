@@ -93,8 +93,10 @@ const RecordListController = {
       'are you sure you want to remove it from your device?';
 
     if (syncStatus === Morel.SYNCED) {
-      body = 'Are you sure you want to remove this record from your device?';
-      body += '</br><i><b>Note:</b> it will remain on the server.</i>';
+      body = 'Are you sure you want to remove this record from your device?' +
+        '</br><i><b>Note:</b> it will remain on the server.</i>' +
+        '<br /><p>If you want to start a fresh list, please use the \'Start new list\' option instead. Otherwise your lists won\'t be properly separated</p>'
+      ;
     }
     App.regions.getRegion('dialog').show({
       title: 'Delete',
