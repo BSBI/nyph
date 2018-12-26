@@ -32,7 +32,7 @@ export default {
    * if set then limit dates to the range specified by MIN_RECORDING_DATE, MAX_RECORDING_DATE
    */
   ENFORCE_DATE_CONSTRAINT: false,
-  MIN_RECORDING_DATE: new Date(2018, 11, 30),
+  MIN_RECORDING_DATE: new Date(2018, 11, 29),
   MAX_RECORDING_DATE: new Date(2019, 0, 6, 23, 59), // stretched beyond the published deadline
 
   gps_accuracy_limit: 100,
