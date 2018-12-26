@@ -28,6 +28,6 @@ body {
 }
 
 .content {
-  height: 100vh;
+  /* height: 100vh; removed because clashes with on-screen keyboard */
   position: relative !important;
 }
