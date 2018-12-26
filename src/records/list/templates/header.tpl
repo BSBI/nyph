@@ -5,7 +5,7 @@
   <button id="submit-all-btn" class="btn btn-narrow btn-positive btn-block">Send</button>
 
   <div class="img-picker icon icon-camera">
-    <input type="file" accept="image/*" capture="environment"/>
+    <input type="file" accept="image/*" /><!-- capture="environment" -->
   </div>
   <a href="#records/new" class="icon icon-plus"></a>
 </div>
