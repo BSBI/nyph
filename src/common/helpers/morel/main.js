@@ -106,12 +106,14 @@ class Morel {
 
       returnPromise = promiseSerial(mapFactories(collection));
     } else {
+      returnPromise = new $.Deferred;
+
       // get all models to submit
       this.getAll((err, receivedCollection) => {
         if (err) {
           //returnPromise.reject();
 
-          returnPromise = new ($.Deferred).reject();
+          returnPromise.reject();
           options.error && options.error(err);
           return;
         }
