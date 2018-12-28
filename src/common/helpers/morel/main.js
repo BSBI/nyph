@@ -69,7 +69,7 @@ class Morel {
     const promiseSerial = funcs =>
       funcs.reduce((promise, func) =>
           promise.then(result => func().then(Array.prototype.concat.bind(result))),
-          new ($.Deferred()).resolve([])
+          (new $.Deferred()).resolve([])
         );
 
 // some url's to resolve
