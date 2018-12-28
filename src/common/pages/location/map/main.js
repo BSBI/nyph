@@ -13,6 +13,7 @@ import GridRef from 'leaflet.gridref';
 import { OsGridRef } from 'geodesy';
 import LeafletButton from './leaflet_button_ext';
 import mapMarker from './marker';
+import appModel from "../../../models/app_model";
 
 const DEFAULT_LAYER = 'OSM'; // use Open Street Map as need to support Ireland
 const DEFAULT_CENTER = [53.7326306, -2.6546124];
@@ -306,7 +307,7 @@ const mapFunctions = {
       this.map.removeLayer(this.layers.OS);
       this.map.addLayer(this.layers.Satellite);
     } else if ((zoom - OS_ZOOM_DIFF) <= MAX_OS_ZOOM - 1 && this.currentLayer === 'Satellite') {
-      // only change base layer if user is on OS and did not specificly
+      // only change base layer if user is on OS and did not specifically
       // select OSM/Satellite
       if (!this.currentLayerControlSelected && inGB !== false) {
         this.map.removeLayer(this.layers.Satellite);
@@ -331,6 +332,9 @@ const mapFunctions = {
   geolocationSuccess(location) {
     this.locationUpdate = location;
     this._set_gps_progress_feedback('fixed');
+
+    // remove lock after a successful gps fix (TAH 2018_12_28)
+    appModel.setAttrLock('location', false);
   },
 
   geolocationStop() {
