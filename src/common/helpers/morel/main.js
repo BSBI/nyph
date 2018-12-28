@@ -84,6 +84,7 @@ class Morel {
 
         if (syncStatus !== CONST.SYNCED) {
           return function(model) {
+            console.log(`syncing ${model.id} or ${model.cid}`);
             return model.save(null, {
               remote: true,
               timeout: options.timeout,
