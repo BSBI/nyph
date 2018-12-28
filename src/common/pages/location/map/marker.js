@@ -47,6 +47,12 @@ const marker = {
       }
     } else {
       const appModel = this.model.get('appModel');
+
+      if ('map' === location.source) {
+        // automatically lock clicked location (TAH 2018_12_28)
+        appModel.setAttrLock('location', true);
+      }
+
       if (!appModel.get('useGridRef')) {
         if (this.marker instanceof L.CircleMarker) {
           this.marker.setLocation(location);
@@ -129,9 +135,6 @@ const marker = {
 
     // trigger won't work to bubble up
     this.triggerMethod('location:select:map', location);
-
-    // automatically lock clicked location (TAH 2018_12_28)
-    appModel.setAttrLock('location', true);
 
     this.updateMapMarker(location);
 
