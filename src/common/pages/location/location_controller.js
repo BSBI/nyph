@@ -183,6 +183,9 @@ const LocationController = {
         location.accuracy = parsedGridRef.length / 2; // radius rather than square dimension
 
         LocationController.onLocationSelect(recordModel, location);
+
+        // lock a typed gridref automatically (TAH 2018_12_28)
+        appModel.setAttrLock('location', location);
       } else {
         App.trigger('gridref:form:data:invalid', {
           gridref: 'invalid',
@@ -255,6 +258,8 @@ const LocationController = {
 
     recordModel.set('location', location);
     recordModel.trigger('change:location');
+
+    recordModel.markChangedAndResave(); // newly added by TH
   },
 
   onGPSClick(recordModel) {
