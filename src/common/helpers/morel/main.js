@@ -122,6 +122,7 @@ class Morel {
     }
 
     return returnPromise.then(() => {
+      console.log('reached success point');
       options.success && options.success()
     }).promise();
 
