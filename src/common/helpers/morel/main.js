@@ -72,12 +72,7 @@ class Morel {
           (new $.Deferred()).resolve([])
         );
 
-// some url's to resolve
-//     const urls = ['/url1', '/url2', '/url3'];
-
-// convert each url to a function that returns a promise
-//     const funcs = urls.map(url => () => $.ajax(url))
-
+    // return an array of promise factories
     const mapFactories = function (collection) {
       return collection.map(model => {
         const syncStatus = model.getSyncStatus();
@@ -102,8 +97,6 @@ class Morel {
     let returnPromise = null;
 
     if (collection) {
-      // syncEach(collection);
-
       returnPromise = promiseSerial(mapFactories(collection));
     } else {
       returnPromise = new $.Deferred;
@@ -111,8 +104,6 @@ class Morel {
       // get all models to submit
       this.getAll((err, receivedCollection) => {
         if (err) {
-          //returnPromise.reject();
-
           returnPromise.reject();
           options.error && options.error(err);
           return;
