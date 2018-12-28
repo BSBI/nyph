@@ -63,6 +63,120 @@ class Morel {
    * @returns {*}
    */
   syncAll(method, collection, options = {}) {
+
+    // based on https://hackernoon.com/functional-javascript-resolving-promises-sequentially-7aac18c4431e
+
+    const promiseSerial = funcs =>
+      funcs.reduce((promise, func) =>
+          promise.then(result => func().then(Array.prototype.concat.bind(result))),
+          new ($.Deferred()).resolve([])
+        );
+
+// some url's to resolve
+//     const urls = ['/url1', '/url2', '/url3'];
+
+// convert each url to a function that returns a promise
+//     const funcs = urls.map(url => () => $.ajax(url))
+
+    const mapFactories = function (collection) {
+      return collection.map(model => {
+        const syncStatus = model.getSyncStatus();
+
+        if (syncStatus !== CONST.SYNCED) {
+          return function(model) {
+            return model.save(null, {
+              remote: true,
+              timeout: options.timeout,
+            }); // return a promise
+          };
+        } else {
+          return function (){
+            const passingPromise = new $.Deferred();
+            return passingPromise.resolve();
+          };
+        }
+      });
+    };
+
+    let returnPromise = null;
+
+    if (collection) {
+      // syncEach(collection);
+
+      returnPromise = promiseSerial(mapFactories(collection));
+    } else {
+      // get all models to submit
+      this.getAll((err, receivedCollection) => {
+        if (err) {
+          //returnPromise.reject();
+
+          returnPromise = new ($.Deferred).reject();
+          options.error && options.error(err);
+          return;
+        }
+
+        // @todo should include early test to prevent resync of unmodified
+        returnPromise = promiseSerial(mapFactories(receivedCollection));
+      });
+    }
+
+    return returnPromise.then(() => {
+      options.success && options.success()
+    }).promise();
+
+
+    // const returnPromise = new $.Deferred();
+
+    // sync all in collection
+    // function syncEach(collectionToSync) {
+    //   const toWait = [];
+    //   collectionToSync.each((model) => {
+    //     // todo: reuse the passed options model
+    //
+    //     const syncStatus = model.getSyncStatus();
+    //
+    //     if (syncStatus !== CONST.SYNCED) {
+    //       const promise = model.save(null, {
+    //         remote: true,
+    //         timeout: options.timeout,
+    //       });
+    //       const passingPromise = new $.Deferred();
+    //       if (!promise) {
+    //         // model was invalid
+    //         passingPromise.resolve();
+    //       } else {
+    //         // valid model, but in case it fails sync carry on
+    //         promise.always(() => {
+    //           passingPromise.resolve();
+    //         });
+    //       }
+    //       toWait.push(passingPromise);
+    //     } else {
+    //       console.log(`already synch'ed ${model.id} or ${model.cid}`);
+    //     }
+    //   });
+    //
+    //   const dfd = $.when(...toWait);
+    //
+    //   dfd.then(() => {
+    //     returnPromise.resolve();
+    //     options.success && options.success();
+    //   });
+    // }
+    //
+    // return returnPromise.promise();
+  }
+
+  /**
+   * Synchronises a collection
+   * if collection is undefined then sync everything
+   *
+   * @param method
+   * @param collection
+   * @param options
+   * @returns {*}
+   */
+  syncAll_OLD(method, collection, options = {}) {
     const returnPromise = new $.Deferred();
 
     // sync all in collection
@@ -282,7 +396,7 @@ class Morel {
           const url = image.getURL();
           const type = image.get('type');
 
-          function onSuccess(err, img, dataURI, blob) {
+          const onSuccess = function (err, img, dataURI, blob) {
             // const name = `sc:${localOccCount}::photo${imgCount}`;
             const name = imageId;
 
@@ -301,7 +415,7 @@ class Morel {
             formData.append(name, blob, `pic.${extension}`);
             imgCount++;
             imageDfd.resolve();
-          }
+          };
 
           if (!helpers.isDataURL(url)) {
             // load image
