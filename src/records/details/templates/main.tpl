@@ -17,7 +17,7 @@
   <li class="table-view-cell">
       <span class="media-object pull-left icon icon-comment"></span>
       <label class="pull-left " style="margin: 0px; padding: 0px;">
-        <textarea id="nyph-list-comments" type="text" placeholder="Comments" name="nyph-list-comments" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;"><%= obj.nyphListComments %></textarea>
+        <textarea id="nyph-list-comments" type="text" placeholder="Comments" name="nyph-list-comments" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;" rows="4" cols="80"><%= obj.nyphListComments %></textarea>
       </label>
   </li>
 </ul>
