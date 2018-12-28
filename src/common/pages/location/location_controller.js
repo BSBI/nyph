@@ -185,7 +185,7 @@ const LocationController = {
         LocationController.onLocationSelect(recordModel, location);
 
         // lock a typed gridref automatically (TAH 2018_12_28)
-        appModel.setAttrLock('location', true);
+        //appModel.setAttrLock('location', true);
       } else {
         App.trigger('gridref:form:data:invalid', {
           gridref: 'invalid',

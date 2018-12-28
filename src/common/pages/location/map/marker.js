@@ -125,8 +125,14 @@ const marker = {
     
     location.gridref = LocHelp.locationLatLngToGridString(location);
 
+
+
     // trigger won't work to bubble up
     this.triggerMethod('location:select:map', location);
+
+    // automatically lock clicked location (TAH 2018_12_28)
+    appModel.setAttrLock('location', true);
+
     this.updateMapMarker(location);
 
     // // zoom to marker
