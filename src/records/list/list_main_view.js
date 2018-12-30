@@ -307,11 +307,14 @@ export default Marionette.CompositeView.extend({
    */
   recorderNumberChange(event) {
     const currentRecorderNumber = this.options.appModel.get('nyphListNoRecorders');
-    const newRecorders = document.getElementById('nyph-list-no-recorders').value.trim();
+    let newRecorders = parseInt(document.getElementById('nyph-list-no-recorders').value.trim(), 10);
 
-    if (currentRecorderNumber !== newRecorders) {
-      this.options.appModel.set('nyphListNoRecorders', newRecorders);
-      // this.options.appModel.save();
+    let newRecordersString = (newRecorders <= 0) ? '' : newRecorders.toString();
+
+    document.getElementById('nyph-list-no-recorders').value = newRecordersString;
+
+    if (currentRecorderNumber != newRecordersString) {
+      this.options.appModel.set('nyphListNoRecorders', newRecordersString);
       this.trigger('list:attribute:change', 'norecorders');
     }
   },
