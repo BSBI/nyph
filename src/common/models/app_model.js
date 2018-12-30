@@ -130,9 +130,9 @@ let AppModel = Backbone.Model.extend({
     }
 
     const nyphListNoRecorders = this.get('nyphListNoRecorders').trim();
-    if (nyphListNoRecorders === '') {
-      errors[errors.length] = 'Please let us know how many people took part.';
-    }
+    // if (nyphListNoRecorders === '') {
+    //   errors[errors.length] = 'Please let us know how many people took part. (a number between 1 and 99)';
+    // }
 
     const nyphListPlacename = this.get('nyphListPlacename').trim();
     if (nyphListPlacename === '') {
