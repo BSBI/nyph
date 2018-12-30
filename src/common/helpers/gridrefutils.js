@@ -28,6 +28,15 @@ if (!('trunc' in Math)) {
 }
 
 /**
+ * polyfill for Internet Explorer
+ */
+if (!('log10' in Math)) {
+  Math.log10 = function (value) {
+    return Math.log(value)/Math.log(10);
+  };
+}
+
+/**
  * @constructor
  */
 BsbiDb.MappingUtils = function () {};
