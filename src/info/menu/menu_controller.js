@@ -25,7 +25,7 @@ const API = {
       App.regions.getRegion('dialog').show({
         title: 'Reset',
         class: 'error',
-        body: 'Are you sure you want to clear all records from list?' +
+        body: 'Are you sure you want to clear the local copy of your records, unsent data will lost?' +
         '</br>Choose this option if you want to start a new Plant Hunt list',
         buttons: [
           {
