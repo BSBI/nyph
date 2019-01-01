@@ -68,7 +68,15 @@ class Morel {
 
     const promiseSerial = funcs =>
       funcs.reduce((promise, func) =>
-          promise.then(result => func().then(Array.prototype.concat.bind(result))),
+          promise.then(
+            function (result) {
+              const functionResult = func();
+
+              if (functionResult.then) {
+                func().then(Array.prototype.concat.bind(result));
+              }
+            }
+          ),
           (new $.Deferred()).resolve([])
         );
 
@@ -87,8 +95,7 @@ class Morel {
           };
         } else {
           return function (){
-            const passingPromise = new $.Deferred();
-            return passingPromise.resolve();
+            return (new $.Deferred()).resolve();
           };
         }
       });

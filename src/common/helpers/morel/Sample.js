@@ -106,16 +106,16 @@ const Sample = Backbone.Model.extend({
     // only update local cache and DB
     if (!options.remote) {
       // todo: add attrs if passed to model
-      const deferred = Backbone.$.Deferred();
+      const deferred = new $.Deferred();
 
       this.manager.set(this, (err) => {
         if (err) {
           deferred.reject(err);
           options.error && options.error(err);
-          return;
+        } else {
+          deferred.resolve(model, {}, options);
+          options.success && options.success(model, {}, options);
         }
-        deferred.resolve(model, {}, options);
-        options.success && options.success(model, {}, options);
       });
       return deferred.promise();
     }
