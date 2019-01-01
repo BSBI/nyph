@@ -73,7 +73,7 @@ class Morel {
               const functionResult = func();
 
               if (functionResult.then) {
-                func().then(Array.prototype.concat.bind(result));
+                functionResult.then(Array.prototype.concat.bind(result));
               }
             }
           ),
