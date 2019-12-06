@@ -3,7 +3,7 @@ import Error from './Error';
 class LocalStorage {
   constructor(options = {}) {
     this.TYPE = 'LocalStorage';
-    this.NAME = 'bsbi-nyph-2019'; // was 'morel' changed by TH to avoid possible collisions with iRecord or previous NYPH
+    this.NAME = 'bsbi-nyph-2020'; // was 'morel' changed by TH to avoid possible collisions with iRecord or previous NYPH
     this.storage = window.localStorage;
 
     this.NAME = options.appname ? `${this.NAME}-${options.appname}` : this.NAME;

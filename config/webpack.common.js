@@ -75,7 +75,7 @@ module.exports = {
       APP_NAME: JSON.stringify(pkg.name),
       APP_VERSION: JSON.stringify(pkg.version),
       API_SECRET: JSON.stringify('irecordApp123'), // JSON.stringify(process.env.API_SECRET || ''),
-      API_KEY: JSON.stringify('nyph-2019'), // was 'ir' JSON.stringify(process.env.API_KEY || ''),
+      API_KEY: JSON.stringify('nyph-2020'), // was 'ir' JSON.stringify(process.env.API_KEY || ''),
       ADMIN_USERNAME: JSON.stringify(process.env.ADMIN_USERNAME || ''),
       ADMIN_PASSWORD: JSON.stringify(process.env.ADMIN_PASSWORD || ''),
     }),

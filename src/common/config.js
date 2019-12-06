@@ -32,8 +32,8 @@ export default {
    * if set then limit dates to the range specified by MIN_RECORDING_DATE, MAX_RECORDING_DATE
    */
   ENFORCE_DATE_CONSTRAINT: false,
-  MIN_RECORDING_DATE: new Date(2018, 11, 29),
-  MAX_RECORDING_DATE: new Date(2019, 0, 6, 23, 59), // stretched beyond the published deadline
+  MIN_RECORDING_DATE: new Date(2020, 0, 1),
+  MAX_RECORDING_DATE: new Date(2020, 0, 4, 23, 59),
 
   gps_accuracy_limit: 100,
 
@@ -75,7 +75,7 @@ export default {
       appsecret: API_SECRET,
       website_id: 23,
       survey_id: 427,
-      input_form: 'enter-NYPH-2019', // was 'enter-app-record',
+      input_form: 'enter-NYPH-2020', // was 'enter-app-record',
     },
     sample: {
       location: {
@@ -98,17 +98,17 @@ export default {
             location_accuracy: accuracy,
             //location_type: location.gridref ? 'OSGB' : 4326, // this should eventually also accomodate Irish gridrefs
           };
-          
+
           // if (window.nyphAdminMode) {
           //     // mark that record has been entered using the website admin version of the app
           //     attributes.location_source = 'transcript';
           // } else {
               attributes.location_source = location.source;
           // }
-          
+
           if (location.gridref) {
               // send GB and Channel Island refs as 'OSGB'; Irish as 'OSIE'
-              
+
               if (/^(?:WA|WV)/i.test(location.gridref)) {
                 attributes.location_type = 'utm30ed50';
               } else {
@@ -129,7 +129,7 @@ export default {
       location_type: {
         values: function(source, fullObject) {
             //let location = fullObject.keys;
-             
+
             // this should eventually also accommodate Irish gridrefs
             return source;
         },
