@@ -142,7 +142,7 @@ const RecordView = Marionette.View.extend({
       location: locationPrint,
       // location_name: locationName,
       location_gridref: location.gridref,
-      location_precision_bad: location.accuracy < 1000,
+      location_precision_bad: location.accuracy > 1000, // radius worse than tetrad
       // recorder: StringHelp.escape(recordModel.get('recorder') || ''),
       isSynchronising: syncStatus === Morel.SYNCHRONISING,
       date,
