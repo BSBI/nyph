@@ -3,14 +3,14 @@
       <span class="media-object pull-left icon icon-address"></span>
       <label class="pull-left " style="margin: 0px; padding: 0px;">
         <input id="nyph-list-place" required class="validationsubject" type="text" placeholder="Where did you go?" name="nyph-list-place" value="<%= obj.nyphListPlacename %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
-        <p class="validationmessage"><br>Please tell us where you surveyed.</p>
+        <p class="validationmessage"><br>Please tell us where you surveyed (use the nearest named place).</p>
       </label>
   </li>
   <li class="table-view-cell">
     <span class="media-object pull-left icon icon-user-plus"></span>
     <label class="pull-left " style="margin: 0px; padding: 0px;">
-      <input id="nyph-list-recorders" required class="validationsubject" type="text" placeholder="Who went?" name="nyph-list-recorders" autocomplete="name" value="<%= obj.nyphListRecorders %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
-      <p class="validationmessage"><br>Please let us know who took part in your Plant Hunt.</p>
+      <input id="nyph-list-recorders" required class="validationsubject" type="text" placeholder="Your names" autocomplete="name" name="nyph-list-recorders" autocomplete="name" value="<%= obj.nyphListRecorders %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
+      <p class="validationmessage"><br>Please let us know who took part in your hunt.</p>
     </label>
   </li>
   <li class="table-view-cell">

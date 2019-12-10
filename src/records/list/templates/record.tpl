@@ -35,9 +35,9 @@
       <div class="species"> <%= obj.taxon.formatted ? obj.taxon.formatted : 'missing species' %></div>
 
       <% if (obj.location_gridref) { %>
-        <div class="gridref"><%= obj.location_gridref %><% if (obj.location_precision_bad) { %>
+        <div class="gridref"><% if (obj.location_precision_bad) { %>
                                                               <div class="location error">2km or better precision required</div>
-                                                              <% } %></div>
+                                                              <% } %><%= obj.location_gridref %></div>
       <% } else { %>
         <% if (obj.isLocating) { %>
           <div class="location warn">Locating...</div>

@@ -113,7 +113,6 @@ let AppModel = Backbone.Model.extend({
    *
    * can't use the standard validate() method as don't want to block saving locally
    *
-   * @param attributes
    * @return string|null
    */
   testValidation() {

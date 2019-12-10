@@ -5,7 +5,7 @@
   <li class="table-view-cell">
       <span class="media-object pull-left icon icon-comment"></span>
       <label class="pull-left " style="margin: 0px; padding: 0px;">
-        <input id="nyph-list-title" type="text" placeholder="List name" name="nyph-list-title" value="<%= obj.nyphListTitle %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;">
+        <input id="nyph-list-title" type="text" placeholder="Name your list for the website summary, e.g. based on where you went." name="nyph-list-title" value="<%= obj.nyphListTitle %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;">
       </label>
   </li>
   <li class="table-view-cell">
