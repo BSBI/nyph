@@ -31,7 +31,7 @@
       <a href="#records/details" id="list-details-button" class="navigate-right">
         <span class="media-object pull-right descript" style="position: absolute; right: 0px;"><%= obj.details %></span>
         <span class="media-object pull-left icon icon-comment"></span>
-        More&nbsp;details
+        List title, date &amp; comments
       </a>
   </li>
 </ul>
