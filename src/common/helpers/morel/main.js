@@ -66,6 +66,8 @@ class Morel {
 
     // based on https://hackernoon.com/functional-javascript-resolving-promises-sequentially-7aac18c4431e
 
+    // @todo needs to carry on even after failure
+    // @todo promise success and failure methods should be the same
     const promiseSerial = funcs =>
       funcs.reduce((promise, func) =>
           promise.then(

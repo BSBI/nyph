@@ -2,7 +2,7 @@
   <li>
     <p><strong>Welcome to the BSBI’s 2020 New Year Plant Hunt</strong></p>
     <p>
-      For the eighth year running you are cordially invited to join in our
+      For the ninth year running you are cordially invited to join in our
       BSBI New Year Plant Hunt. The aim is to find and record as many wild
       species in bloom as you can in up to three hours over the New Year
       period.
