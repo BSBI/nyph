@@ -71,7 +71,14 @@ class Morel {
     const promiseSerial = funcs =>
       funcs.reduce((promise, func) =>
           promise.then(
-            function (result) {
+            function (result) { // success
+              const functionResult = func();
+
+              if (functionResult.then && result) {
+                return functionResult.then(Array.prototype.concat.bind(result));
+              }
+            },
+            function (result) { // failure, use same function as for success
               const functionResult = func();
 
               if (functionResult.then && result) {
