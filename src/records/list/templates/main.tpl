@@ -10,7 +10,7 @@
     <span class="media-object pull-left icon icon-user-plus"></span>
     <label class="pull-left " style="margin: 0px; padding: 0px;">
       <input id="nyph-list-recorders" required class="validationsubject" type="text" placeholder="Your names" autocomplete="name" name="nyph-list-recorders" autocomplete="name" value="<%= obj.nyphListRecorders %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
-      <p class="validationmessage"><br>Please let us know who took part in your hunt.</p>
+      <p class="validationmessage"><br>Please let us know who took part in your hunt. The names you enter here will included with your list in BSBI's archive.</p>
     </label>
   </li>
   <li class="table-view-cell">

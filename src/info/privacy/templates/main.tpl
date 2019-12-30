@@ -37,7 +37,7 @@
     <p>By submitting photographs or plant records with this app you:</p>
     <ul>
     <li>
-       <p>Agree to apply the <a href="https://creativecommons.org/licenses/by/4.0/" target='_blank'>Creative Common Attribution license (CC BY)</a> to your work. Under this Open Access license, you as
+       <p>Agree to apply the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Common Attribution license (CC BY)</a> to your work. Under this Open Access license, you as
         copyright holder agree that anyone can reuse your work in whole or part for any purpose.</p>
        <p>Anyone may copy, distribute, or reuse the content as long as the author and original source are properly cited.</p>
       </li>

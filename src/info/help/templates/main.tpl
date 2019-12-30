@@ -110,7 +110,7 @@
     </p>
   </li>
   <li>
-    For more help please visit the <a href="https://nyph.bsbi.org" target="_blank">New Year Plant Hunt</a> website.
+    For more help please visit the <a href="https://nyph.bsbi.org">New Year Plant Hunt</a> website.
     <p>Or send an <a href='mailto:nyplanthunt@bsbi.org?subject=NYPH%20App%20Support%20%26%20Feedback&body=%0A%0A%0AVersion%3A%20<%- obj.version %>%0ABrowser%3A <%- window.navigator.appVersion %>%0A'>email</a>.
     </p>
   </li>

@@ -41,13 +41,13 @@
     </p>
     <p>
       You can keep track of live progress on the
-      <a href="https://nyph.bsbi.org" target="_blank">NYPH webpage</a>.
+      <a href="https://nyph.bsbi.org">NYPH webpage</a>.
     </p>
     <p>
       You can share and via our social media platforms:
-      <a href="https://www.facebook.com/BSBI2011/" target="_blank">Facebook</a>,
-      <a href="https://twitter.com/BSBIbotany" target="_blank">Twitter #NewYearPlantHunt</a>,
-      <a href="https://bsbi.org/news-views/" target="_blank">BSBI blog</a>
+      <a href="https://www.facebook.com/BSBI2011/">Facebook</a>,
+      <a href="https://twitter.com/BSBIbotany">Twitter #NewYearPlantHunt</a>,
+      <a href="https://bsbi.org/news-views/">BSBI blog</a>
     </p>
     <p>
       So keep checking back to see what's been found and to compare your area
