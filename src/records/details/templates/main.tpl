@@ -7,7 +7,7 @@
       <label class="pull-left " style="margin: 0px; padding: 0px;">
         <input id="nyph-list-title" type="text" placeholder="List name" name="nyph-list-title" value="<%= obj.nyphListTitle %>" style="margin: 0px; padding: 0px;text-align: left; border: none; height: inherit; font-size: inherit;position: absolute; left: 60px; right: 12px;">
         <p><br />
-        Name your list for the website summary, e.g. based on where you went.</p>
+        Please give your list a distinctive title for use on the results page, e.g. based on where you went.</p>
       </label>
   </li>
   <li class="table-view-cell">
