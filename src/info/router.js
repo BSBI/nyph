@@ -22,7 +22,7 @@ const Router = Marionette.AppRouter.extend({
     'info/intro(/)': IntroController.show,
     'info/about(/)': () => {
       CommonController.show({
-        title: 'NYPH 2020',
+        title: 'NYPH 2021',
         App,
         route: 'info/about/main',
         model: new Backbone.Model({
@@ -63,7 +63,7 @@ App.on('info:intro', () => {
 App.on('info:about', () => {
   App.navigate('info/about');
   CommonController.show({
-    title: 'NYPH 2020',
+    title: 'NYPH 2021',
     App,
     route: 'info/about/main',
     model: new Backbone.Model({ version: CONFIG.version }),

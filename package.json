@@ -1,9 +1,9 @@
 {
-  "name": "NYPH-app-2020",
+  "name": "NYPH-app-2021",
   "id": "org.bsbi.nyph",
   "title": "NYPH",
-  "description": "BSBI New Year Plant Hunt 2020.",
-  "version": "2.2020.0",
+  "description": "BSBI New Year Plant Hunt 2021.",
+  "version": "2.2021.0",
   "build": "4",
   "homepage": "https://bsbi.org.uk",
   "author": {
